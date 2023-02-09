@@ -1,3 +1,10 @@
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+  sensitive   = false
+  default     = "us-west-2"
+}
+
 variable "cloudflare_org_id" {
   description = "Cloudflare org ID."
   type        = string
@@ -22,9 +29,8 @@ variable "cloudflare_api_token" {
   sensitive   = true
 }
 
-variable "cloudflare_domain" {
+variable "root_domain" {
   description = "Root domain."
-  default     = "@"
   type        = string
-  sensitive   = false
+  sensitive   = true
 }
