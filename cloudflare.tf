@@ -1,4 +1,4 @@
-resource "cloudflare_record" "caseyspar_kz" { #                                     www.caseyspar.kz (CNAME)
+resource "cloudflare_record" "caseyspar_kz" { #                                     caseyspar.kz (CNAME)
   zone_id         = var.cloudflare_zone_id
   name            = "@"
   type            = "CNAME"
@@ -25,7 +25,7 @@ resource "cloudflare_record" "keys_caseyspar_kz" { #                            
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "www_caseyspar_kz" { #                                 www.caseyspar.kz (A)
+resource "cloudflare_record" "www_caseyspar_kz" { #                                 www.caseyspar.kz (CNAME)
   zone_id         = var.cloudflare_zone_id
   name            = "www"
   type            = "CNAME"
@@ -133,7 +133,7 @@ resource "cloudflare_record" "himself_pka" { #                                  
   zone_id         = var.cloudflare_zone_id
   name            = "himself._pka"
   type            = "TXT"
-  value           = "v=pka1;fpr=A0A991E4CCE81E4AF0D5D07B3260255327CBCDA1;uri=https://keys.${var.root_domain}/public.asc"
+  value           = "v=pka1;fpr=${var.admin_pgp_fingerprint};uri=https://keys.${var.root_domain}/public.asc"
   proxied         = false
   allow_overwrite = true
 }
