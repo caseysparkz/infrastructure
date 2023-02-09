@@ -1,10 +1,3 @@
-variable "aws_region" {
-  description = "AWS region"
-  type        = string
-  sensitive   = false
-  default     = "us-west-2"
-}
-
 variable "cloudflare_org_id" {
   description = "Cloudflare org ID."
   type        = string

@@ -1,40 +1,31 @@
-resource "cloudflare_record" "caseyspar_kz" {
+resource "cloudflare_record" "caseyspar_kz" { #                                     www.caseyspar.kz (CNAME)
   zone_id         = var.cloudflare_zone_id
   name            = "@"
   type            = "CNAME"
-  value           = "www.caseyspar.kz"
+  value           = "www.${var.root_domain}"
   proxied         = true
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "cloud_caseyspar_kz" {
+resource "cloudflare_record" "cloud_caseyspar_kz" { #                               cloud.caseyspar.kz (A)
   zone_id         = var.cloudflare_zone_id
   name            = "cloud"
   type            = "CNAME"
-  value           = "cloud-caseyspar-kz.s3.amazonaws.com"
+  value           = "cloud-caseyspar-kz.s3.amazonaws.com" #                         S3 bucket
   proxied         = false
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "keys_caseyspar_kz" {
+resource "cloudflare_record" "keys_caseyspar_kz" { #                                keys.caseyspar.kz (A)
   zone_id         = var.cloudflare_zone_id
   name            = "keys"
   type            = "CNAME"
-  value           = "keys.caseyspar.kz.s3-website-us-west-1.amazonaws.com"
+  value           = "keys.${var.root_domain}.s3-website-us-west-1.amazonaws.com" #  S3 bucket
   proxied         = true
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "vpn_caseyspar_kz" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "vpn"
-  type            = "A"
-  value           = "35.89.207.9"
-  proxied         = false
-  allow_overwrite = true
-}
-
-resource "cloudflare_record" "www_caseyspar_kz" {
+resource "cloudflare_record" "www_caseyspar_kz" { #                                 www.caseyspar.kz (A)
   zone_id         = var.cloudflare_zone_id
   name            = "www"
   type            = "CNAME"
@@ -43,7 +34,7 @@ resource "cloudflare_record" "www_caseyspar_kz" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "mx" {
+resource "cloudflare_record" "mx" { #                                               Primary (MX)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "MX"
@@ -53,7 +44,7 @@ resource "cloudflare_record" "mx" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "mx1" {
+resource "cloudflare_record" "mx1" { #                                              Failover 1 (MX)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "MX"
@@ -63,7 +54,7 @@ resource "cloudflare_record" "mx1" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "mx2" {
+resource "cloudflare_record" "mx2" { #                                              Failover 2 (MX)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "MX"
@@ -73,7 +64,7 @@ resource "cloudflare_record" "mx2" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "mx3" {
+resource "cloudflare_record" "mx3" { #                                              Failover 3 (MX)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "MX"
@@ -83,7 +74,7 @@ resource "cloudflare_record" "mx3" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "mx4" {
+resource "cloudflare_record" "mx4" { #                                              Failover 4 (MX)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "MX"
@@ -93,7 +84,7 @@ resource "cloudflare_record" "mx4" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "spf" {
+resource "cloudflare_record" "spf" { #                                              SPF (TXT)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "TXT"
@@ -102,16 +93,16 @@ resource "cloudflare_record" "spf" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "_dmarc" {
+resource "cloudflare_record" "_dmarc" { #                                           DMARC (TXT)
   zone_id         = var.cloudflare_zone_id
   name            = "_dmarc"
   type            = "TXT"
-  value           = "v=DMARC1; p=reject; sp=reject; rua=mailto:admin@caseyspar.kz; ruf=mailto:dmarc@caseyspar.kz; fo=1; pct=5;"
+  value           = "v=DMARC1; p=reject; sp=reject; rua=mailto:admin@${var.root_domain}; ruf=mailto:dmarc@${var.root_domain}; fo=1; pct=5;"
   proxied         = false
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "keybase_site_verification" {
+resource "cloudflare_record" "keybase_site_verification" { #                        Keybase verification. (TXT)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "TXT"
@@ -120,7 +111,7 @@ resource "cloudflare_record" "keybase_site_verification" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "google_site_verification" {
+resource "cloudflare_record" "google_site_verification" { #                         Google verification. (TXT)
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "TXT"
@@ -129,7 +120,7 @@ resource "cloudflare_record" "google_site_verification" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "google_domainkey" {
+resource "cloudflare_record" "google_domainkey" { #                                 Google domain key. (TXT)
   zone_id         = var.cloudflare_zone_id
   name            = "google._domainkey"
   type            = "TXT"
@@ -138,11 +129,11 @@ resource "cloudflare_record" "google_domainkey" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "himself_pka" {
+resource "cloudflare_record" "himself_pka" { #                                      PKA record. (TXT)
   zone_id         = var.cloudflare_zone_id
   name            = "himself._pka"
   type            = "TXT"
-  value           = "v=pka1;fpr=A0A991E4CCE81E4AF0D5D07B3260255327CBCDA1;uri=https://keys.caseyspar.kz/public.asc"
+  value           = "v=pka1;fpr=A0A991E4CCE81E4AF0D5D07B3260255327CBCDA1;uri=https://keys.${var.root_domain}/public.asc"
   proxied         = false
   allow_overwrite = true
 }
