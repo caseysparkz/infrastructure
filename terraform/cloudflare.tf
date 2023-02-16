@@ -20,7 +20,7 @@ resource "cloudflare_record" "ecr_caseyspar_kz" { #                             
   zone_id         = var.cloudflare_zone_id
   name            = "ecr"
   type            = "CNAME"
-  value           = trimsuffix(aws_ecr_repository.ecr.repository_url, "/${aws_ecr_repository.ecr.name}")
+  value           = "${aws_ecr_repository.ecr.registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
   proxied         = false
   allow_overwrite = true
 }

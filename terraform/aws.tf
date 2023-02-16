@@ -69,12 +69,25 @@ resource "aws_ecr_repository" "ecr" { # Create ECR repository.
   )
 }
 
-output "aws_iam_access_key_cli_user_id" {
+output "aws_iam_access_key_cli_user_ses_smtp_password_v4" {
+  value     = aws_iam_access_key.cli_user.ses_smtp_password_v4
+  sensitive = true
+}
+
+output "aws_ecr_repository_url" {
+  value = aws_ecr_repository.ecr.repository_url
+}
+
+output "aws_region" {
+  value = var.aws_region
+}
+
+output "aws_iam_cli_user_access_key_id" {
   value     = aws_iam_access_key.cli_user.id
   sensitive = true
 }
 
-output "aws_iam_access_key_cli_user_ses_smtp_password_v4" {
-  value     = aws_iam_access_key.cli_user.ses_smtp_password_v4
+output "aws_iam_cli_user_access_key_secret" {
+  value     = aws_iam_access_key.cli_user.secret
   sensitive = true
 }
