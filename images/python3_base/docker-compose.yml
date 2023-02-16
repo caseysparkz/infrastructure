@@ -1,0 +1,7 @@
+version: "3"
+services:
+    python3_base:
+        image: 770088062852.dkr.ecr.us-west-2.amazonaws.com/python3_base:1.0.0
+        build:
+            context: .
+            network: host
