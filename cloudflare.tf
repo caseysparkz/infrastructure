@@ -16,6 +16,15 @@ resource "cloudflare_record" "cloud_caseyspar_kz" { #                           
   allow_overwrite = true
 }
 
+resource "cloudflare_record" "ecr_caseyspar_kz" { #                                 ecr.caseyspar.kz (CNAME)
+  zone_id         = var.cloudflare_zone_id
+  name            = "ecr"
+  type            = "CNAME"
+  value           = trimsuffix(aws_ecr_repository.ecr.repository_url, "/${aws_ecr_repository.ecr.name}")
+  proxied         = false
+  allow_overwrite = true
+}
+
 resource "cloudflare_record" "keys_caseyspar_kz" { #                                keys.caseyspar.kz (A)
   zone_id         = var.cloudflare_zone_id
   name            = "keys"
