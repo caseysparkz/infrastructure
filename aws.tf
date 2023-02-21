@@ -1,6 +1,6 @@
 locals { #                                                                              Local TF variables.
   common_tags = {
-    terraform = ""
+    terraform = "true"
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_iam_user" "cli_user" { #                                          
   tags = merge(
     local.common_tags,
     {
-      iam = ""
+      iam = "true"
     }
   )
 }
@@ -56,7 +56,7 @@ resource "aws_iam_user" "s3_user" { #                                           
   tags = merge(
     local.common_tags,
     {
-      iam = ""
+      iam = "true"
     }
   )
 }
@@ -105,7 +105,7 @@ resource "aws_ecr_repository" "alpine_base" { #                                 
     local.common_tags,
     {
       domain = "ecr.${var.root_domain}"
-      ecr    = ""
+      ecr    = "true"
       image  = "alpine"
     }
   )
@@ -128,7 +128,7 @@ resource "aws_ecr_repository" "python3_base" { #                                
     local.common_tags,
     {
       domain = "ecr.${var.root_domain}"
-      ecr    = ""
+      ecr    = "true"
       image  = "python3"
     }
   )
@@ -147,7 +147,7 @@ resource "aws_s3_bucket" "cloud_caseyspar_kz" { #                               
     local.common_tags,
     {
       domain = "cloud.${var.root_domain}"
-      s3     = ""
+      s3     = "true"
     }
   )
 }
@@ -190,7 +190,7 @@ resource "aws_s3_bucket" "keys_caseyspar_kz" { #                                
     local.common_tags,
     {
       domain = "keys.${var.root_domain}"
-      s3     = ""
+      s3     = "true"
     }
   )
 }
@@ -229,7 +229,7 @@ resource "aws_s3_object" "keys_caseyspar_kz-authorized_keys" { #                
   tags = merge(
     local.common_tags,
     {
-      ssh = ""
+      ssh = "true"
     }
   )
 }
@@ -242,7 +242,7 @@ resource "aws_s3_object" "keys_caseyspar_kz-public_asc" { #                     
   tags = merge(
     local.common_tags,
     {
-      pgp = ""
+      pgp = "true"
     }
   )
 }

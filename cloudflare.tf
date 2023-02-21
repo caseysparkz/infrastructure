@@ -30,7 +30,7 @@ resource "cloudflare_record" "keys_caseyspar_kz" { #                            
   name            = "keys"
   type            = "CNAME"
   value           = aws_s3_bucket.keys_caseyspar_kz.bucket_regional_domain_name
-  proxied         = true
+  proxied         = false
   allow_overwrite = true
 }
 
