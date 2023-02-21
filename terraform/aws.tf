@@ -35,18 +35,16 @@ resource "aws_iam_user_policy" "cli_user" { #                                   
 
   policy = <<-EOF
     {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Sid": "ECRFullAccess",
-                "Effect": "Allow",
-                "Principal": "${aws_iam_user.cli_user.arn}",
-                "Action": [
-                    "ecr:*"
-                ],
-                "Resource": "*"
-            }
-        ]
+      "Version": "2012-10-17",
+      "Statement": [{
+        "Sid": "ECRFullAccess",
+        "Effect": "Allow",
+        "Principal": "${aws_iam_user.cli_user.arn}",
+        "Action": [
+          "ecr:*"
+        ],
+        "Resource": "*"
+      }]
     }
   EOF
 }
@@ -72,22 +70,20 @@ resource "aws_iam_user_policy" "s3_user" { #                                    
   user = aws_iam_user.s3_user.name
 
   policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "S3Access",
-            "Effect": "Allow",
-            "Action": [
-                "s3:*"
-            ],
-            "Resource": [
-              "${aws_s3_bucket.cloud_caseyspar_kz.arn}",
-              "${aws_s3_bucket.keys_caseyspar_kz.arn}"
-            ]
-        }
-    ]
-  }
+    {
+      "Version": "2012-10-17",
+      "Statement": [{
+        "Sid": "S3Access",
+        "Effect": "Allow",
+        "Action": [
+          "s3:*"
+        ],
+        "Resource": [
+          "${aws_s3_bucket.cloud_caseyspar_kz.arn}",
+          "${aws_s3_bucket.keys_caseyspar_kz.arn}"
+        ]
+      }]
+    }
   EOF
 }
 
@@ -199,6 +195,27 @@ resource "aws_s3_bucket" "keys_caseyspar_kz" { #                                
   )
 }
 
+resource "aws_s3_bucket_policy" "keys_caseyspar_kz" { #                                 Public RO policy for keys.caseyspar.kz.
+  bucket = aws_s3_bucket.keys_caseyspar_kz.id
+
+  policy = <<-EOF
+    {
+      "Version": "2012-10-17",
+      "Statement": [{
+          "Sid": "PublicReadGetObject",
+          "Effect": "Allow",
+          "Principal": "*",
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Resource": [
+            "arn:aws:s3:::keys.${var.root_domain}/*"
+          ]
+      }]
+    }
+  EOF
+}
+
 resource "aws_s3_bucket_acl" "keys_caseyspar_kz" { #                                    ACL policy for keys.caseyspar.kz.
   bucket = aws_s3_bucket.keys_caseyspar_kz.id
   acl    = "public-read"
@@ -208,25 +225,24 @@ resource "aws_s3_object" "keys_caseyspar_kz-authorized_keys" { #                
   bucket  = aws_s3_bucket.keys_caseyspar_kz.id
   acl     = "public-read"
   key     = "authorized_keys"
-  source  = "root/keys/authorized_keys"
   content = var.admin_ssh_pubkey
   tags = merge(
     local.common_tags,
     {
-      pgp = ""
+      ssh = ""
     }
   )
 }
 
 resource "aws_s3_object" "keys_caseyspar_kz-public_asc" { #                             Public PGP key.
-  bucket = aws_s3_bucket.keys_caseyspar_kz.id
-  acl    = "public-read"
-  key    = "public.asc"
-  source = var.admin_pgp_key
+  bucket  = aws_s3_bucket.keys_caseyspar_kz.id
+  acl     = "public-read"
+  key     = "public.asc"
+  content = var.admin_pgp_key
   tags = merge(
     local.common_tags,
     {
-      ssh = ""
+      pgp = ""
     }
   )
 }
