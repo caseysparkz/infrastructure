@@ -4,8 +4,8 @@ locals { #                                                                      
   }
 }
 
-##########################################################################################################################
-# ECR Config
+
+# IAM Config #############################################################################################################
 resource "aws_iam_user" "cli_user" { #                                                  AWS CLI user.
   name          = "cli_user"
   path          = "/"
@@ -23,13 +23,13 @@ resource "aws_iam_access_key" "cli_user" { #                                    
   user = aws_iam_user.cli_user.name
 }
 
-resource "aws_iam_user_ssh_key" "cli_user" { #                                          Add SSH key to CLI user.
+resource "aws_iam_user_ssh_key" "cli_user" { #                                          SSH key for CLI user.
   username   = aws_iam_user.cli_user.name
   encoding   = "SSH"
   public_key = var.admin_ssh_pubkey
 }
 
-resource "aws_iam_user_policy" "cli_user" { #                                           Add policy to user.
+resource "aws_iam_user_policy" "cli_user" { #                                           CLI user policy (ECR)
   name = "${aws_iam_user.cli_user.name}_iam_policy"
   user = aws_iam_user.cli_user.name
 
@@ -51,6 +51,47 @@ resource "aws_iam_user_policy" "cli_user" { #                                   
   EOF
 }
 
+resource "aws_iam_user" "s3_user" { #                                                   AWS S3 user.
+  name          = "s3_user"
+  path          = "/"
+  force_destroy = true
+  tags = merge(
+    local.common_tags,
+    {
+      iam = ""
+    }
+  )
+}
+
+resource "aws_iam_access_key" "s3_user" { #                                             Access key for S3 user.
+  user = aws_iam_user.s3_user.name
+}
+
+resource "aws_iam_user_policy" "s3_user" { #                                            S3 user policy (S3).
+  name = "${aws_iam_user.s3_user.name}_iam_policy"
+  user = aws_iam_user.s3_user.name
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "S3Access",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+              "${aws_s3_bucket.cloud_caseyspar_kz.arn}",
+              "${aws_s3_bucket.keys_caseyspar_kz.arn}"
+            ]
+        }
+    ]
+  }
+  EOF
+}
+
+# ECR Config #############################################################################################################
 resource "aws_ecr_repository" "alpine_base" { #                                         Alpine base repo.
   name                 = "alpine_base"
   image_tag_mutability = "IMMUTABLE"
@@ -97,49 +138,7 @@ resource "aws_ecr_repository" "python3_base" { #                                
   )
 }
 
-##########################################################################################################################
-# S3 Config
-resource "aws_iam_user" "s3_user" { #                                                   AWS S3 user.
-  name          = "s3_user"
-  path          = "/"
-  force_destroy = true
-  tags = merge(
-    local.common_tags,
-    {
-      iam = ""
-    }
-  )
-}
-
-resource "aws_iam_access_key" "s3_user" { #                                             Access key for S3 user.
-  user = aws_iam_user.s3_user.name
-}
-
-resource "aws_iam_user_policy" "s3_user" { #                                            Add policy to user.
-  name = "${aws_iam_user.s3_user.name}_iam_policy"
-  user = aws_iam_user.s3_user.name
-
-  policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "S3Access",
-            "Effect": "Allow",
-            "Action": [
-                "s3:*"
-            ],
-            "Resource": [
-              "${aws_s3_bucket.cloud_caseyspar_kz.arn}",
-              "arn:aws:s3:::cloud_caseyspar_kz",
-              "arn:aws:s3:::keys.caseyspar.kz"
-            ]
-        }
-    ]
-  }
-  EOF
-}
-
+# S3 Config ##############################################################################################################
 resource "aws_kms_key" "cloud_key" { #                                                  Key used to encrypt S3 buckets.
   description             = "Key used to encrypt S3 buckets."
   deletion_window_in_days = 14
@@ -179,6 +178,57 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloud_caseyspar_k
       sse_algorithm     = "aws:kms"
     }
   }
+}
+
+resource "aws_s3_bucket_versioning" "cloud_caseyspar_kz" { #                            Enable versioning.
+  bucket = aws_s3_bucket.cloud_caseyspar_kz.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket" "keys_caseyspar_kz" { #                                        Pubkey cloud storage.
+  bucket = "keys.${var.root_domain}"
+
+  tags = merge(
+    local.common_tags,
+    {
+      domain = "keys.${var.root_domain}"
+      s3     = ""
+    }
+  )
+}
+
+resource "aws_s3_bucket_acl" "keys_caseyspar_kz" { #                                    ACL policy for keys.caseyspar.kz.
+  bucket = aws_s3_bucket.keys_caseyspar_kz.id
+  acl    = "public-read"
+}
+
+resource "aws_s3_object" "keys_caseyspar_kz-authorized_keys" { #                        Public SSH key.
+  bucket  = aws_s3_bucket.keys_caseyspar_kz.id
+  acl     = "public-read"
+  key     = "authorized_keys"
+  source  = "root/keys/authorized_keys"
+  content = var.admin_ssh_pubkey
+  tags = merge(
+    local.common_tags,
+    {
+      pgp = ""
+    }
+  )
+}
+
+resource "aws_s3_object" "keys_caseyspar_kz-public_asc" { #                             Public PGP key.
+  bucket = aws_s3_bucket.keys_caseyspar_kz.id
+  acl    = "public-read"
+  key    = "public.asc"
+  source = var.admin_pgp_key
+  tags = merge(
+    local.common_tags,
+    {
+      ssh = ""
+    }
+  )
 }
 
 ##########################################################################################################################

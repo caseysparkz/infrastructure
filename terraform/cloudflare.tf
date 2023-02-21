@@ -11,7 +11,7 @@ resource "cloudflare_record" "cloud_caseyspar_kz" { #                           
   zone_id         = var.cloudflare_zone_id
   name            = "cloud"
   type            = "CNAME"
-  value           = "cloud-caseyspar-kz.s3.amazonaws.com" #                         S3 bucket
+  value           = aws_s3_bucket.cloud_caseyspar_kz.bucket_regional_domain_name
   proxied         = false
   allow_overwrite = true
 }
@@ -29,7 +29,7 @@ resource "cloudflare_record" "keys_caseyspar_kz" { #                            
   zone_id         = var.cloudflare_zone_id
   name            = "keys"
   type            = "CNAME"
-  value           = "keys.${var.root_domain}.s3-website-us-west-1.amazonaws.com" #  S3 bucket
+  value           = aws_s3_bucket.keys_caseyspar_kz.bucket_regional_domain_name
   proxied         = true
   allow_overwrite = true
 }
