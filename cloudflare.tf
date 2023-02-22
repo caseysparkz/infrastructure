@@ -1,4 +1,4 @@
-resource "cloudflare_record" "caseyspar_kz" { #                                     caseyspar.kz (CNAME)
+resource "cloudflare_record" "root" { #                                             Root domain (CNAME)
   zone_id         = var.cloudflare_zone_id
   name            = "@"
   type            = "CNAME"
@@ -7,16 +7,16 @@ resource "cloudflare_record" "caseyspar_kz" { #                                 
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "cloud_caseyspar_kz" { #                               cloud.caseyspar.kz (A)
+resource "cloudflare_record" "cloud" { #                                            cloud@ (A)
   zone_id         = var.cloudflare_zone_id
   name            = "cloud"
   type            = "CNAME"
-  value           = aws_s3_bucket.cloud_caseyspar_kz.bucket_regional_domain_name
+  value           = aws_s3_bucket.cloud.bucket_regional_domain_name
   proxied         = false
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "ecr_caseyspar_kz" { #                                 ecr.caseyspar.kz (CNAME)
+resource "cloudflare_record" "ecr" { #                                              ecr@ (CNAME)
   zone_id         = var.cloudflare_zone_id
   name            = "ecr"
   type            = "CNAME"
@@ -25,16 +25,16 @@ resource "cloudflare_record" "ecr_caseyspar_kz" { #                             
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "keys_caseyspar_kz" { #                                keys.caseyspar.kz (A)
+resource "cloudflare_record" "keys" { #                                             keys@ (A)
   zone_id         = var.cloudflare_zone_id
   name            = "keys"
   type            = "CNAME"
-  value           = aws_s3_bucket.keys_caseyspar_kz.bucket_regional_domain_name
+  value           = aws_s3_bucket.keys.bucket_regional_domain_name
   proxied         = false
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "www_caseyspar_kz" { #                                 www.caseyspar.kz (CNAME)
+resource "cloudflare_record" "www" { #                                              www@ (CNAME)
   zone_id         = var.cloudflare_zone_id
   name            = "www"
   type            = "CNAME"

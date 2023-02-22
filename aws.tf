@@ -79,8 +79,9 @@ resource "aws_iam_user_policy" "s3_user" { #                                    
           "s3:*"
         ],
         "Resource": [
-          "${aws_s3_bucket.cloud_caseyspar_kz.arn}",
-          "${aws_s3_bucket.keys_caseyspar_kz.arn}"
+          "${aws_s3_bucket.cloud.arn}",
+          "${aws_s3_bucket.keys.arn}",
+          "arn:aws:s3:::33095dce-cbf2-48ce-a24a-f42b2fdfb9a9"
         ]
       }]
     }
@@ -140,7 +141,7 @@ resource "aws_kms_key" "cloud_key" { #                                          
   deletion_window_in_days = 14
 }
 
-resource "aws_s3_bucket" "cloud_caseyspar_kz" { #                                       Misc. cloud storage.
+resource "aws_s3_bucket" "cloud" { #                                       Misc. cloud storage.
   bucket = "cloud.${var.root_domain}"
 
   tags = merge(
@@ -152,21 +153,21 @@ resource "aws_s3_bucket" "cloud_caseyspar_kz" { #                               
   )
 }
 
-resource "aws_s3_bucket_acl" "cloud_caseyspar_kz" { #                                   ACL policy for cloud.caseyspar.kz.
-  bucket = aws_s3_bucket.cloud_caseyspar_kz.id
+resource "aws_s3_bucket_acl" "cloud" { #                                   ACL policy for cloud S3 bucket.
+  bucket = aws_s3_bucket.cloud.id
   acl    = "private"
 }
 
-resource "aws_s3_bucket_public_access_block" "cloud_caseyspar_kz" { #                   Block public S3 access.
-  bucket                  = aws_s3_bucket.cloud_caseyspar_kz.id
+resource "aws_s3_bucket_public_access_block" "cloud" { #                   Block public S3 access.
+  bucket                  = aws_s3_bucket.cloud.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "cloud_caseyspar_kz" { #  S3 encryption policy.
-  bucket = aws_s3_bucket.cloud_caseyspar_kz.id
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloud" { #  S3 encryption policy.
+  bucket = aws_s3_bucket.cloud.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -176,14 +177,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloud_caseyspar_k
   }
 }
 
-resource "aws_s3_bucket_versioning" "cloud_caseyspar_kz" { #                            Enable versioning.
-  bucket = aws_s3_bucket.cloud_caseyspar_kz.id
+resource "aws_s3_bucket_versioning" "cloud" { #                            Enable versioning.
+  bucket = aws_s3_bucket.cloud.id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket" "keys_caseyspar_kz" { #                                        Pubkey cloud storage.
+resource "aws_s3_bucket" "keys" { #                                        Pubkey cloud storage.
   bucket = "keys.${var.root_domain}"
 
   tags = merge(
@@ -195,8 +196,8 @@ resource "aws_s3_bucket" "keys_caseyspar_kz" { #                                
   )
 }
 
-resource "aws_s3_bucket_policy" "keys_caseyspar_kz" { #                                 Public RO policy for keys.caseyspar.kz.
-  bucket = aws_s3_bucket.keys_caseyspar_kz.id
+resource "aws_s3_bucket_policy" "keys" { #                                 Public RO policy for keys S3 bucket.
+  bucket = aws_s3_bucket.keys.id
 
   policy = <<-EOF
     {
@@ -216,13 +217,13 @@ resource "aws_s3_bucket_policy" "keys_caseyspar_kz" { #                         
   EOF
 }
 
-resource "aws_s3_bucket_acl" "keys_caseyspar_kz" { #                                    ACL policy for keys.caseyspar.kz.
-  bucket = aws_s3_bucket.keys_caseyspar_kz.id
+resource "aws_s3_bucket_acl" "keys" { #                                    ACL policy for keys S3 bucket.
+  bucket = aws_s3_bucket.keys.id
   acl    = "public-read"
 }
 
-resource "aws_s3_object" "keys_caseyspar_kz-authorized_keys" { #                        Public SSH key.
-  bucket  = aws_s3_bucket.keys_caseyspar_kz.id
+resource "aws_s3_object" "keys-authorized_keys" { #                        Public SSH key.
+  bucket  = aws_s3_bucket.keys.id
   acl     = "public-read"
   key     = "authorized_keys"
   content = var.admin_ssh_pubkey
@@ -234,8 +235,8 @@ resource "aws_s3_object" "keys_caseyspar_kz-authorized_keys" { #                
   )
 }
 
-resource "aws_s3_object" "keys_caseyspar_kz-public_asc" { #                             Public PGP key.
-  bucket  = aws_s3_bucket.keys_caseyspar_kz.id
+resource "aws_s3_object" "keys-public_asc" { #                             Public PGP key.
+  bucket  = aws_s3_bucket.keys.id
   acl     = "public-read"
   key     = "public.asc"
   content = var.admin_pgp_key
