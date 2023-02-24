@@ -34,6 +34,12 @@ variable "aws_secret_key" {
   sensitive   = true
 }
 
+variable "aws_root_mfa_key_arns" {
+  description = "AWS Root account MFA security keys"
+  type        = list(string)
+  sensitive   = true
+}
+
 variable "aws_region" {
   description = "AWS region"
   type        = string
