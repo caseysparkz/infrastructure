@@ -1,9 +1,0 @@
-version: "3"
-services:
-    alpine:
-        #image: 770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine_base:3.10.4
-        image: ${ECR_REPO}/alpine_base:3.17.1
-
-        build:
-            context: .
-            network: host

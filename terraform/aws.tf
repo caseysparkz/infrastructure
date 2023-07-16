@@ -1,4 +1,4 @@
-locals { #                                                                              Local TF variables.
+locals { #                                                                      Local TF variables.
   common_tags = {
     terraform = "true"
   }
@@ -6,7 +6,7 @@ locals { #                                                                      
 
 
 # IAM Config #############################################################################################################
-resource "aws_iam_user" "cli_user" { #                                                  AWS CLI user.
+resource "aws_iam_user" "cli_user" { #                                          AWS CLI user.
   name          = "cli_user"
   path          = "/"
   force_destroy = true
@@ -19,17 +19,17 @@ resource "aws_iam_user" "cli_user" { #                                          
   )
 }
 
-resource "aws_iam_access_key" "cli_user" { #                                            Access key for CLI user.
+resource "aws_iam_access_key" "cli_user" { #                                    Access key for CLI user.
   user = aws_iam_user.cli_user.name
 }
 
-resource "aws_iam_user_ssh_key" "cli_user" { #                                          SSH key for CLI user.
+resource "aws_iam_user_ssh_key" "cli_user" { #                                  SSH key for CLI user.
   username   = aws_iam_user.cli_user.name
   encoding   = "SSH"
   public_key = var.admin_ssh_pubkey
 }
 
-resource "aws_iam_user_policy" "cli_user" { #                                           CLI user policy (ECR)
+resource "aws_iam_user_policy" "cli_user" { #                                   CLI user policy (ECR)
   name = "${aws_iam_user.cli_user.name}_iam_policy"
   user = aws_iam_user.cli_user.name
 
@@ -49,7 +49,7 @@ resource "aws_iam_user_policy" "cli_user" { #                                   
   EOF
 }
 
-resource "aws_iam_user" "s3_user" { #                                                   AWS S3 user.
+resource "aws_iam_user" "s3_user" { #                                           AWS S3 user.
   name          = "s3_user"
   path          = "/"
   force_destroy = true
@@ -61,11 +61,11 @@ resource "aws_iam_user" "s3_user" { #                                           
   )
 }
 
-resource "aws_iam_access_key" "s3_user" { #                                             Access key for S3 user.
+resource "aws_iam_access_key" "s3_user" { #                                     Access key for S3 user.
   user = aws_iam_user.s3_user.name
 }
 
-resource "aws_iam_user_policy" "s3_user" { #                                            S3 user policy (S3).
+resource "aws_iam_user_policy" "s3_user" { #                                    S3 user policy (S3).
   name = "${aws_iam_user.s3_user.name}_iam_policy"
   user = aws_iam_user.s3_user.name
 
@@ -89,7 +89,7 @@ resource "aws_iam_user_policy" "s3_user" { #                                    
 }
 
 # ECR Config #############################################################################################################
-resource "aws_ecr_repository" "alpine_base" { #                                         Alpine base repo.
+resource "aws_ecr_repository" "alpine_base" { #                                 Alpine base repo.
   name                 = "alpine_base"
   image_tag_mutability = "IMMUTABLE"
   force_delete         = true
@@ -112,7 +112,7 @@ resource "aws_ecr_repository" "alpine_base" { #                                 
   )
 }
 
-resource "aws_ecr_repository" "python3_base" { #                                        Python3 base repo.
+resource "aws_ecr_repository" "python3_base" { #                                Python3 base repo.
   name                 = "python3_base"
   image_tag_mutability = "IMMUTABLE"
   force_delete         = true
@@ -136,12 +136,12 @@ resource "aws_ecr_repository" "python3_base" { #                                
 }
 
 # S3 Config ##############################################################################################################
-resource "aws_kms_key" "cloud_key" { #                                                  Key used to encrypt S3 buckets.
+resource "aws_kms_key" "cloud_key" { #                                          Key used to encrypt S3 buckets.
   description             = "Key used to encrypt S3 buckets."
   deletion_window_in_days = 14
 }
 
-resource "aws_s3_bucket" "cloud" { #                                       Misc. cloud storage.
+resource "aws_s3_bucket" "cloud" { #                                            Misc. cloud storage.
   bucket = "cloud.${var.root_domain}"
 
   tags = merge(
@@ -153,12 +153,12 @@ resource "aws_s3_bucket" "cloud" { #                                       Misc.
   )
 }
 
-resource "aws_s3_bucket_acl" "cloud" { #                                   ACL policy for cloud S3 bucket.
+resource "aws_s3_bucket_acl" "cloud" { #                                        ACL policy for cloud S3 bucket.
   bucket = aws_s3_bucket.cloud.id
   acl    = "private"
 }
 
-resource "aws_s3_bucket_public_access_block" "cloud" { #                   Block public S3 access.
+resource "aws_s3_bucket_public_access_block" "cloud" { #                        Block public S3 access.
   bucket                  = aws_s3_bucket.cloud.id
   block_public_acls       = true
   block_public_policy     = true
@@ -166,7 +166,7 @@ resource "aws_s3_bucket_public_access_block" "cloud" { #                   Block
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "cloud" { #  S3 encryption policy.
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloud" { #       S3 encryption policy.
   bucket = aws_s3_bucket.cloud.id
 
   rule {
@@ -177,14 +177,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cloud" { #  S3 en
   }
 }
 
-resource "aws_s3_bucket_versioning" "cloud" { #                            Enable versioning.
+resource "aws_s3_bucket_versioning" "cloud" { #                                 Enable versioning.
   bucket = aws_s3_bucket.cloud.id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket" "keys" { #                                        Pubkey cloud storage.
+resource "aws_s3_bucket" "keys" { #                                             Pubkey cloud storage.
   bucket = "keys.${var.root_domain}"
 
   tags = merge(
@@ -196,7 +196,7 @@ resource "aws_s3_bucket" "keys" { #                                        Pubke
   )
 }
 
-resource "aws_s3_bucket_policy" "keys" { #                                 Public RO policy for keys S3 bucket.
+resource "aws_s3_bucket_policy" "keys" { #                                      Public RO policy for keys S3 bucket.
   bucket = aws_s3_bucket.keys.id
 
   policy = <<-EOF
@@ -217,12 +217,12 @@ resource "aws_s3_bucket_policy" "keys" { #                                 Publi
   EOF
 }
 
-resource "aws_s3_bucket_acl" "keys" { #                                    ACL policy for keys S3 bucket.
+resource "aws_s3_bucket_acl" "keys" { #                                         ACL policy for keys S3 bucket.
   bucket = aws_s3_bucket.keys.id
   acl    = "public-read"
 }
 
-resource "aws_s3_object" "keys-authorized_keys" { #                        Public SSH key.
+resource "aws_s3_object" "keys-authorized_keys" { #                             Public SSH key.
   bucket  = aws_s3_bucket.keys.id
   acl     = "public-read"
   key     = "authorized_keys"
@@ -235,7 +235,7 @@ resource "aws_s3_object" "keys-authorized_keys" { #                        Publi
   )
 }
 
-resource "aws_s3_object" "keys-public_asc" { #                             Public PGP key.
+resource "aws_s3_object" "keys-public_asc" { #                                  Public PGP key.
   bucket  = aws_s3_bucket.keys.id
   acl     = "public-read"
   key     = "public.asc"
