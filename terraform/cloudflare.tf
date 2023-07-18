@@ -67,7 +67,7 @@ resource "cloudflare_record" "spf" { #                                          
   zone_id         = var.cloudflare_zone_id
   name            = var.root_domain
   type            = "TXT"
-  value           = "v=spf1 include._spf.protonmail.ch -all"
+  value           = "v=spf1 include:_spf.protonmail.ch mx ~all"
   proxied         = false
   allow_overwrite = true
 }
