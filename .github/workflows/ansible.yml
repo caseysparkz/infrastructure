@@ -1,0 +1,62 @@
+---
+name: 'Ansible'
+on:
+    pull_request:
+        branches:
+            - 'main'
+        paths:
+            - 'ansible/**'
+jobs:
+    ansible:
+        name: 'Validate Ansible code'
+        runs-on: 'ubuntu-latest'
+        permissions:
+            pull-requests: 'write'
+            contents: 'read'
+        env:
+            GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        working-directory: './ansible'
+        steps:
+            - name: 'Checkout'
+              uses: 'actions/checkout@v3'
+              with:
+                  fetch-depth: 0
+
+            - name: 'Run ansible-lint'
+              id: 'lint'
+              uses: 'ansible/ansible-lint-action@main'
+
+            - name: 'Update pull request.'
+              uses: 'actions/github-script@v6'
+              if: github.event_name == 'pull_request'
+              with:
+                  script: |
+                      github.rest.issues.createComment({
+                          issue_number: context.issue.number,
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          body: `#### Ansible Lint -\`${{ steps.lint.outcome }}\`
+                      })
+
+            - name: 'ansible-lint status'
+              if: steps.lint.outcome == 'failure'
+              run: exit 1
+
+            - name: 'Auto approve.'
+              uses: 'actions/github-script@v6'
+              if: steps.lint.outcome == 'success'
+              with:
+                  script: |
+                      github.rest.pulls.createReview({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          pull_number: context.issue.number,
+                          review_id: 1,
+                          event: 'APPROVE',
+                          body: 'Auto-approved by Github workflow.'
+                      })
+
+            - name: 'Auto merge.'
+              uses: 'pascalgn/automerge-action@v0.15.6'
+              if: steps.lint.outcome == 'success'
+...
