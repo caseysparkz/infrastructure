@@ -1,7 +1,0 @@
-version: '3'
-services:
-    alpine:
-        image: '${ECR_REPO}/alpine_base:3.18.0'
-        build:
-            context: '.'
-            network: 'host'
