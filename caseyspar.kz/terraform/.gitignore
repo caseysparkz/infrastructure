@@ -1,0 +1,15 @@
+# Terraform
+**/.terraform/*
+**/*.tfstate
+**/*.tfstate.*
+**/*.log
+**/*.tfvars
+**/*.tfvars.json
+**/override.tf
+**/override.tf.json
+**/_override.tf
+**/_override.tf.json
+**/.terraformrc
+**/terraform.rc
+**/terraform.lock.hcl
+**/.terraform.lock.hcl
