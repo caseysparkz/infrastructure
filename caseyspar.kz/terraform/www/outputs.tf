@@ -1,6 +1,7 @@
-###############################################################################
+########################################################################################################################
 # Outputs
 #
+
 output "aws_s3_bucket_endpoint" {
   description = "Bucket endpoint"
   value       = aws_s3_bucket_website_configuration.www_site.website_endpoint

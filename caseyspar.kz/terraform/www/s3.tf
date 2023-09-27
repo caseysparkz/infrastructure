@@ -1,9 +1,8 @@
-####################################################################################################
+########################################################################################################################
 # AWS S3
 #
 
-# WWW static site bucket.
-#
+## WWW static site bucket =====================================================
 resource "aws_s3_bucket" "www_site" {
   bucket        = local.subdomain
   force_destroy = true
@@ -70,8 +69,7 @@ resource "aws_s3_bucket_policy" "www_site" {
   })
 }
 
-# Root redirect bucket.
-#
+## Root redirect bucket =======================================================
 resource "aws_s3_bucket" "web_root" {
   bucket        = var.root_domain
   force_destroy = true

@@ -1,3 +1,7 @@
+########################################################################################################################
+# Providers
+#
+
 terraform {
   required_version = "~> 1.5"
 
@@ -10,7 +14,7 @@ terraform {
   backend "s3" {
     region = "us-west-2"
     bucket = "caseyspar.kz-tfstate"
-    key = "caseyspar.kz-tfstate.tfstate"
+    key    = "caseyspar.kz-tfstate.tfstate"
   }
 }
 

@@ -1,6 +1,7 @@
-###############################################################################
-# Cloudflare Root DNS 
+########################################################################################################################
+# Cloudflare
 #
+
 ## Locals =====================================================================
 locals {
   dmarc_policy = { #                                                            {key: value} (parsed to string)
@@ -71,7 +72,7 @@ resource "cloudflare_record" "txt_spf" { #                                      
   comment         = "Terraform-managed."
 }
 
-resource "cloudflare_record" "txt_verification" { #                             Domain verifications.
+resource "cloudflare_record" "txt_verification" { #                             Domain verification TXT records.
   for_each        = toset(var.verification_records)
   zone_id         = data.cloudflare_zone.root_domain.id
   name            = var.root_domain

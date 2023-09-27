@@ -1,9 +1,8 @@
-###############################################################################
+########################################################################################################################
 # Variables.
 #
 
-# Lambda
-#
+## Lambda =====================================================================
 variable "artifact_bucket_uri" {
   default     = "domain-artifacts"
   description = "S3 URI of the bucket in which the function is kept."
@@ -24,8 +23,7 @@ variable "function_name" {
   sensitive   = false
 }
 
-# Misc.
-#
+## Misc. ======================================================================
 variable "root_domain" {
   default     = "caseyspar.kz"
   description = "Root domain of Terraform infrastructure."

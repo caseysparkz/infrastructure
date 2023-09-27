@@ -1,7 +1,8 @@
-###############################################################################
-# AWS variables.
+########################################################################################################################
+# Variables
 #
-## Global
+
+## AWS ========================================================================
 variable "aws_region" {
   default     = "us-west-2"
   description = "AWS region to deploy to."
@@ -26,9 +27,7 @@ variable "aws_secret_key" {
   sensitive   = true
 }
 
-###############################################################################
-# Misc variables.
-#
+## Misc. ======================================================================
 variable "root_domain" {
   default     = "caseyspar.kz"
   description = "Root domain of Terraform infrastructure."

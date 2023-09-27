@@ -1,6 +1,8 @@
-###############################################################################
-# AWS variables
+########################################################################################################################
+# Variables
 #
+
+## AWS ========================================================================
 variable "aws_region" {
   description = "AWS region to deploy to."
   default     = "us-west-2"
@@ -25,9 +27,7 @@ variable "aws_secret_key" {
   sensitive   = true
 }
 
-###############################################################################
-# Cloudflare variables
-#
+## Cloudflare =================================================================
 variable "cloudflare_api_token" {
   description = "API token for Cloudflare authentication."
   type        = string
@@ -93,9 +93,7 @@ variable "pka_records" {
   sensitive = false
 }
 
-###############################################################################
-# Misc variables.
-#
+## Misc. ======================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."
   default     = "caseyspar.kz"
