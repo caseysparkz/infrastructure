@@ -2,7 +2,9 @@
 # Outputs
 #
 
-output "ecr_repository_url" {
-  description = "URL of the deployed ECR registry."
-  value       = aws_ecr_repository.ecr.repository_url
+output "ecr_registry_id" {
+  description = "List of URLs for deployed ECR registries."
+  value = [
+    for v in aws_ecr_repository.ecr : v.registry_id
+  ][0]
 }

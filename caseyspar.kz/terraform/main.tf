@@ -22,13 +22,13 @@ module "infrastructure" { #
 
 ## ECR ========================================================================
 module "ecr" { #                                                                Module.
-  source      = "./ecr"
-  root_domain = var.root_domain
+  source               = "./ecr"
+  ecr_repository_names = var.ecr_repository_names
 }
 
-output "ecr_repository_url" { #                                                 Outputs.
-  description = "URL of ECR repository for root domain."
-  value       = module.ecr.ecr_repository_url
+output "ecr_registry_url" { #                                                   Outputs.
+  description = "URLs of ECR repository for root domain."
+  value       = "${module.ecr.ecr_registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
 }
 
 /*

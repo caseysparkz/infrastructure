@@ -2,8 +2,8 @@
 # Variables
 #
 
-variable "root_domain" {
-  description = "Root domain of the deployed infrastructure."
-  type        = string
-  sensitive   = false
+variable "ecr_repository_names" {
+  description = "List of ECR repository names to create."
+  type = list(string)
+  sensitive = false
 }

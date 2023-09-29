@@ -1,4 +1,4 @@
-FROM alpine_base:3.18.0
+FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine_base:3.18.0
 
 USER root
 
@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED=1
 RUN apk update                                                          \
     && apk upgrade                                                      \
     && apk add --update --no-cache                                      \
-        python3=3.11.4-r0                                               \
+        python3                                                         \
     && ln -sf python3 /usr/bin/python                                   \
     && python -m ensurepip                                              \
     && ln -sf pip3 /usr/bin/pip

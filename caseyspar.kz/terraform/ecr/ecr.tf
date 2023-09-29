@@ -3,9 +3,10 @@
 #
 
 resource "aws_ecr_repository" "ecr" {
-  name                 = var.root_domain
+  for_each             = toset(var.ecr_repository_names)
+  name                 = each.key
   image_tag_mutability = "IMMUTABLE"
-  force_delete         = false
+  force_delete         = true
   tags                 = local.common_tags
 
   encryption_configuration {

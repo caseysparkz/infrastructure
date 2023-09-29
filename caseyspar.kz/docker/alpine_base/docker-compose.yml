@@ -1,7 +1,7 @@
 version: '3'
 services:
     alpine:
-        image: 'alpine_base:3.18.0'
+        image: '770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine_base:3.18.0'
         build:
             context: '.'
             network: 'host'

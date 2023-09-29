@@ -27,6 +27,23 @@ variable "aws_secret_key" {
   sensitive   = true
 }
 
+variable "ecr_repository_names" {
+  description = "List of ECR repository names to create."
+  default = [
+    "alpine_base",
+    "python3_base"
+  ]
+  type      = list(string)
+  sensitive = false
+
+  validation {
+    condition = alltrue([
+      for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9-_./]*$", v))
+    ])
+    error_message = "ECR repository name contains invalid characters. Valid: [a-zA-Z0-9-_./]"
+  }
+}
+
 ## Cloudflare =================================================================
 variable "cloudflare_api_token" {
   description = "API token for Cloudflare authentication."
