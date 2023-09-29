@@ -38,9 +38,9 @@ variable "ecr_repository_names" {
 
   validation {
     condition = alltrue([
-      for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9-_./]*$", v))
+      for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9_./]*$", v))
     ])
-    error_message = "ECR repository name contains invalid characters. Valid: [a-zA-Z0-9-_./]"
+    error_message = "ECR repository name contains invalid characters [a-zA-Z0-9-_./]."
   }
 }
 
