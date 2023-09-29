@@ -13,12 +13,23 @@ locals {
 # Modules and Outputs
 #
 
-/*
 ## Infrastructure =============================================================
 module "infrastructure" { #
   source      = "./infrastructure"
   root_domain = var.root_domain
   common_tags = local.common_tags
+}
+
+/*
+## ECR ========================================================================
+module "ecr" { #                                                                Module.
+  source      = "./ecr"
+  root_domain = var.root_domain
+}
+
+output "ecr_repository_url" { #                                                 Outputs.
+  description = "URL of ECR repository for root domain."
+  value       = module.ecr.ecr_repository_url
 }
 
 ## WWW ========================================================================
@@ -39,17 +50,6 @@ output "www_s3_bucket_endpoint" { #                                             
 output "www_s3_bucket_uri" {
   description = "URI of the www.{root_domain} S3 bucket (as expected by the AWS CLI)."
   value       = "s3://${module.www.aws_s3_bucket_uri}"
-}
-
-## ECR ========================================================================
-module "ecr" { #                                                                Module.
-  source      = "./ecr"
-  root_domain = var.root_domain
-}
-
-output "ecr_repository_url" { #                                                 Outputs.
-  description = "URL of ECR repository for root domain."
-  value       = module.ecr.ecr_repository_url
 }
 
 ## EKS ========================================================================
