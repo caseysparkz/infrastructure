@@ -20,7 +20,6 @@ module "infrastructure" { #
   common_tags = local.common_tags
 }
 
-/*
 ## ECR ========================================================================
 module "ecr" { #                                                                Module.
   source      = "./ecr"
@@ -32,6 +31,7 @@ output "ecr_repository_url" { #                                                 
   value       = module.ecr.ecr_repository_url
 }
 
+/*
 ## WWW ========================================================================
 module "www" { #                                                                Module.
   source              = "./www"
