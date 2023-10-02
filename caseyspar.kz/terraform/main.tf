@@ -29,6 +29,13 @@ module "ecr" { #                                                                
 output "ecr_registry_url" { #                                                   Outputs.
   description = "URLs of ECR repository for root domain."
   value       = "${module.ecr.ecr_registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
+  sensitive   = false
+}
+
+output "ecr_registry_repository_urls" {
+  description = "List of URLs for all deployed ECR repositories."
+  value       = module.ecr.ecr_registry_repository_urls
+  sensitive   = false
 }
 
 /*
@@ -45,11 +52,13 @@ module "www" { #                                                                
 output "www_s3_bucket_endpoint" { #                                             Outputs.
   description = "Endpoint of the www.{root_domain} S3 bucket."
   value       = module.www.aws_s3_bucket_endpoint
+  sensitive = false
 }
 
 output "www_s3_bucket_uri" {
   description = "URI of the www.{root_domain} S3 bucket (as expected by the AWS CLI)."
   value       = "s3://${module.www.aws_s3_bucket_uri}"
+  sensitive = false
 }
 
 ## EKS ========================================================================
@@ -60,5 +69,6 @@ module "eks" { #                                                                
 output "eks_sample_output" { #                                                  Outputs.
   description = "Placeholder EKS output.
   value = "eks_sample_output"
+  sensitive = false
 }
 */
