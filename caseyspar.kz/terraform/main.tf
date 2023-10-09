@@ -22,18 +22,18 @@ module "infrastructure" { #
 
 ## ECR ========================================================================
 module "ecr" { #                                                                Module.
-  source               = "./ecr"
-  ecr_repository_names = var.ecr_repository_names
+  source      = "./ecr"
+  root_domain = var.root_domain
 }
 
-output "ecr_registry_url" { #                                                   Outputs.
-  description = "URLs of ECR repository for root domain."
-  value       = "${module.ecr.ecr_registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
+output "ecr_registry_url" {
+  description = "URL of the deployed ECR registry."
+  value       = module.ecr.ecr_registry_url
   sensitive   = false
 }
 
 output "ecr_registry_repository_urls" {
-  description = "List of URLs for all deployed ECR repositories."
+  description = "List of URLs for the deployed ECR registry repositories."
   value       = module.ecr.ecr_registry_repository_urls
   sensitive   = false
 }

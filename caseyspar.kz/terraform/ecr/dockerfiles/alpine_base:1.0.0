@@ -1,0 +1,25 @@
+FROM alpine:3.18
+
+RUN apk update
+RUN apk upgrade
+RUN apk add                                                                 \
+        musl                                                                \
+        musl-locales                                                        \
+        musl-locales-lang                                                   \
+        sudo                                                                \
+        tzdata
+RUN cp /usr/share/zoneinfo/UTC /etc/localtime
+RUN echo "UTC" > /etc/timezone
+RUN echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
+RUN adduser                                                                 \
+        -h /app                                                             \
+        -D                                                                  \
+        -u 780                                                              \
+        app
+
+USER app
+
+ENV HOME="/app"
+ENV PATH="${PATH}:${HOME}/.local/bin"
+
+WORKDIR /app

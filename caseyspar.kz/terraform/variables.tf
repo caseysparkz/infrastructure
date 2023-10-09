@@ -51,15 +51,6 @@ variable "cloudflare_api_token" {
   sensitive   = true
 }
 
-variable "forward_zones" {
-  description = "Zones to forward to var.root_domain."
-  default = [
-    "cspar.kz",
-  ]
-  type      = list(string)
-  sensitive = false
-}
-
 variable "mx_servers" {
   description = "MX servers for root domain. Syntax: {server: priority}."
   default = {

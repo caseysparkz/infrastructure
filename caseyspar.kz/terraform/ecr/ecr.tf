@@ -3,7 +3,9 @@
 #
 
 resource "aws_ecr_repository" "ecr" {
-  for_each             = toset(var.ecr_repository_names)
+  for_each = toset([
+    for f in fileset(local.dockerfile_dir, "*") : replace(f, "/:.*$/", "")
+  ])
   name                 = each.key
   image_tag_mutability = "IMMUTABLE"
   force_delete         = true

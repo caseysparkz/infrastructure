@@ -13,16 +13,10 @@ locals {
     rua   = "mailto:dmarc_rua@${var.root_domain}"
     ruf   = "mailto:dmarc_ruf@${var.root_domain}"
   }
-  forward_zones = toset([for zone in data.cloudflare_zone.forward_zones : zone.id])
 }
 
 ## Data =======================================================================
 data "cloudflare_zone" "root_domain" { name = var.root_domain } #               Root zone.
-
-data "cloudflare_zone" "forward_zones" { #                                      Forward zones.
-  for_each = toset(var.forward_zones)
-  name     = each.value
-}
 
 ## Resources ==================================================================
 resource "cloudflare_record" "mx" { #                                           MX records.
@@ -96,43 +90,8 @@ resource "cloudflare_record" "txt_pka" { #                                      
   comment         = "Terraform-managed."
 }
 
-/*
-## Rules ======================================================================
-resource "cloudflare_ruleset" "redirect_forward_zone" {
-  for_each    = local.forward_zones
-  zone_id     = each.value
-  name        = "redirects"
-  description = "Redirects ruleset"
-  kind        = "zone"
-  phase       = "http_request_dynamic_redirect"
-
-  rules {
-    action      = "redirect"
-    expression  = "(http.request.uri.path matches \"^*\")"
-    description = "Redirect request to ${var.root_domain}."
-    enabled     = true
-
-    action_parameters {
-      from_value {
-        status_code           = 301
-        preserve_query_string = false
-
-        target_url {
-          value = "https://${var.root_domain}/"
-        }
-      }
-    }
-  }
-}
-*/
-
 ## Outputs ====================================================================
 output "cloudflare_zone_root" {
   description = "ID of the domain Cloudflare DNS zone."
   value       = data.cloudflare_zone.root_domain
-}
-
-output "cloudflare_zones_forward" {
-  description = "List of forward zone IDs."
-  value       = data.cloudflare_zone.forward_zones
 }
