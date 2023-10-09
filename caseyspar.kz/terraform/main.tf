@@ -14,10 +14,34 @@ locals {
 #
 
 ## Infrastructure =============================================================
-module "infrastructure" { #
+module "infrastructure" { #                                                     Module.
   source      = "./infrastructure"
   root_domain = var.root_domain
   common_tags = local.common_tags
+}
+
+output "infrastructure_artifacts_s3_bucket_name" { #                            Outputs.
+  description = "Name of the S3 bucket used to hold artifacts."
+  value       = module.infrastructure.artifacts_s3_bucket_name
+  sensitive   = false
+}
+
+output "infrastructure_artifacts_s3_bucket_URI" {
+  description = "URI of the S3 bucket used to hold artifacts."
+  value       = module.infrastructure.artifacts_s3_bucket_uri
+  sensitive   = false
+}
+
+output "infrastructure_artifacts_kms_key" {
+  description = "KMS key used to encrypt artifacts."
+  value       = module.infrastructure.artifacts_kms_key
+  sensitive   = false
+}
+
+output "infrastructure_artifacts_kms_key_alias" {
+  description = "Alias of the KMS key used to encrypt artifacts."
+  value       = module.infrastructure.artifacts_kms_key_alias
+  sensitive   = false
 }
 
 ## ECR ========================================================================
@@ -37,38 +61,3 @@ output "ecr_registry_repository_urls" {
   value       = module.ecr.ecr_registry_repository_urls
   sensitive   = false
 }
-
-/*
-## WWW ========================================================================
-module "www" { #                                                                Module.
-  source              = "./www"
-  root_domain         = var.root_domain
-  artifact_bucket_uri = module.infrastructure.aws_s3_bucket_name_artifacts
-  artifact_zip_name   = "www_contact_form.zip"
-  function_name       = "contact_form"
-  common_tags         = local.common_tags
-}
-
-output "www_s3_bucket_endpoint" { #                                             Outputs.
-  description = "Endpoint of the www.{root_domain} S3 bucket."
-  value       = module.www.aws_s3_bucket_endpoint
-  sensitive = false
-}
-
-output "www_s3_bucket_uri" {
-  description = "URI of the www.{root_domain} S3 bucket (as expected by the AWS CLI)."
-  value       = "s3://${module.www.aws_s3_bucket_uri}"
-  sensitive = false
-}
-
-## EKS ========================================================================
-module "eks" { #                                                                Module.
-  source = "./eks"
-}
-
-output "eks_sample_output" { #                                                  Outputs.
-  description = "Placeholder EKS output.
-  value = "eks_sample_output"
-  sensitive = false
-}
-*/
