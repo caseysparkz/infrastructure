@@ -7,8 +7,15 @@ locals {
   hugo_dir              = "${path.module}/srv"
   hugo_config_template  = "${local.hugo_dir}/config.yaml.tftpl"
   contact_page_template = "${local.hugo_dir}/content/contact.md.tftpl"
-  srv_dir               = "${local.hugo_dir}/public/"
+  srv_dir               = "${local.hugo_dir}/public"
   website_files         = fileset(local.srv_dir, "**")
+  build_hash = sha256(join( #                                                   If build changes.
+    "",
+    [
+      for file in setsubtract(fileset(local.hugo_dir, "**"), local.website_files) :
+      filesha1("${local.hugo_dir}/${file}")
+    ]
+  ))
   mime_types = {
     ".html"        = "text/html"
     ".ico"         = "image/vnd.microsoft.icon"
@@ -68,6 +75,7 @@ resource "null_resource" "compile_pages" {
     local_file.hugo_config,
     local_file.contact_page
   ]
+  triggers = { build_hash = local.build_hash }
 
   provisioner "local-exec" {
     working_dir = local.hugo_dir
@@ -129,6 +137,9 @@ resource "aws_s3_bucket_policy" "www_site" {
 
 # Works but don't like.
 resource "null_resource" "deploy_pages" {
+  depends_on = [null_resource.compile_pages]
+  triggers   = { build_hash = local.build_hash }
+
   provisioner "local-exec" {
     command = "aws s3 cp --recursive ${local.srv_dir} s3://${aws_s3_bucket.www_site.id}"
   }
