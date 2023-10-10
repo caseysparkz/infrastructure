@@ -12,36 +12,34 @@ locals {
 }
 
 ########################################################################################################################
-# Modules
+# Modules and Outputs
 #
 
 ## Artifacts ==================================================================
-module "artifacts" {
+module "artifacts" { #                                                          Module.
   source      = "./artifacts"
   root_domain = var.root_domain
   common_tags = local.common_tags
 }
 
-########################################################################################################################
-# Outputs
-#
-
-output "artifacts_s3_bucket_name" {
+output "artifacts_s3_bucket_id" { #                                             Outputs.
   description = "FQDN of the S3 bucket (as expected by the Terraform backend config)."
-  value       = module.artifacts.aws_s3_bucket_name
+  value       = module.artifacts.aws_s3_bucket_id
 }
 
 output "artifacts_s3_bucket_uri" {
   description = "URI of the S3 bucket (as expected by the AWS CLI)."
-  value       = "s3://${module.artifacts.aws_s3_bucket_name}"
+  value       = "s3://${module.artifacts.aws_s3_bucket_uri}"
 }
 
 output "artifacts_kms_key" {
   description = "ID of the KMS key used to encrypt domain artifacts."
   value       = module.artifacts.aws_kms_key
+  sensitive   = false
 }
 
 output "artifacts_kms_key_alias" {
   description = "Alias of the KMS key used to encrypt Terraform domain artifacts."
   value       = module.artifacts.aws_kms_key_alias
+  sensitive   = false
 }
