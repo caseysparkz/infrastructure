@@ -1,16 +1,12 @@
-FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine3_base:1.0.0
+FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/ubuntu22_base:1.0.0
 
 USER root
 
 ENV PYTHONUNBUFFERED=1
 
-RUN apk update
-RUN apk upgrade
-RUN apk add                                                             \
-        --update                                                        \
-        --no-cache                                                      \
-    py3-pip                                                             \
-    python3
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y python3-pip
 
 USER app
 

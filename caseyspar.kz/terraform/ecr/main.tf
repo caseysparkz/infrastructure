@@ -17,8 +17,3 @@ locals {
     for f in local.dockerfiles : "${local.ecr_registry}/${replace(f, "/:.*$/", "")}"
   ]
 }
-
-## Data =======================================================================
-data "aws_ecr_authorization_token" "token" { #                                  ECR token.
-  depends_on = [aws_ecr_repository.ecr]
-}

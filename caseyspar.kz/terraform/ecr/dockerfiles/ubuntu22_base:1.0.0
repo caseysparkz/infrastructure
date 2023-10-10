@@ -1,0 +1,39 @@
+FROM docker.io/ubuntu:22.04
+
+ENV TZ="UTC"
+ENV LANG="C.UTF-8"
+ENV LC_ALL="C.UTF-8"
+ENV DEBIAN_FRONTEND="noninteractive"
+ENV APP_HOME="/app"
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y                                                          \
+    apt-transport-https                                                     \
+    ca-certificates                                                         \
+    curl                                                                    \
+    git                                                                     \
+    iputils-ping                                                            \
+    locales                                                                 \
+    locales-all                                                             \
+    lsb-release                                                             \
+    tzdata                                                                  \
+    unzip                                                                   \
+    vim
+RUN apt clean
+RUN apt autoremove
+RUN mkdir -p /opt/{,local/}bin
+RUN useradd                                                                 \
+        --system                                                            \
+        --home-dir ${APP_HOME}                                              \
+        --uid 780                                                           \
+        --user-group                                                        \
+    app
+
+USER app
+
+ENV PATH="${PATH}:${HOME}/.local/bin"
+
+WORKDIR ${APP_HOME}
+
+ENTRYPOINT ["/usr/bin/bash"]

@@ -18,6 +18,9 @@ terraform {
   }
 }
 
+## Data =======================================================================
+data "aws_ecr_authorization_token" "token" {} #                                  ECR token.
+
 ## Providers ==================================================================
 provider "docker" { #                                                           Docker.
   registry_auth {
