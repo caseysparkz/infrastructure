@@ -2,10 +2,7 @@
 # AWS IAM
 #
 
-## Locals =====================================================================
-locals {}
-
-## IAM Policy =================================================================
+## Data =======================================================================
 data "aws_iam_policy_document" "lambda_assume_role" {
   statement {
     effect  = "Allow"
@@ -29,6 +26,7 @@ data "aws_iam_policy_document" "lambda_ses_sendemail" {
   }
 }
 
+## Resources ==================================================================
 resource "aws_iam_role" "lambda_contact_form" {
   name               = "lambda_contact_form"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json

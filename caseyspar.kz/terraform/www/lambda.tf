@@ -14,7 +14,7 @@ locals {
   }
 }
 
-## Lambda =====================================================================
+## Data =======================================================================
 # TODO: Fix
 # Will redeploy _every_ time.
 data "archive_file" "lambda_contact_form" {
@@ -23,6 +23,7 @@ data "archive_file" "lambda_contact_form" {
   output_path = "${local.lambda_dir}/contact_form_handler.zip"
 }
 
+## Resources ==================================================================
 resource "aws_s3_object" "lambda_contact_form" {
   bucket = var.artifact_bucket_id
   key    = "contact_form_handler.zip"

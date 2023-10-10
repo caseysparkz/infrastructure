@@ -1,7 +1,8 @@
-########################################################################################################################
-# Locals
+###############################################################################
+# Main
 #
 
+## Locals =====================================================================
 locals {
   common_tags = merge(
     {
@@ -11,18 +12,14 @@ locals {
   )
 }
 
-########################################################################################################################
-# Modules and Outputs
-#
-
-## Artifacts ==================================================================
-module "artifacts" { #                                                          Module.
+## Modules and Outputs
+module "artifacts" { # -------------------------------------------------------- Artifacts module.
   source      = "./artifacts"
   root_domain = var.root_domain
   common_tags = local.common_tags
 }
 
-output "artifacts_s3_bucket_id" { #                                             Outputs.
+output "artifacts_s3_bucket_id" { # ------------------------------------------- Artifacts outputs.
   description = "FQDN of the S3 bucket (as expected by the Terraform backend config)."
   value       = module.artifacts.aws_s3_bucket_id
 }

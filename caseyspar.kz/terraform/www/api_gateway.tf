@@ -7,7 +7,7 @@ locals {
   lambda_url = aws_apigatewayv2_stage.lambda_contact_form.invoke_url
 }
 
-## API Gateway ================================================================
+## Resources ==================================================================
 resource "aws_apigatewayv2_api" "lambda_contact_form" {
   name          = "lambda_contact_form_gateway"
   protocol_type = "HTTP"

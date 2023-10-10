@@ -1,6 +1,7 @@
-########################################################################################################################
+###############################################################################
 # Outputs
 #
+
 output "ecr_registry_url" {
   description = "URL of the deployed ECR registry."
   value       = replace(data.aws_ecr_authorization_token.token.proxy_endpoint, "https://", "")

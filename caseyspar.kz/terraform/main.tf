@@ -1,7 +1,8 @@
-########################################################################################################################
-# Locals
+###############################################################################
+# Main
 #
 
+## Locals =====================================================================
 locals {
   common_tags = {
     domain    = var.root_domain
@@ -9,18 +10,14 @@ locals {
   }
 }
 
-########################################################################################################################
-# Modules and Outputs
-#
-
-## Infrastructure =============================================================
-module "infrastructure" { #                                                     Module.
+## Modules and Outputs ========================================================
+module "infrastructure" { # --------------------------------------------------- Infrastructure.
   source      = "./infrastructure"
   root_domain = var.root_domain
   common_tags = local.common_tags
 }
 
-output "infrastructure_artifacts_s3_bucket_id" { #                              Outputs.
+output "infrastructure_artifacts_s3_bucket_id" {
   description = "Name of the S3 bucket used to hold artifacts."
   value       = module.infrastructure.artifacts_s3_bucket_id
   sensitive   = false
@@ -44,8 +41,7 @@ output "infrastructure_artifacts_kms_key_alias" {
   sensitive   = false
 }
 
-## ECR ========================================================================
-module "ecr" { #                                                                Module.
+module "ecr" { # -------------------------------------------------------------- ECR.
   source      = "./ecr"
   root_domain = var.root_domain
 }
@@ -62,8 +58,7 @@ output "ecr_registry_repository_urls" {
   sensitive   = false
 }
 
-## WWW ========================================================================
-module "www" { #                                                                Module.
+module "www" { # -------------------------------------------------------------- WWW.
   source             = "./www"
   root_domain        = var.root_domain
   subdomain          = "www.${var.root_domain}"
@@ -71,7 +66,7 @@ module "www" { #                                                                
   common_tags        = local.common_tags
 }
 
-output "www_s3_bucket_endpoint" { #                                             Outputs.
+output "www_s3_bucket_endpoint" {
   description = "Endpoint of the www.{root_domain} S3 bucket."
   value       = module.www.aws_s3_bucket_endpoint
   sensitive   = false
@@ -88,16 +83,3 @@ output "www_contact_form_uri" {
   value       = module.www.aws_apigateway_contact_form_uri
   sensitive   = false
 }
-
-/*
-## EKS ========================================================================
-module "eks" { #                                                                Module.
-  source = "./eks"
-}
-
-output "eks_sample_output" { #                                                  Outputs.
-  description = "Placeholder EKS output.
-  value = "eks_sample_output"
-  sensitive = false
-}
-*/

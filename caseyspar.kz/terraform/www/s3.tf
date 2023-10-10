@@ -1,14 +1,14 @@
-########################################################################################################################
+###############################################################################
 # AWS S3
 #
 
 ## Locals =====================================================================
 locals {
-  hugo_dir             = "${path.module}/srv"
-  hugo_config_template = "${local.hugo_dir}/config.yaml.tftpl"
+  hugo_dir              = "${path.module}/srv"
+  hugo_config_template  = "${local.hugo_dir}/config.yaml.tftpl"
   contact_page_template = "${local.hugo_dir}/content/contact.md.tftpl"
-  srv_dir              = "${local.hugo_dir}/public/"
-  website_files        = fileset(local.srv_dir, "**")
+  srv_dir               = "${local.hugo_dir}/public/"
+  website_files         = fileset(local.srv_dir, "**")
   mime_types = {
     ".html"        = "text/html"
     ".ico"         = "image/vnd.microsoft.icon"
@@ -22,19 +22,37 @@ locals {
   }
 }
 
-## Local build ================================================================
-resource "local_file" "hugo_config" { #                                         Update Hugo config.
+## Data objects ===============================================================
+data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "s3_public_read_access" {
+  statement {
+    sid     = "PublicReadGetObject"
+    actions = ["s3:GetObject"]
+    resources = [
+      aws_s3_bucket.www_site.arn,
+      "${aws_s3_bucket.www_site.arn}/*",
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+  }
+}
+
+## Resources ==================================================================
+resource "local_file" "hugo_config" { # --------------------------------------- Local build files.
   filename = replace(local.hugo_config_template, ".tftpl", "")
   content = templatefile(
     local.hugo_config_template,
     {
-      "domain"                 = var.subdomain
-      "title"                  = var.root_domain
+      "domain" = var.subdomain
+      "title"  = var.root_domain
     }
   )
 }
 
-resource "local_file" "contact_page" { #                                        Update Hugo config.
+resource "local_file" "contact_page" {
   filename = replace(local.contact_page_template, ".tftpl", "")
   content = templatefile(
     local.contact_page_template,
@@ -45,8 +63,11 @@ resource "local_file" "contact_page" { #                                        
   )
 }
 
-resource "null_resource" "compile_pages" { #                                    Build static pages.
-  depends_on = [local_file.hugo_config]
+resource "null_resource" "compile_pages" {
+  depends_on = [
+    local_file.hugo_config,
+    local_file.contact_page
+  ]
 
   provisioner "local-exec" {
     working_dir = local.hugo_dir
@@ -54,26 +75,7 @@ resource "null_resource" "compile_pages" { #                                    
   }
 }
 
-## Data objects ===============================================================
-data "aws_caller_identity" "current" {}
-
-data "aws_iam_policy_document" "s3_access" {
-  statement {
-    sid = "PublicReadGetObject"
-    actions = ["s3:GetObject"]
-    resources = [
-      aws_s3_bucket.www_site.arn,
-      "${aws_s3_bucket.www_site.arn}/*",
-    ]
-    principals {
-      type = "AWS"
-      identifiers = ["*"]
-    }
-  }
-}
-
-## WWW static site bucket =====================================================
-resource "aws_s3_bucket" "www_site" {
+resource "aws_s3_bucket" "www_site" { # --------------------------------------- WWW site.
   bucket        = var.subdomain
   force_destroy = true
   tags = merge(
@@ -122,7 +124,7 @@ resource "aws_s3_bucket_acl" "www_site" {
 
 resource "aws_s3_bucket_policy" "www_site" {
   bucket = aws_s3_bucket.www_site.id
-  policy = data.aws_iam_policy_document.s3_access.json
+  policy = data.aws_iam_policy_document.s3_public_read_access.json
 }
 
 # Works but don't like.
@@ -138,17 +140,15 @@ resource "aws_s3_object_copy" "www_site" { #                                    
     null_resource.compile_pages,
     aws_s3_bucket.www_site
   ]
-  for_each     = local.website_files
-  bucket       = aws_s3_bucket.www_site.id
-  key          = each.key
-  source       = "${local.srv_dir}/${each.key}"
-  #acl          = "public-read"
+  for_each                     = local.website_files
+  bucket                       = aws_s3_bucket.www_site.id
+  key                          = each.key
+  source                       = "${local.srv_dir}/${each.key}"
   content_type = lookup(local.mime_types, regex("\\.[^.]+$", each.key), "text/plain")
 }
 */
 
-## Root redirect bucket =======================================================
-resource "aws_s3_bucket" "web_root" {
+resource "aws_s3_bucket" "web_root" { # --------------------------------------- Redirect root.
   bucket        = var.root_domain
   force_destroy = true
   tags = merge(

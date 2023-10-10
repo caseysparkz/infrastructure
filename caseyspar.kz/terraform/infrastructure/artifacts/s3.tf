@@ -1,32 +1,8 @@
-########################################################################################################################
-# Locals
-#
-
-locals {}
-
-########################################################################################################################
-# AWS KMS
-#
-
-resource "aws_kms_key" "artifacts" {
-  description             = "KMS key to encrypt domain artifacts/S3 bucket objects."
-  deletion_window_in_days = 30
-  tags = merge(
-    {
-      service = "kms"
-    },
-    local.common_tags
-  )
-}
-resource "aws_kms_alias" "artifacts" {
-  name          = "alias/artifacts_kms_key"
-  target_key_id = aws_kms_key.artifacts.key_id
-}
-
-########################################################################################################################
+###############################################################################
 # AWS S3
 #
 
+## Resources ==================================================================
 resource "aws_s3_bucket" "artifacts" {
   bucket        = "${var.root_domain}-artifacts"
   force_destroy = false

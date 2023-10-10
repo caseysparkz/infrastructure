@@ -1,7 +1,8 @@
-########################################################################################################################
-# Terraform
+###############################################################################
+# Terraform and Providers
 #
 
+## Terraform ==================================================================
 terraform {
   required_version = "~> 1.5"
 
@@ -17,13 +18,7 @@ terraform {
   }
 }
 
-########################################################################################################################
-# Providers
-#
-data "aws_ecr_authorization_token" "token" { #                                  ECR token.
-  depends_on = [aws_ecr_repository.ecr]
-}
-
+## Providers ==================================================================
 provider "docker" { #                                                           Docker.
   registry_auth {
     address  = data.aws_ecr_authorization_token.token.proxy_endpoint
