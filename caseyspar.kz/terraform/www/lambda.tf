@@ -2,35 +2,7 @@
 # AWS Lambda
 #
 
-## Locals =====================================================================
-locals {
-  lambda_dir = "${path.module}/lambda"
-  default_email_headers = {
-    recipient = "form@${var.subdomain}"
-    sender    = "NULL"
-    email     = "NULL"
-    subject   = "NULL"
-    message   = "NULL"
-  }
-}
-
-## Data =======================================================================
-# TODO: Fix
-# Will redeploy _every_ time.
-data "archive_file" "lambda_contact_form" {
-  type        = "zip"
-  source_file = "${local.lambda_dir}/handler.py"
-  output_path = "${local.lambda_dir}/contact_form_handler.zip"
-}
-
 ## Resources ==================================================================
-resource "aws_s3_object" "lambda_contact_form" {
-  bucket = var.artifact_bucket_id
-  key    = "contact_form_handler.zip"
-  source = data.archive_file.lambda_contact_form.output_path
-  etag   = filemd5(data.archive_file.lambda_contact_form.output_path)
-}
-
 resource "aws_lambda_function" "contact_form" {
   description      = "Python function to send an email via AWS SES."
   function_name    = "contact_form"
@@ -43,11 +15,8 @@ resource "aws_lambda_function" "contact_form" {
 
   environment {
     variables = {
-      DEFAULT_RECIPIENT = local.default_email_headers["recipient"]
-      DEFAULT_SENDER    = local.default_email_headers["sender"]
-      DEFAULT_EMAIL     = local.default_email_headers["email"]
-      DEFAULT_SUBJECT   = local.default_email_headers["subject"]
-      DEFAULT_MESSAGE   = local.default_email_headers["message"]
+      DEFAULT_RECIPIENT = local.email_headers["default_recipient"]
+      DEFAULT_SENDER    = local.email_headers["default_sender"]
     }
   }
 }

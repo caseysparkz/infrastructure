@@ -6,6 +6,7 @@
 '''Python Lambda function for website contact page.'''
 
 from logging import getLogger
+from os import getenv
 from typing import NoReturn
 from boto3 import client
 
@@ -13,29 +14,38 @@ LOG = getLogger(__name__)                                                   # In
 
 def send_email(
     recipients: list[str],
-    name: str = "NULL",
-    source: str = "NULL",
-    subject: str = "NULL",
-    message: str = "NULL"
+    default_sender: str,
+    sender_name: str,
+    sender_email: str,
+    subject: str,
+    message: str,
         ) -> dict:
     '''
     Send an email via AWS SES.
-        :param recipients:  Email recipient list.
-        :param name:        Email sender's name.
-        :param source:      Email sender's email address.
-        :param subject:     Email subject line.
-        :param message:     Email message body.
-        :return:            Dict containing the SES response.
+        :param recipients:      Email recipient list.
+        :param default_sender:  Email of the Lambda application (not the user).
+        :param sender_name:     Email sender's name.
+        :param sender_email:    Email sender's email address.
+        :param subject:         Email subject line.
+        :param message:         Email message body.
+        :return:                Dict containing the SES response.
     '''
-    ses_client = client('ses')                                              # Instantiate AWS SES client.
-    body = f'From: {name}\nEmail: {source}\nContent:\n{message}'            # Format message body for email.
-    response = ses_client.send_email(                                       # Send email to SES client.
+    assert isinstance(recipients, list), 'recipients must be list().'
+    assert all(isinstance(item, str) for item in recipients), 'recipients must be list[str].'
+    assert isinstance(sender_name, str), 'sender_name must be str().'
+    assert isinstance(sender_email, str), 'sender_email must be str().'
+    assert isinstance(subject, str), 'subject must be str().'
+    assert isinstance(message, str), 'message must be str().'
+    assert isinstance(default_sender, str), 'default_sender must be str().'
+
+    ses_client = client('ses')
+    response = ses_client.send_email(
         Destination={'ToAddresses': recipients},
         Message={
             'Body': {
                 'Text': {
                     'Charset': 'UTF-8',
-                    'Data': body
+                    'Data': f'From: {sender_name}\nEmail: {sender_email}\nContent:\n{message}'
                 }
             },
             'Subject': {
@@ -43,8 +53,10 @@ def send_email(
                 'Data': subject,
             }
         },
-        Source=source
+        Source=default_sender
     )
+
+    LOG.debug(response)
 
     return response
 
@@ -58,13 +70,15 @@ def lambda_handler(
         :param event:   The Lamba event to handle.
         :param context: Context for said Lambda event.
     '''
-    LOG.debug(f'Event: {event}\nContext: {context}')                        # Log event, context.
-    ses_response = send_email(                                              # Send email to API.
-        getenv('DEFAULT_RECIPIENT'),
-        event['body']['name'] or getenv('DEFAULT_SENDER'), 
-        event['body']['source'] or getenv('DEFAULT_EMAIL'),
-        event['body']['subject'] or getenv('DEFAULT_SUBJECT'),
-        event['body']['message'] or getenv('DEFAULT_MESSAGE')
+    LOG.debug(f'Event: {event}')                                            # Log event.
+    LOG.debug(f'Context: {context}')                                        # Log context.
+    ses_response = send_email(                                              # Send email.
+        recipients=[getenv('DEFAULT_RECIPIENT', 'EMPTY')],
+        default_sender=getenv('DEFAULT_SENDER', 'EMPTY'),
+        sender_name=event['body']['sender_name'] or 'EMPTY',
+        sender_email=event['body']['sender_email'] or 'EMPTY',
+        subject=event['body']['subject'] or 'EMPTY',
+        message=event['body']['message'] or 'EMPTY'
     )
 
     return ses_response['body']['result']

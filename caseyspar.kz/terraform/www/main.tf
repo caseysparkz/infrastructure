@@ -13,6 +13,10 @@ locals {
     }
   )
   lambda_function_name  = aws_lambda_function.contact_form.function_name
-  apigateway_url        = aws_apigatewayv2_stage.lambda_contact_form.invoke_url
-  contact_form_endpoint = "${local.apigateway_url}/${local.lambda_function_name}"
+  apigateway_url        = aws_apigatewayv2_api.lambda_contact_form.api_endpoint
+  contact_form_endpoint = local.apigateway_url
+  email_headers = {
+    default_recipient = "form@${var.root_domain}"
+    default_sender    = "form@${var.subdomain}"
+  }
 }

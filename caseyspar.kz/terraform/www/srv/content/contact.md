@@ -22,14 +22,8 @@ description: 'Contact Page'
         <form
             name="contact"
             class="space-y-8"
-            action="https://v51gl1jyn2.execute-api.us-west-2.amazonaws.com/lambda_contact_form_gateway_stage/contact_form"
+            action="https://obowgpyafc.execute-api.us-west-2.amazonaws.com"
             method="POST"
-            >
-            <!-- Recipient email --><input
-                type="hidden"
-                id="destination"
-                name="destination"
-                default="contact_form@caseyspar.kz"
             >
             <!-- Sender name --><div class="my-4">
                 <label
@@ -45,9 +39,9 @@ description: 'Contact Page'
                 ><strong>From</strong></label>
                 <input
                     type="text"
-                    id="name"
+                    id="sender_name"
                     placeholder="Your Name"
-                    name="name"
+                    name="sender_name"
                     class="
                         shadow-sm
                         bg-gray-50
@@ -75,8 +69,8 @@ description: 'Contact Page'
             <!-- Sender email address --><div class="my-4">
                 <input
                     type="email"
-                    id="email"
-                    name="source"
+                    id="sender_email"
+                    name="sender_email"
                     class="
                         shadow-sm
                         bg-gray-50
@@ -103,7 +97,17 @@ description: 'Contact Page'
                 >
             </div>
             <!-- Email subject --><div class="my-4">
-                <label for="subject" class="block mb-2 font-medium text-gray-900 text-md dark:text-gray-300"><strong>Subject</strong></label>
+                <label
+                    for="subject"
+                    class="
+                        block
+                        mb-2
+                        font-medium
+                        text-gray-900
+                        text-md
+                        dark:text-gray-300
+                    "
+                ><strong>Subject</strong></label>
                 <input
                     type="text"
                     id="subject"

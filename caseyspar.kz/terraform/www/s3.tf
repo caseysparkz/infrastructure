@@ -27,6 +27,7 @@ locals {
     ".webp"        = "image/webp"
     ".xml"         = "text/xml"
   }
+  lambda_dir = "${path.module}/lambda"
 }
 
 ## Data objects ===============================================================
@@ -47,6 +48,13 @@ data "aws_iam_policy_document" "s3_public_read_access" {
   }
 }
 
+# FIX. Will redeploy every time.
+data "archive_file" "lambda_contact_form" { #                                   Lambda function zip.
+  type        = "zip"
+  source_file = "${local.lambda_dir}/handler.py"
+  output_path = "${local.lambda_dir}/contact_form_handler.zip"
+}
+
 ## Resources ==================================================================
 resource "local_file" "hugo_config" { # --------------------------------------- Local build files.
   filename = replace(local.hugo_config_template, ".tftpl", "")
@@ -63,10 +71,7 @@ resource "local_file" "contact_page" {
   filename = replace(local.contact_page_template, ".tftpl", "")
   content = templatefile(
     local.contact_page_template,
-    {
-      "contact_form_endpoint"  = local.contact_form_endpoint #                  Defined in main.tf.
-      "contact_form_recipient" = "contact_form@${var.root_domain}"
-    }
+    { "contact_form_endpoint" = local.contact_form_endpoint } #                Defined in main.tf.
   )
 }
 
@@ -145,20 +150,6 @@ resource "null_resource" "deploy_pages" {
   }
 }
 
-/* TODO
-resource "aws_s3_object_copy" "www_site" { #                                    Terraform abuse!
-  depends_on = [
-    null_resource.compile_pages,
-    aws_s3_bucket.www_site
-  ]
-  for_each                     = local.website_files
-  bucket                       = aws_s3_bucket.www_site.id
-  key                          = each.key
-  source                       = "${local.srv_dir}/${each.key}"
-  content_type = lookup(local.mime_types, regex("\\.[^.]+$", each.key), "text/plain")
-}
-*/
-
 resource "aws_s3_bucket" "web_root" { # --------------------------------------- Redirect root.
   bucket        = var.root_domain
   force_destroy = true
@@ -176,4 +167,11 @@ resource "aws_s3_bucket_website_configuration" "web_root" {
   redirect_all_requests_to {
     host_name = aws_s3_bucket.www_site.id
   }
+}
+
+resource "aws_s3_object" "lambda_contact_form" { # ---------------------------- S3 Lambda artifact.
+  bucket = var.artifact_bucket_id
+  key    = "contact_form_handler.zip"
+  source = data.archive_file.lambda_contact_form.output_path
+  etag   = filemd5(data.archive_file.lambda_contact_form.output_path)
 }
