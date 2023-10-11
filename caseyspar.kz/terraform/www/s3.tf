@@ -9,6 +9,7 @@ locals {
   contact_page_template = "${local.hugo_dir}/content/contact.md.tftpl"
   srv_dir               = "${local.hugo_dir}/public"
   website_files         = fileset(local.srv_dir, "**")
+  contact_form_endpoint = "${local.apigateway_url}/${local.lambda_function_name}"
   build_hash = sha256(join( #                                                   If build changes.
     "",
     [
@@ -31,8 +32,6 @@ locals {
 }
 
 ## Data objects ===============================================================
-data "aws_caller_identity" "current" {}
-
 data "aws_iam_policy_document" "s3_public_read_access" {
   statement {
     sid     = "PublicReadGetObject"
@@ -61,8 +60,8 @@ resource "local_file" "hugo_config" { # --------------------------------------- 
   content = templatefile(
     local.hugo_config_template,
     {
-      "domain" = var.subdomain
-      "title"  = var.root_domain
+      domain = var.subdomain
+      title  = var.root_domain
     }
   )
 }
@@ -71,7 +70,9 @@ resource "local_file" "contact_page" {
   filename = replace(local.contact_page_template, ".tftpl", "")
   content = templatefile(
     local.contact_page_template,
-    { "contact_form_endpoint" = local.contact_form_endpoint } #                Defined in main.tf.
+    {
+      contact_form_endpoint = local.contact_form_endpoint
+    }
   )
 }
 

@@ -31,6 +31,6 @@ output "aws_apigateway_base_url" {
 
 output "aws_apigateway_contact_form_uri" {
   description = "URI of the contact form page."
-  value       = "${local.apigateway_url}/${local.lambda_function_name}"
+  value       = local.contact_form_endpoint
   sensitive   = false
 }

@@ -21,10 +21,18 @@ resource "aws_lambda_function" "contact_form" {
   }
 }
 
-resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.contact_form.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_apigatewayv2_api.lambda_contact_form.execution_arn}/*/*"
-}
+#resource "aws_lambda_permission" "api_gateway" {
+#  statement_id  = "AllowExecutionFromAPIGateway"
+#  action        = "lambda:InvokeFunction"
+#  function_name = aws_lambda_function.contact_form.function_name
+#  principal     = "apigateway.amazonaws.com"
+#  source_arn    = "${aws_apigatewayv2_api.lambda_contact_form.execution_arn}/*/*"
+#}
+#
+#resource "aws_lambda_permission" "ses_sendemail" {
+#  statement_id  = "AllowExecutionFromSES"
+#  action        = "lambda:InvokeFunction"
+#  function_name = aws_lambda_function.contact_form.function_name
+#  principal     = "ses.amazonaws.com"
+#  source_arn    = "arn:aws:ses:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:identity/${var.subdomain}"
+#}

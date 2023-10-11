@@ -1,6 +1,10 @@
 ###############################################################################
 # AWS IAM
 #
+locals {
+  aws_region     = data.aws_region.current.name
+  aws_account_id = data.aws_caller_identity.current.account_id
+}
 
 ## Data =======================================================================
 data "aws_kms_alias" "lambda" {
@@ -26,7 +30,11 @@ data "aws_iam_policy_document" "lambda_ses_sendemail" {
       "ses:SendEmail",
       "ses:SendRawEmail"
     ]
-    resources = ["arn:aws:ses:::*"]
+    resources = [
+      aws_ses_domain_identity.subdomain.arn,
+      aws_ses_email_identity.recipient.arn,
+      aws_ses_email_identity.sender.arn
+    ]
   }
 }
 

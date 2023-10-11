@@ -77,4 +77,4 @@ def lambda_handler(
         'message': event['body']['message']
     })
 
-    return ses_response['body']['result']
+    return ses_response
