@@ -9,6 +9,14 @@ variable "artifact_bucket_id" {
   sensitive   = false
 }
 
+/*
+variable "artifact_bucket_kms_key_arn" {
+  description = "ARN of the KMS key used to encrypt bucket objects."
+  type        = string
+  sensitive   = false
+}
+*/
+
 ## Misc. ======================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."

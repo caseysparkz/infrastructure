@@ -9,7 +9,7 @@ resource "aws_lambda_function" "contact_form" {
   s3_bucket        = var.artifact_bucket_id
   s3_key           = aws_s3_object.lambda_contact_form.key
   runtime          = "python3.10"
-  handler          = "index.test"
+  handler          = "handler.lambda_handler"
   source_code_hash = data.archive_file.lambda_contact_form.output_base64sha256
   role             = aws_iam_role.lambda_contact_form.arn
 

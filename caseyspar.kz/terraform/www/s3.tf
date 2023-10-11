@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "s3_public_read_access" {
 data "archive_file" "lambda_contact_form" { #                                   Lambda function zip.
   type        = "zip"
   source_file = "${local.lambda_dir}/handler.py"
-  output_path = "${local.lambda_dir}/contact_form_handler.zip"
+  output_path = "${local.lambda_dir}/${local.lambda_s3_object_key}"
 }
 
 ## Resources ==================================================================
@@ -171,7 +171,8 @@ resource "aws_s3_bucket_website_configuration" "web_root" {
 
 resource "aws_s3_object" "lambda_contact_form" { # ---------------------------- S3 Lambda artifact.
   bucket = var.artifact_bucket_id
-  key    = "contact_form_handler.zip"
+  key    = local.lambda_s3_object_key
+  #kms_key_id = var.artifact_bucket_kms_key_arn
   source = data.archive_file.lambda_contact_form.output_path
   etag   = filemd5(data.archive_file.lambda_contact_form.output_path)
 }

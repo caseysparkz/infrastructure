@@ -12,9 +12,14 @@ output "aws_s3_bucket_uri" {
   value       = "s3://${aws_s3_bucket.artifacts.id}/"
 }
 
-output "aws_kms_key" {
+output "aws_kms_key_id" {
   description = "ID of the KMS key used to encrypt domain artifacts."
   value       = aws_kms_key.artifacts.key_id
+}
+
+output "aws_kms_key_arn" {
+  description = "ARN of the KMS key used to encrypt domain artifacts."
+  value       = aws_kms_key.artifacts.arn
 }
 
 output "aws_kms_key_alias" {

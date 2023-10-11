@@ -29,9 +29,15 @@ output "infrastructure_artifacts_s3_bucket_uri" {
   sensitive   = false
 }
 
-output "infrastructure_artifacts_kms_key" {
+output "infrastructure_artifacts_kms_key_id" {
   description = "KMS key used to encrypt artifacts."
-  value       = module.infrastructure.artifacts_kms_key
+  value       = module.infrastructure.artifacts_kms_key_id
+  sensitive   = false
+}
+
+output "infrastructure_artifacts_kms_key_arn" {
+  description = "KMS key used to encrypt artifacts."
+  value       = module.infrastructure.artifacts_kms_key_arn
   sensitive   = false
 }
 
@@ -63,7 +69,8 @@ module "www" { # -------------------------------------------------------------- 
   root_domain        = var.root_domain
   subdomain          = "www.${var.root_domain}"
   artifact_bucket_id = module.infrastructure.artifacts_s3_bucket_id
-  common_tags        = local.common_tags
+  #artifact_bucket_kms_key_arn = module.infrastructure.artifacts_kms_key_arn
+  common_tags = local.common_tags
 }
 
 output "www_s3_bucket_endpoint" {
