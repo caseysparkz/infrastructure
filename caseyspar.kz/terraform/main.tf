@@ -12,7 +12,7 @@ locals {
 
 ## Modules and Outputs ========================================================
 module "infrastructure" { # --------------------------------------------------- Infrastructure.
-  source      = "./infrastructure"
+  source      = "./modules/infrastructure"
   root_domain = var.root_domain
   common_tags = local.common_tags
 }
@@ -48,7 +48,7 @@ output "infrastructure_artifacts_kms_key_alias" {
 }
 
 module "ecr" { # -------------------------------------------------------------- ECR.
-  source      = "./ecr"
+  source      = "./modules/ecr"
   root_domain = var.root_domain
 }
 
@@ -65,7 +65,7 @@ output "ecr_registry_repository_urls" {
 }
 
 module "www" { # -------------------------------------------------------------- WWW.
-  source             = "./www"
+  source             = "./modules/www"
   root_domain        = var.root_domain
   subdomain          = "www.${var.root_domain}"
   artifact_bucket_id = module.infrastructure.artifacts_s3_bucket_id
