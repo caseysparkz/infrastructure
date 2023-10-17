@@ -32,6 +32,48 @@ output "artifacts_kms_key_alias" {
   sensitive   = false
 }
 
+module "api" { # -------------------------------------------------------------- API.
+  source      = "./modules/api_gateway"
+  root_domain = var.root_domain
+  subdomain   = "api.${var.root_domain}"
+}
+
+output "api_gateway_fqdn" {
+  description = "FQDN of the root API path."
+  value       = module.api.aws_api_gateway_fqdn
+  sensitive   = false
+}
+
+output "aws_api_gateway_id" {
+  description = "ID of the AWS API gateway."
+  value       = module.api.aws_api_gateway_id
+  sensitive   = false
+}
+
+output "api_gateway_root_resource_id" {
+  description = "ID of the API gateway root resource."
+  value       = module.api.aws_api_gateway_root_resource_id
+  sensitive   = false
+}
+
+output "api_gatway_arn" {
+  description = "ARN of the API gateway."
+  value       = module.api.aws_api_gateway_arn
+  sensitive   = true
+}
+
+output "api_acm_certificate_id" {
+  description = "ID of the ACM certificate for the API domain."
+  value       = module.api.aws_acm_certificate_id
+  sensitive   = false
+}
+
+output "api_acm_certificate_arn" {
+  description = "ARN of the ACM certificate for the API domain."
+  value       = module.api.aws_acm_certificate_arn
+  sensitive   = true
+}
+
 module "ecr" { # -------------------------------------------------------------- ECR.
   source      = "./modules/ecr"
   root_domain = var.root_domain
