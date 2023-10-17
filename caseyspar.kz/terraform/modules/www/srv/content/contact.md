@@ -22,7 +22,7 @@ description: 'Contact Page'
         <form
             name="contact"
             class="space-y-8"
-            action="https://j47k2fdoeg.execute-api.us-west-2.amazonaws.com/contact_form"
+            action="https://2zwdyvd7gc.execute-api.us-west-2.amazonaws.com/contact_form"
             method="POST"
             >
             <!-- Sender name --><div class="my-4">

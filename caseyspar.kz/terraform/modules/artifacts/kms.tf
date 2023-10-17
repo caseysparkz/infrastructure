@@ -14,6 +14,6 @@ resource "aws_kms_key" "artifacts" {
   )
 }
 resource "aws_kms_alias" "artifacts" {
-  name          = "alias/artifacts_kms_key"
+  name          = "alias/s3/artifacts"
   target_key_id = aws_kms_key.artifacts.key_id
 }

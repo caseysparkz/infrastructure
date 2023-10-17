@@ -29,7 +29,6 @@ variable "aws_secret_key" {
 
 ## Misc. ======================================================================
 variable "root_domain" {
-  default     = "caseyspar.kz"
   description = "Root domain of Terraform infrastructure."
   type        = string
   sensitive   = false

@@ -9,14 +9,6 @@ variable "artifact_bucket_id" {
   sensitive   = false
 }
 
-/*
-variable "artifact_bucket_kms_key_arn" {
-  description = "ARN of the KMS key used to encrypt bucket objects."
-  type        = string
-  sensitive   = false
-}
-*/
-
 ## Misc. ======================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."
@@ -27,14 +19,5 @@ variable "root_domain" {
 variable "subdomain" {
   description = "Subdomain of Terraform infrastructure."
   type        = string
-  sensitive   = false
-}
-
-variable "common_tags" {
-  default = {
-    terraform = true
-  }
-  description = "Tags common to all infrastructure resources."
-  type        = map(any)
   sensitive   = false
 }

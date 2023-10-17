@@ -38,6 +38,7 @@ provider "aws" {
   default_tags {
     tags = {
       terraform = true
+      domain    = var.root_domain
     }
   }
 }

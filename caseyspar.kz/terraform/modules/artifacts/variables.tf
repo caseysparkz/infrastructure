@@ -8,10 +8,3 @@ variable "root_domain" {
   type        = string
   sensitive   = false
 }
-
-variable "common_tags" {
-  default     = {}
-  description = "Tags to be applied to all infrastructure resources."
-  type        = map(any)
-  sensitive   = false
-}

@@ -16,9 +16,9 @@ output "aws_s3_bucket_endpoint" {
   sensitive   = false
 }
 
-output "aws_s3_bucket_uri" {
-  description = "URI of the S3 bucket (as expected by the AWS CLI)."
-  value       = "s3://${aws_s3_bucket.www_site.id}/"
+output "aws_s3_bucket_id" {
+  description = "ID of the S3 bucket (as expected by the AWS CLI)."
+  value       = aws_s3_bucket.www_site.id
   sensitive   = false
 }
 
