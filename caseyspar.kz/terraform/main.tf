@@ -92,20 +92,40 @@ output "ecr_registry_repository_urls" {
 }
 
 module "www" { # -------------------------------------------------------------- WWW.
-  source             = "./modules/www"
-  root_domain        = var.root_domain
-  subdomain          = "www.${var.root_domain}"
-  artifact_bucket_id = module.artifacts.s3_bucket_id
+  source                       = "./modules/www"
+  root_domain                  = var.root_domain
+  subdomain                    = "www.${var.root_domain}"
+  artifact_bucket_id           = module.artifacts.s3_bucket_id
+  api_gateway_id               = module.api.aws_api_gateway_id
+  api_gateway_root_resource_id = module.api.aws_api_gateway_root_resource_id
 }
 
 output "www_s3_bucket_endpoint" {
-  description = "Endpoint of the www.{root_domain} S3 bucket."
+  description = "Endpoint of the static site S3 bucket."
   value       = module.www.aws_s3_bucket_endpoint
   sensitive   = false
 }
 
-output "www_contact_form_uri" {
-  description = "URI of the www subdomain contact form page."
-  value       = module.www.aws_apigateway_contact_form_uri
+output "www_s3_bucket_id" {
+  description = "ID of the static site S3 bucket."
+  value       = module.www.aws_s3_bucket_id
+  sensitive   = false
+}
+
+output "www_api_gateway_stage_invoke_url" {
+  description = "Invocation URL of the AWS API stage for the contact page."
+  value       = module.www.aws_api_gateway_stage_invoke_url
+  sensitive   = false
+}
+
+output "www_lambda_function_invoke_arn" {
+  description = "Invocation ARN of the AWS Lambda function for the contact page."
+  value       = module.www.aws_lambda_function_invoke_arn
+  sensitive   = false
+}
+
+output "www_lambda_function_url" {
+  description = "URL of the AWS Lambda function for the contact page."
+  value       = module.www.aws_lambda_function_url
   sensitive   = false
 }

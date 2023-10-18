@@ -21,18 +21,34 @@ resource "aws_lambda_function" "contact_form" {
   }
 }
 
-#resource "aws_lambda_permission" "api_gateway" {
-#  statement_id  = "AllowExecutionFromAPIGateway"
-#  action        = "lambda:InvokeFunction"
-#  function_name = aws_lambda_function.contact_form.function_name
-#  principal     = "apigateway.amazonaws.com"
-#  source_arn    = "${aws_apigatewayv2_api.lambda_contact_form.execution_arn}/*/*"
-#}
-#
-#resource "aws_lambda_permission" "ses_sendemail" {
-#  statement_id  = "AllowExecutionFromSES"
-#  action        = "lambda:InvokeFunction"
-#  function_name = aws_lambda_function.contact_form.function_name
-#  principal     = "ses.amazonaws.com"
-#  source_arn    = "arn:aws:ses:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:identity/${var.subdomain}"
-#}
+resource "aws_lambda_function_url" "contact_form" {
+  function_name      = aws_lambda_function.contact_form.function_name
+  authorization_type = "NONE"
+
+  cors {
+    allow_credentials = true
+    allow_origins     = ["*"]
+    allow_methods     = ["*"]
+    allow_headers     = ["*"]
+    expose_headers    = ["*"]
+    max_age           = 86400
+  }
+}
+
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.contact_form.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = aws_api_gateway_stage.contact_form.execution_arn
+}
+
+/*
+resource "aws_lambda_permission" "ses_sendemail" {
+  statement_id  = "AllowExecutionFromSES"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.contact_form.function_name
+  principal     = "ses.amazonaws.com"
+  source_arn    = "arn:aws:ses:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:identity/${var.subdomain}"
+}
+*/

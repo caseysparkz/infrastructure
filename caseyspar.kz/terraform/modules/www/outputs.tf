@@ -2,13 +2,6 @@
 # Outputs
 #
 
-## Lambda =====================================================================
-output "aws_lambda_function_name" {
-  description = "Name of the contact form Lambda function."
-  value       = aws_lambda_function.contact_form.function_name
-  sensitive   = false
-}
-
 ## S3 =========================================================================
 output "aws_s3_bucket_endpoint" {
   description = "Bucket endpoint"
@@ -23,14 +16,21 @@ output "aws_s3_bucket_id" {
 }
 
 ## API Gateway ================================================================
-output "aws_apigateway_base_url" {
-  description = "Base URL for the contact form API gateway stage."
-  value       = local.apigateway_url
+output "aws_api_gateway_stage_invoke_url" {
+  description = "Invocation URL for the contact form API gateway stage."
+  value       = aws_api_gateway_stage.contact_form.invoke_url
   sensitive   = false
 }
 
-output "aws_apigateway_contact_form_uri" {
-  description = "URI of the contact form page."
-  value       = local.contact_form_endpoint
+## Lambda =====================================================================
+output "aws_lambda_function_invoke_arn" {
+  description = "Invocation URL for the Lambda function."
+  value       = aws_lambda_function.contact_form.invoke_arn
+  sensitive   = false
+}
+
+output "aws_lambda_function_url" {
+  description = "URL for the Lambda function."
+  value       = aws_lambda_function_url.contact_form.function_url
   sensitive   = false
 }

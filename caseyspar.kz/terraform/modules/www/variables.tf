@@ -21,3 +21,15 @@ variable "subdomain" {
   type        = string
   sensitive   = false
 }
+
+variable "api_gateway_id" {
+  description = "ID of the AWS API gateway."
+  type        = string
+  sensitive   = false
+}
+
+variable "api_gateway_root_resource_id" {
+  description = "ID of the AWS API gateway's root resource."
+  type        = string
+  sensitive   = false
+}

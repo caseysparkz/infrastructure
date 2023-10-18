@@ -1,7 +1,7 @@
 ---
 title: 'Bootstrapping a Daily Driver Linux Environment with Ansible'
 date: '2023-10-03'
-draft: true
+draft: false
 language: 'en'
 summary: 'Leveraging Ansible to build secure end-user Linux systems and support my distro-hopping habit.'
 featured_image: '../assets/images/posts/code/bootstrapping_a_daily_driver_linux_environment_with_ansible.png'

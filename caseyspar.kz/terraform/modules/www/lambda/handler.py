@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-# Author:   Casey Sparks
-# Date:     October 05, 2023
+# Author:       Casey Sparks
+# Date:         October 05, 2023
 # Description:
-'''Python Lambda function for website contact page.'''
+'''Python Lambda function for website /contact page.'''
 
-from logging import getLogger
+from logging import Formatter, StreamHandler, getLogger
 from os import getenv
 from textwrap import dedent
 from boto3 import client
 
-LOG = getLogger()                                                           # Instantiate logger.
-REQUIRED_KEYS = {'sender_name', 'sender_email', 'subject', 'message'}
+LOG = getLogger()
+REQUIRED_KEYS = {'message', 'sender_email', 'sender_name', 'subject'}
+_FORMATTER = Formatter('{asctime} {threadName:12} {levelname:8}: "{message}"', style='{')
+_LOG_CONSOLE = StreamHandler()
+
+_LOG_CONSOLE.setFormatter(_FORMATTER)
+LOG.addHandler(_LOG_CONSOLE)
+LOG.setLevel(10)
 
 def send_email(
     email_obj: dict
@@ -19,17 +25,25 @@ def send_email(
     '''
     Send an email via AWS SES.
         :param email_obj:   Dict containing email headers:
-                            (default_recipient, default_sender, sender_name, sender_email, subject, message).
+                                * <default_recipient>
+                                * <default_sender>
+                                * <sender_email>
+                                * <sender_name>
+                                * <subject>
+                                * <message>
         :return:            Dict containing the SES response.
     '''
     assert isinstance(email_obj, dict), 'email_obj must be instance of dict().'
     assert REQUIRED_KEYS.intersection(email_obj.keys()) == REQUIRED_KEYS, 'email_obj missing keys.'
     assert all(isinstance(email_obj[value], str) for value in REQUIRED_KEYS), 'Invalid value type.'
     assert all(
-        isinstance(email_obj[value], str) for value in ['default_recipient', 'default_sender']
+        isinstance(email_obj[value], str)
+        for value
+        in ('default_recipient', 'default_sender')
     ), 'Invalid value type.'
 
     ses_client = client('ses')
+
     LOG.debug(response := ses_client.send_email(
         Destination={'ToAddresses': [email_obj['default_recipient']]},
         Message={
@@ -69,10 +83,10 @@ def lambda_handler(
     assert REQUIRED_KEYS.intersection(event['body'].keys()) == REQUIRED_KEYS, 'Event body missing keys.'
 
     ses_response = send_email({                                             # Send email.
-        'default_recipient': getenv('DEFAULT_RECIPIENT', 'EMPTY'),
-        'default_sender': getenv('DEFAULT_SENDER', 'EMPTY'),
-        'sender_name': event['body']['sender_name'],
+        'default_recipient': getenv('DEFAULT_RECIPIENT'),
+        'default_sender': getenv('DEFAULT_SENDER'),
         'sender_email': event['body']['sender_email'],
+        'sender_name': event['body']['sender_name'],
         'subject': event['body']['subject'],
         'message': event['body']['message']
     })

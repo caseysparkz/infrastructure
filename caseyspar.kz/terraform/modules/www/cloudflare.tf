@@ -5,13 +5,24 @@
 ## Locals =====================================================================
 locals {
   cloudflare_comment = "Terraform managed."
+  dmarc_policy = { #                                                            Parsed to string.
+    p     = "reject"
+    sp    = "reject"
+    adkim = "s"
+    aspf  = "s"
+    fo    = 1
+    pct   = 5
+    rua   = "mailto:dmarc_rua@${var.root_domain}"
+    ruf   = "mailto:dmarc_ruf@${var.root_domain}"
+  }
 }
 
 ## Data =======================================================================
-data "cloudflare_zone" "domain" { name = var.root_domain } #                    Root zone.
+data "cloudflare_zone" "domain" { #                                             Root zone.
+  name = var.root_domain
+}
 
 ## Resources ==================================================================
-/*
 resource "cloudflare_record" "subdomain_cname" { #                              Site bucket.
   zone_id         = data.cloudflare_zone.domain.id
   name            = var.subdomain
@@ -20,7 +31,7 @@ resource "cloudflare_record" "subdomain_cname" { #                              
   ttl             = 1
   proxied         = true
   allow_overwrite = true
-  comment         = "Terraform-managed. S3 bucket for website static pages."
+  comment         = local.cloudflare_comment
 }
 
 resource "cloudflare_record" "root_cname" { #                                   Redirect bucket.
@@ -31,9 +42,8 @@ resource "cloudflare_record" "root_cname" { #                                   
   ttl             = 1
   proxied         = true
   allow_overwrite = true
-  comment         = "Terraform-managed. S3 bucket for website static pages."
+  comment         = local.cloudflare_comment
 }
-*/
 
 resource "cloudflare_record" "ses_verification" { #                             Verify ownership.
   zone_id         = data.cloudflare_zone.domain.id
@@ -43,18 +53,18 @@ resource "cloudflare_record" "ses_verification" { #                             
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed. SES domain verification."
+  comment         = local.cloudflare_comment
 }
 
 resource "cloudflare_record" "subdomain_spf" { #                                SPF record.
   zone_id         = data.cloudflare_zone.domain.id
   name            = var.subdomain
-  value           = "v=spf1 amazonses.com -all"
+  value           = "v=spf1 include:amazonses.com -all"
   type            = "TXT"
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed. SES SPF record."
+  comment         = local.cloudflare_comment
 }
 
 resource "cloudflare_record" "subdomain_dkim" { #                               DKIM record.
@@ -66,5 +76,18 @@ resource "cloudflare_record" "subdomain_dkim" { #                               
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed. SES SPF record."
+  comment         = local.cloudflare_comment
 }
+
+/*
+resource "cloudflare_record" "subdomain_dmarc" { #                              DMARC record.
+  zone_id         = data.cloudflare_zone.domain.id
+  name            = "_dmarc.${var.subdomain}"
+  value           = "v=DMARC1;${join(";", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
+  type            = "TXT"
+  ttl             = 1
+  proxied         = false
+  allow_overwrite = true
+  comment         = local.cloudflare_comment
+}
+*/

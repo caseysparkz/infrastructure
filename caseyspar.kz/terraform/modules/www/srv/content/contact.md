@@ -1,7 +1,7 @@
 ---
 title: 'Contact'
 date: '2021-10-03T13:10:36.000Z'
-draft: false
+draft: true
 language: 'en'
 description: 'Contact Page'
 
@@ -22,7 +22,7 @@ description: 'Contact Page'
         <form
             name="contact"
             class="space-y-8"
-            action="https://2zwdyvd7gc.execute-api.us-west-2.amazonaws.com/contact_form"
+            action="https://rtz81j8ks3.execute-api.us-west-2.amazonaws.com/contact"
             method="POST"
             >
             <!-- Sender name --><div class="my-4">

@@ -4,8 +4,10 @@
 
 ## Locals =====================================================================
 locals {
-  dmarc_policy = { #                                                            {key: value} (parsed to string)
+  cloudflare_comment = "Terraform managed."
+  dmarc_policy = { #                                                            Parsed to string.
     p     = "reject"
+    sp    = "reject"
     adkim = "s"
     aspf  = "s"
     fo    = 1
@@ -16,7 +18,9 @@ locals {
 }
 
 ## Data =======================================================================
-data "cloudflare_zone" "root_domain" { name = var.root_domain } #               Root zone.
+data "cloudflare_zone" "root_domain" { #                                        Root zone.
+  name = var.root_domain
+}
 
 ## Resources ==================================================================
 resource "cloudflare_record" "mx" { #                                           MX records.
@@ -29,7 +33,7 @@ resource "cloudflare_record" "mx" { #                                           
   proxied         = false
   priority        = each.value
   allow_overwrite = true
-  comment         = "Terraform-managed"
+  comment         = local.cloudflare_comment
 }
 
 resource "cloudflare_record" "dkim" { #                                         DKIM records.
@@ -41,18 +45,18 @@ resource "cloudflare_record" "dkim" { #                                         
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed."
+  comment         = local.cloudflare_comment
 }
 
 resource "cloudflare_record" "txt_dmarc" { #                                    DMARC policy.
   zone_id         = data.cloudflare_zone.root_domain.id
   name            = "_dmarc"
-  value           = "v=DMARC1; ${join("; ", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
+  value           = "v=DMARC1;${join(";", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
   type            = "TXT"
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed."
+  comment         = local.cloudflare_comment
 }
 
 resource "cloudflare_record" "txt_spf" { #                                      SPF record.
@@ -63,10 +67,10 @@ resource "cloudflare_record" "txt_spf" { #                                      
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed."
+  comment         = local.cloudflare_comment
 }
 
-resource "cloudflare_record" "txt_verification" { #                             Domain verification TXT records.
+resource "cloudflare_record" "txt_verification" { #                             Domain verification.
   for_each        = toset(var.verification_records)
   zone_id         = data.cloudflare_zone.root_domain.id
   name            = var.root_domain
@@ -75,7 +79,7 @@ resource "cloudflare_record" "txt_verification" { #                             
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed."
+  comment         = local.cloudflare_comment
 }
 
 resource "cloudflare_record" "txt_pka" { #                                      Pubkey records.
@@ -87,7 +91,7 @@ resource "cloudflare_record" "txt_pka" { #                                      
   ttl             = 1
   proxied         = false
   allow_overwrite = true
-  comment         = "Terraform-managed."
+  comment         = local.cloudflare_comment
 }
 
 ## Outputs ====================================================================
