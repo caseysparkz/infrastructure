@@ -2,7 +2,7 @@
 name: 'Infracost'
 on:
     pull_request:
-        - 'main'
+        - 'opened'
 jobs:
     infracost:
         name: 'Infracost.'
