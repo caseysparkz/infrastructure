@@ -47,12 +47,7 @@ data "archive_file" "lambda_contact_form" { #                                   
 resource "aws_s3_bucket" "www_site" { # --------------------------------------- WWW site.
   bucket        = var.subdomain
   force_destroy = true
-  tags = merge(
-    {
-      service = "s3"
-    },
-    local.common_tags
-  )
+  tags = local.common_tags
 }
 
 resource "aws_s3_bucket_website_configuration" "www_site" {
@@ -99,12 +94,7 @@ resource "aws_s3_bucket_policy" "www_site" {
 resource "aws_s3_bucket" "web_root" { # --------------------------------------- Redirect root.
   bucket        = var.root_domain
   force_destroy = true
-  tags = merge(
-    {
-      service = "s3"
-    },
-    local.common_tags
-  )
+  tags = local.common_tags
 }
 
 resource "aws_s3_bucket_website_configuration" "web_root" {
