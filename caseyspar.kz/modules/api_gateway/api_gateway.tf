@@ -13,7 +13,8 @@ resource "aws_api_gateway_domain_name" "subdomain" {
 }
 
 resource "aws_api_gateway_rest_api" "subdomain" {
-  name = var.subdomain
+  name        = var.subdomain
+  description = "Backend API for ${var.subdomain}."
 }
 
 resource "aws_api_gateway_rest_api_policy" "subdomain" {

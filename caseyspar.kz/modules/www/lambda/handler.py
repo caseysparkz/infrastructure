@@ -5,6 +5,7 @@
 # Description:
 '''Python Lambda function for website /contact page.'''
 
+from json import dumps, loads
 from logging import Formatter, StreamHandler, getLogger
 from os import getenv
 from textwrap import dedent
@@ -80,15 +81,26 @@ def lambda_handler(
     LOG.debug(f'Event: {event}')                                            # Log event.
     LOG.debug(f'Context: {context}')                                        # Log context.
 
-    assert REQUIRED_KEYS.intersection(event['body'].keys()) == REQUIRED_KEYS, 'Event body missing keys.'
+    event_body = loads(event['body'])
+
+    assert REQUIRED_KEYS.intersection(event_body.keys()) == REQUIRED_KEYS, 'Event body missing keys.'
 
     ses_response = send_email({                                             # Send email.
         'default_recipient': getenv('DEFAULT_RECIPIENT'),
         'default_sender': getenv('DEFAULT_SENDER'),
-        'sender_email': event['body']['sender_email'],
-        'sender_name': event['body']['sender_name'],
-        'subject': event['body']['subject'],
-        'message': event['body']['message']
+        'sender_email': event_body['sender_email'],
+        'sender_name': event_body['sender_name'],
+        'subject': event_body['subject'],
+        'message': event_body['message']
     })
 
-    return ses_response
+    lambda_response = {
+        'statusCode': 200,
+        'headers': {'Content-Type': 'application/json'},
+        'body': dumps({
+            'Success': True,
+            'MessageId': ses_response['MessageId']
+        })
+    }
+
+    return lambda_response

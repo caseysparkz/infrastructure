@@ -74,6 +74,12 @@ output "api_gateway_arn" {
   sensitive   = true
 }
 
+output "api_gateway_execution_arn" {
+  description = "ARN of the API gateway."
+  value       = module.api.aws_api_gateway_execution_arn
+  sensitive   = true
+}
+
 output "api_acm_certificate_id" {
   description = "ID of the ACM certificate for the API domain."
   value       = module.api.aws_acm_certificate_id
@@ -110,6 +116,7 @@ module "www" { # -------------------------------------------------------------- 
   artifact_bucket_id           = module.artifacts.s3_bucket_id
   api_gateway_id               = module.api.aws_api_gateway_id
   api_gateway_root_resource_id = module.api.aws_api_gateway_root_resource_id
+  api_gateway_execution_arn    = module.api.aws_api_gateway_execution_arn
 }
 
 output "www_s3_bucket_endpoint" {
@@ -134,4 +141,10 @@ output "www_api_gateway_deployment_invoke_url" {
   description = "Invocation URL of the AWS API deployment for the contact page."
   value       = module.www.aws_api_gateway_deployment_invoke_url
   sensitive   = false
+}
+
+output "www_api_gateway_source_arn" {
+  description = "Source ARN of API GW calls to Lambda."
+  value       = module.www.aws_api_gateway_source_arn
+  sensitive   = true
 }
