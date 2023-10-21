@@ -3,6 +3,7 @@
 #
 
 locals {
+  cloudflare_comment = "Terraform managed."
   zone_map = { #                                                                Like {"fqdn": "zone_id"}.
     for zone, data in data.cloudflare_zone.forward_zones : zone => data.id
   }
@@ -19,6 +20,18 @@ data "cloudflare_zone" "forward_zones" {
 }
 
 # Resources ===================================================================
+resource "cloudflare_record" "forward_zones" {
+  for_each        = local.zone_map
+  zone_id         = each.value
+  name            = each.key
+  value           = var.root_domain
+  type            = "CNAME"
+  ttl             = 1
+  proxied         = true
+  allow_overwrite = true
+  comment         = local.cloudflare_comment
+}
+
 resource "cloudflare_page_rule" "forward_zones" {
   for_each = local.zone_map
   zone_id  = each.value

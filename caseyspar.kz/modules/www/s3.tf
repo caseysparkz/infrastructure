@@ -6,10 +6,9 @@
 locals {
   hugo_dir              = "${path.module}/srv"
   hugo_config_template  = "${local.hugo_dir}/config.yaml.tftpl"
-  contact_page_template = "${local.hugo_dir}/content/contact.md.tftpl"
+  contact_page_template = "${local.hugo_dir}/content/contactForm.js.tftpl"
   srv_dir               = "${local.hugo_dir}/public"
   website_files         = fileset(local.srv_dir, "**")
-  contact_form_endpoint = aws_api_gateway_deployment.contact_form.invoke_url
   build_hash = sha256(join( #                                                   If build changes.
     "",
     [
@@ -128,7 +127,7 @@ resource "local_file" "contact_page" {
   content = templatefile(
     local.contact_page_template,
     {
-      contact_form_endpoint = local.contact_form_endpoint
+      execution_url = aws_api_gateway_deployment.contact_form.invoke_url
     }
   )
 }

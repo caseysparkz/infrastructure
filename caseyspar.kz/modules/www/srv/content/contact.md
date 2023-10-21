@@ -1,12 +1,11 @@
 ---
 title: 'Contact'
 date: '2021-10-03T13:10:36.000Z'
-draft: true
+draft: false
 language: 'en'
 description: 'Contact Page'
 
 ---
-
 <!-- @format -->
 <section class="lg:pb-24">
     <div class="max-w-screen-md px-4 mx-auto">
@@ -22,8 +21,7 @@ description: 'Contact Page'
         <form
             name="contact"
             class="space-y-8"
-            action="https://2thztj5px2.execute-api.us-west-2.amazonaws.com/contact"
-            method="POST"
+            method="post"
             >
             <!-- Sender name --><div class="my-4">
                 <label
@@ -167,6 +165,7 @@ description: 'Contact Page'
             <!-- Submit button --><div class="mt-6 lg:pb-16">
                 <button
                     type="submit"
+                    onClick="contactForm.submitEvent(event)"
                     class="
                         px-5
                         py-3
