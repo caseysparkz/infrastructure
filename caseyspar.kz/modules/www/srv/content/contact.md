@@ -20,6 +20,7 @@ description: 'Contact Page'
         >Want to reach out? Do it here.</p>
         <form
             name="contact"
+            id="contact-form"
             class="space-y-8"
             method="post"
             >
@@ -135,7 +136,17 @@ description: 'Contact Page'
                 >
             </div>
             <!-- Email body --><div class="my-4 sm:col-span-2">
-                <label for="message" class="block mb-2 font-medium text-gray-900 text-md dark:text-gray-400"><strong>Body</strong></label>
+                <label
+                    for="message"
+                    class="
+                        block
+                        mb-2
+                        font-medium
+                        text-gray-900
+                        text-md
+                        dark:text-gray-400
+                    "
+                ><strong>Body</strong></label>
                 <textarea
                     id="message"
                     name="message"
