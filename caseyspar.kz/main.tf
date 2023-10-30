@@ -83,7 +83,7 @@ output "api_gateway_execution_arn" {
 output "api_acm_certificate_id" {
   description = "ID of the ACM certificate for the API domain."
   value       = module.api.aws_acm_certificate_id
-  sensitive   = false
+  sensitive   = true
 }
 
 output "api_acm_certificate_arn" {
