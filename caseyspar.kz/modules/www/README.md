@@ -5,24 +5,26 @@ This module contains the complete configuration (static pages and Terraform conf
 The site made with JAMstack and uses a Tailwinds CSS/Alpine.js frontend with a Lambda backend.
 
 Applying this Terraform module will deploy:
-* S3 buckets for the redirect root and subdomain site pages.
+* S3 buckets for the redirect root and subdomain static site pages.
 * A Lambda function for the contact page backend.
 * An API gateway to receive POST requests from the contact page.
 * Cloudflare records to:
     * Resolve the website.
-    * Verify the subdomain with AWS SES.
+    * Verify the root domain with AWS SES.
     * Deploy DKIM keys to the subdomain.
     * Deploy SPF policy to the subdomain.
-* Deploy the static pages to the S3 bucket (via the local-exec provisioner).
 
 ## Requirements
 This directory presumes access to, and a familiarity with, the following tools:
+* [AWS CLI](https://aws.amazon.com/cli/)
+* [Hugo](https://gohugo.io/)
+* [Node.js](https://nodejs.org/)
+* [npm](https://npmjs.com/)
 
-### Softwares
-* [Hugo](https://gohugo.io/installation/)
-* [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
 
-
-### Credentials
-* [AWS access via the AWS CLI](https://docs.aws.amazon.com/signin/latest/userguide/command-line-sign-in.html)
-    * Required for deploying static pages via the local-exec provisioner.
+## Prerequisites
+1. Run `npm install` from `./srv` to install NodeJS dependencies.
+2. Make sure the Docker service is running on your host.
+3. Ensure that you are logged into the AWS CLI with either:
+    * The credentials set in your Terraform variables, or
+    * Sufficient credentials to write to the S3 bucket created by [s3.tf](./s3.tf).

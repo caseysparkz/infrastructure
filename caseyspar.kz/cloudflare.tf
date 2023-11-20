@@ -87,9 +87,9 @@ resource "cloudflare_record" "txt_spf" { #                                      
 }
 
 resource "cloudflare_record" "txt_verification" { #                             Domain verification.
-  for_each        = toset(var.verification_records)
+  for_each        = var.txt_verification_records
   zone_id         = local.cloudflare_zone_id
-  name            = var.root_domain
+  name            = each.key
   value           = each.value
   type            = "TXT"
   ttl             = 1

@@ -82,14 +82,15 @@ variable "spf_senders" {
   sensitive = false
 }
 
-variable "verification_records" {
+variable "txt_verification_records" {
   description = "List of verification TXT records for root domain."
-  type        = list(string)
+  type        = map(string)
   sensitive   = false
-  default = [
-    "keybase-site-verification=8MXkrublC6Bg6NPBvHAwmK12v1FledQETZS1ux_oi0A", #  Keybase.
-    "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3"       #  Proton.
-  ]
+  default = {
+    "@"        = "keybase-site-verification=8MXkrublC6Bg6NPBvHAwmK12v1FledQETZS1ux_oi0A"
+    "@"        = "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3"
+    "_atproto" = "did=did:plc:eop37ikcn6s33dedyhvejqv5"
+  }
 }
 
 variable "pka_records" {
