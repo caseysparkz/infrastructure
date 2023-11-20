@@ -30,9 +30,11 @@ resource "aws_api_gateway_integration" "contact_form" {
 }
 
 resource "aws_api_gateway_deployment" "contact_form" {
-  depends_on = [
-    aws_api_gateway_integration.contact_form
-  ]
+  depends_on  = [aws_api_gateway_integration.contact_form]
   rest_api_id = var.api_gateway_id
   stage_name  = "contact"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
