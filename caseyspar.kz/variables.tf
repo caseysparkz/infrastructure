@@ -75,14 +75,14 @@ variable "dkim_records" {
 variable "spf_senders" {
   description = "List of allowed SPF senders, like: [\"include:_spf.example.com\", \"ip4:127.0.0.1\"]."
   type        = list(string)
+  sensitive   = false
   default = [
     "include:_spf.protonmail.ch",
     "mx"
   ]
-  sensitive = false
 }
 
-variable "txt_verification_records" {
+variable "txt_records" {
   description = "List of verification TXT records for root domain."
   type        = map(string)
   sensitive   = false
@@ -115,29 +115,6 @@ variable "root_domain" {
   default     = "caseyspar.kz"
   type        = string
   sensitive   = false
-}
-
-variable "environment" {
-  description = "The environment to deploy to."
-  default     = "development"
-  type        = string
-  sensitive   = false
-
-  validation {
-    condition     = contains(["production", "staging", "development"], var.environment)
-    error_message = "var.environment not in ['production', 'staging', 'development']."
-  }
-}
-
-variable "environment_suffix_map" {
-  description = "Suffix to auto-append based on chosen environment."
-  default = {
-    development = "-dev"
-    staging     = "-stage"
-    production  = ""
-  }
-  type      = map(string)
-  sensitive = false
 }
 
 variable "ssh_pubkey_path" {

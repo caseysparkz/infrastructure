@@ -67,7 +67,7 @@ resource "cloudflare_record" "dkim" { #                                         
 resource "cloudflare_record" "txt_dmarc" { #                                    DMARC policy.
   zone_id         = local.cloudflare_zone_id
   name            = "_dmarc"
-  value           = "v=DMARC1;${join(";", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
+  value           = "v=DMARC1;${join("; ", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
   type            = "TXT"
   ttl             = 1
   proxied         = false
@@ -86,8 +86,8 @@ resource "cloudflare_record" "txt_spf" { #                                      
   comment         = local.cloudflare_comment
 }
 
-resource "cloudflare_record" "txt_verification" { #                             Domain verification.
-  for_each        = var.txt_verification_records
+resource "cloudflare_record" "txt" { #                                          TXT records.
+  for_each        = var.txt_records
   zone_id         = local.cloudflare_zone_id
   name            = each.key
   value           = each.value
@@ -98,7 +98,7 @@ resource "cloudflare_record" "txt_verification" { #                             
   comment         = local.cloudflare_comment
 }
 
-resource "cloudflare_record" "txt_pka" { #                                      Pubkey records.
+resource "cloudflare_record" "pka" { #                                          PKA records.
   for_each        = var.pka_records
   zone_id         = local.cloudflare_zone_id
   name            = "${each.key}._pka"
