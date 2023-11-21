@@ -1,6 +1,18 @@
 ###############################################################################
 # Main
 #
+locals {
+  environment = lookup( #                                                       Map workspace > environment.
+    {
+      default : ""
+      production : ""
+      staging : "stage"
+      development : "dev"
+    },
+    terraform.workspace,
+    "dev"
+  )
+}
 
 ## Modules and Outputs ========================================================
 module "artifacts" { # -------------------------------------------------------- S3: Artifacts.
