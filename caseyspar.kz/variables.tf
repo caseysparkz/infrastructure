@@ -83,13 +83,13 @@ variable "spf_senders" {
 }
 
 variable "txt_records" {
-  description = "List of verification TXT records for root domain."
+  description = "List of TXT records for domain."
   type        = map(string)
   sensitive   = false
   default = {
-    "@"        = "keybase-site-verification=8MXkrublC6Bg6NPBvHAwmK12v1FledQETZS1ux_oi0A"
-    "@"        = "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3"
-    "_atproto" = "did=did:plc:eop37ikcn6s33dedyhvejqv5"
+    "keybase-site-verification=8MXkrublC6Bg6NPBvHAwmK12v1FledQETZS1ux_oi0A" = "@"
+    "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3" = "@"
+    "did=did:plc:eop37ikcn6s33dedyhvejqv5" = "_atproto"
   }
 }
 
@@ -119,7 +119,7 @@ variable "root_domain" {
 
 variable "ssh_pubkey_path" {
   description = "Path of the administrator SSH public key."
-  default     = "~/.ssh/id_ed25519.pub"
+  default     = "~/.ssh/keys/hck.pub"
   type        = string
   sensitive   = false
 }

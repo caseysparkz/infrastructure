@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "s3_public_read_access" {
 data "archive_file" "lambda_contact_form" { #                                   Lambda function zip.
   type        = "zip"
   source_file = "${local.lambda_dir}/handler.py"
-  output_path = "${local.lambda_dir}/${local.lambda_s3_object_key}"
+  output_path = "/tmp/${local.lambda_s3_object_key}"
 }
 
 ## Resources ==================================================================
@@ -132,7 +132,7 @@ resource "local_file" "contact_page" {
   )
 }
 
-resource "null_resource" "npm_install" {
+resource "null_resource" "npm_install" { #                                      Install dependencies.
   depends_on = [
     local_file.hugo_config,
     local_file.contact_page
@@ -147,7 +147,7 @@ resource "null_resource" "npm_install" {
   }
 }
 
-resource "null_resource" "compile_pages" {
+resource "null_resource" "compile_pages" { #                                    Build static site.
   depends_on = [
     local_file.hugo_config,
     local_file.contact_page
@@ -162,7 +162,7 @@ resource "null_resource" "compile_pages" {
   }
 }
 
-resource "null_resource" "deploy_pages" { #                                     Delete and sync pages.
+resource "null_resource" "deploy_pages" { #                                     Deploy static site.
   depends_on = [
     null_resource.compile_pages,
     aws_s3_bucket.www_site
