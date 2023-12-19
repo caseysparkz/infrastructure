@@ -16,7 +16,7 @@ locals {
 
 ## Modules and Outputs ========================================================
 module "artifacts" { # -------------------------------------------------------- S3: Artifacts.
-  source      = "./modules/artifacts"
+  source      = "../modules/artifacts"
   root_domain = var.root_domain
 }
 
@@ -45,7 +45,7 @@ output "artifacts_kms_key_alias" {
 }
 
 module "forward_zones" { # ---------------------------------------------------- Forward zones.
-  source        = "./modules/forward_zones"
+  source        = "../modules/forward_zones"
   root_domain   = var.root_domain
   forward_zones = var.forward_zones
 }
@@ -57,7 +57,7 @@ output "forward_zones_zone_data" {
 }
 
 module "api" { # -------------------------------------------------------------- API.
-  source      = "./modules/api_gateway"
+  source      = "../modules/api_gateway"
   root_domain = var.root_domain
   subdomain   = "api.${var.root_domain}"
 }
@@ -105,7 +105,7 @@ output "api_acm_certificate_arn" {
 }
 
 module "ecr" { # -------------------------------------------------------------- ECR.
-  source      = "./modules/ecr"
+  source      = "../modules/ecr"
   root_domain = var.root_domain
 }
 
@@ -122,7 +122,7 @@ output "ecr_registry_repository_urls" {
 }
 
 module "www" { # -------------------------------------------------------------- WWW.
-  source                       = "./modules/www"
+  source                       = "../modules/hugo_frontend"
   root_domain                  = var.root_domain
   subdomain                    = "www.${var.root_domain}"
   artifact_bucket_id           = module.artifacts.s3_bucket_id

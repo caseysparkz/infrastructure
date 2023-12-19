@@ -1,6 +1,7 @@
 ###############################################################################
 # Terraform and Providers
 #
+locals {}
 
 ## Terraform ==================================================================
 terraform {
@@ -16,14 +17,11 @@ terraform {
   }
 }
 
-## Data =======================================================================
-data "aws_ecr_authorization_token" "token" {} #                                 ECR token.
-
 ## Providers ==================================================================
 provider "docker" { #                                                           Docker.
   registry_auth {
-    address  = data.aws_ecr_authorization_token.token.proxy_endpoint
-    username = data.aws_ecr_authorization_token.token.user_name
-    password = data.aws_ecr_authorization_token.token.password
+    address  = local.ecr_authorization_token.proxy_endpoint
+    username = local.ecr_authorization_token.user_name
+    password = local.ecr_authorization_token.password
   }
 }

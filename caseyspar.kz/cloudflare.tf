@@ -64,7 +64,7 @@ resource "cloudflare_record" "dkim" { #                                         
   comment         = local.cloudflare_comment
 }
 
-resource "cloudflare_record" "txt_dmarc" { #                                    DMARC policy.
+resource "cloudflare_record" "dmarc" { #                                        DMARC policy.
   zone_id         = local.cloudflare_zone_id
   name            = "_dmarc"
   value           = "v=DMARC1;${join("; ", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
@@ -75,7 +75,7 @@ resource "cloudflare_record" "txt_dmarc" { #                                    
   comment         = local.cloudflare_comment
 }
 
-resource "cloudflare_record" "txt_spf" { #                                      SPF record.
+resource "cloudflare_record" "spf" { #                                          SPF record.
   zone_id         = local.cloudflare_zone_id
   name            = var.root_domain
   value           = "v=spf1 ${join(" ", var.spf_senders)} -all"
@@ -89,8 +89,8 @@ resource "cloudflare_record" "txt_spf" { #                                      
 resource "cloudflare_record" "txt" { #                                          TXT records.
   for_each        = var.txt_records
   zone_id         = local.cloudflare_zone_id
-  name            = each.key
-  value           = each.value
+  name            = each.value
+  value           = each.key
   type            = "TXT"
   ttl             = 1
   proxied         = false
