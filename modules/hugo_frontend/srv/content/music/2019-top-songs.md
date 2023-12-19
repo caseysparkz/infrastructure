@@ -1,21 +1,20 @@
 ---
-title: 'September/October 2023'
-date: '2023-10-31'
+title: 'Top Songs - 2019'
+date: '2019-12-31'
 draft: false
 language: 'en'
-description: 'Kinda pop, kinda punk.'
-featured_image: '../assets/images/posts/music/2023-10.jpeg'
-summary: 'Kinda pop, kinda punk.'
+summary: "2019's top tracks"
+description: "2019's top tracks"
+featured_image: '../assets/images/posts/music/2019-top-songs.jpeg'
 categories: 'music'
 tags:
     - 'curations'
     - 'music'
-
 ---
 <!-- @format -->
 <iframe
     style="border-radius:12px"
-    src="https://open.spotify.com/embed/playlist/7fD6gEqlVHprwCy6ZdGX7n"
+    src="https://open.spotify.com/embed/playlist/37i9dQZF1EtpG7TfKlyCmr"
     width="100%"
     height="700"
     frameBorder="0"
@@ -26,6 +25,6 @@ tags:
         encrypted-media;
         fullscreen;
         picture-in-picture
-    "
+        "
     loading="lazy"
-></iframe>
+    ></iframe>
