@@ -1,11 +1,11 @@
 ---
-title: 'September/October 2023'
-date: '2023-10-31'
+title: 'Top Songs - 2022'
+date: '2022-12-31'
 draft: false
 language: 'en'
-description: 'Kinda pop, kinda punk.'
-featured_image: '../assets/images/posts/music/2023-10.jpeg'
-summary: 'Kinda pop, kinda punk.'
+summary: "2022's top tracks."
+description: "2022's top tracks."
+featured_image: '../assets/images/posts/music/2022-top-songs.jpeg'
 categories: 'music'
 tags:
     - 'curations'
@@ -15,7 +15,7 @@ tags:
 <!-- @format -->
 <iframe
     style="border-radius:12px"
-    src="https://open.spotify.com/embed/playlist/7fD6gEqlVHprwCy6ZdGX7n"
+    src="https://open.spotify.com/embed/playlist/37i9dQZF1F0sijgNaJdgit"
     width="100%"
     height="700"
     frameBorder="0"
@@ -26,6 +26,6 @@ tags:
         encrypted-media;
         fullscreen;
         picture-in-picture
-    "
+        "
     loading="lazy"
-></iframe>
+    ></iframe>
