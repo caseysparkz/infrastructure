@@ -9,7 +9,6 @@ terraform {
       version = "~> 5.8.0"
     }
   }
-
   backend "s3" {
     region = "us-west-2"
     bucket = "caseyspar.kz-tfstate"
