@@ -11,10 +11,10 @@ This directory contains the configuration for the AWS S3 bucket for all Terrafor
 ### Credentials and TF_VARs
 * `$TF_VAR_aws_access_key` [SENSITIVE]
 * `$TF_VAR_aws_secret_key` [SENSITIVE]
-* `$TF_VAR_aws_region`
 
 
 ## Usage
 1. Ensure that the above environment variables are present and correct in your shell.
-2. Apply config (`terraform apply`).
+2. Apply the configuration (`terraform apply`).
 3. Un-comment the `backend` config block in `providers.tf`.
+4. Repply the configuration.
