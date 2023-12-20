@@ -2,7 +2,7 @@
 # Variables
 #
 
-## AWS ========================================================================
+# AWS =========================================================================
 variable "aws_region" {
   default     = "us-west-2"
   description = "AWS region to deploy to."
@@ -27,9 +27,11 @@ variable "aws_secret_key" {
   sensitive   = true
 }
 
-## Misc. ======================================================================
-variable "root_domain" {
-  description = "Root domain of Terraform infrastructure."
+
+# Misc. =======================================================================
+variable "bucket_name" {
+  description = "Name of the AWS bucket to create."
   type        = string
   sensitive   = false
+  default     = "caseyspar.kz-tfstate"
 }

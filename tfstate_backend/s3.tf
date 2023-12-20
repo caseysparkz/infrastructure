@@ -2,9 +2,9 @@
 # AWS S3
 #
 
-## Resources ==================================================================
+# Resources ===================================================================
 resource "aws_s3_bucket" "terraform_state" {
-  bucket        = "${var.root_domain}-tfstate"
+  bucket        = var.bucket_name
   force_destroy = false
   tags = merge(
     {
@@ -45,4 +45,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" 
       sse_algorithm     = "aws:kms"
     }
   }
+}
+
+# Outputs =====================================================================
+output "aws_s3_bucket_name" {
+  description = "FQDN of the S3 bucket (as expected by the Terraform backend config)."
+  value       = aws_s3_bucket.terraform_state.id
+}
+
+output "aws_s3_bucket_uri" {
+  description = "URI of the S3 bucket (as expected by the AWS CLI)."
+  value       = "s3://${aws_s3_bucket.terraform_state.id}/"
 }
