@@ -2,7 +2,7 @@
 # AWS SES
 #
 
-## Resources ==================================================================
+# Resources ===================================================================
 resource "aws_ses_domain_identity" "root_domain" {
   domain = var.root_domain
 }

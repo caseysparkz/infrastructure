@@ -2,24 +2,7 @@
 # AWS S3
 #
 
-## Locals =====================================================================
-locals {
-  hugo_dir              = "${path.module}/srv"
-  hugo_config_template  = "${local.hugo_dir}/config.yaml.tftpl"
-  contact_page_template = "${local.hugo_dir}/content/contactForm.js.tftpl"
-  srv_dir               = "${local.hugo_dir}/public"
-  website_files         = fileset(local.srv_dir, "**")
-  build_hash = sha256(join( #                                                   If build changes.
-    "",
-    [
-      for file in setsubtract(fileset(local.hugo_dir, "**"), local.website_files) :
-      filesha1("${local.hugo_dir}/${file}")
-    ]
-  ))
-  lambda_dir = "${path.module}/lambda"
-}
-
-## Data objects ===============================================================
+# Data Objects ================================================================
 data "aws_iam_policy_document" "s3_public_read_access" {
   statement {
     sid     = "PublicReadGetObject"
@@ -35,14 +18,7 @@ data "aws_iam_policy_document" "s3_public_read_access" {
   }
 }
 
-# FIX. Will redeploy every time.
-data "archive_file" "lambda_contact_form" { #                                   Lambda function zip.
-  type        = "zip"
-  source_file = "${local.lambda_dir}/handler.py"
-  output_path = "/tmp/${local.lambda_s3_object_key}"
-}
-
-## Resources ==================================================================
+# Resources ===================================================================
 resource "aws_s3_bucket" "www_site" { # --------------------------------------- WWW site.
   bucket        = var.subdomain
   force_destroy = true
@@ -111,67 +87,15 @@ resource "aws_s3_object" "lambda_contact_form" { # ---------------------------- 
   etag   = filemd5(data.archive_file.lambda_contact_form.output_path)
 }
 
-resource "local_file" "hugo_config" { # --------------------------------------- Local build.
-  filename = replace(local.hugo_config_template, ".tftpl", "")
-  content = templatefile(
-    local.hugo_config_template,
-    {
-      domain = var.subdomain
-      title  = var.root_domain
-    }
-  )
+# Outputs =====================================================================
+output "aws_s3_bucket_endpoint" {
+  description = "Bucket endpoint"
+  value       = aws_s3_bucket_website_configuration.www_site.website_endpoint
+  sensitive   = false
 }
 
-resource "local_file" "contact_page" {
-  filename = replace(local.contact_page_template, ".tftpl", "")
-  content = templatefile(
-    local.contact_page_template,
-    {
-      execution_url = aws_api_gateway_deployment.contact_form.invoke_url
-    }
-  )
-}
-
-resource "null_resource" "npm_install" { #                                      Install dependencies.
-  depends_on = [
-    local_file.hugo_config,
-    local_file.contact_page
-  ]
-  triggers = {
-    build_hash = local.build_hash
-  }
-
-  provisioner "local-exec" {
-    working_dir = local.hugo_dir
-    command     = "npm install"
-  }
-}
-
-resource "null_resource" "compile_pages" { #                                    Build static site.
-  depends_on = [
-    local_file.hugo_config,
-    local_file.contact_page
-  ]
-  triggers = {
-    build_hash = local.build_hash
-  }
-
-  provisioner "local-exec" {
-    working_dir = local.hugo_dir
-    command     = "hugo"
-  }
-}
-
-resource "null_resource" "deploy_pages" { #                                     Deploy static site.
-  depends_on = [
-    null_resource.compile_pages,
-    aws_s3_bucket.www_site
-  ]
-  triggers = {
-    build_hash = local.build_hash
-  }
-
-  provisioner "local-exec" {
-    command = "aws s3 sync --delete ${local.srv_dir} s3://${aws_s3_bucket.www_site.id}"
-  }
+output "aws_s3_bucket_id" {
+  description = "ID of the S3 bucket (as expected by the AWS CLI)."
+  value       = aws_s3_bucket.www_site.id
+  sensitive   = false
 }

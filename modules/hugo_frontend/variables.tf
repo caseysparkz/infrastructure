@@ -2,7 +2,7 @@
 # Variables.
 #
 
-## API Gateway ================================================================
+# API Gateway =================================================================
 variable "api_gateway_id" {
   description = "ID of the AWS API gateway."
   type        = string
@@ -21,14 +21,14 @@ variable "api_gateway_execution_arn" {
   sensitive   = false
 }
 
-## Lambda =====================================================================
+# Lambda ======================================================================
 variable "artifact_bucket_id" {
   description = "ID of the S3 bucket in which lambda functions are kept."
   type        = string
   sensitive   = false
 }
 
-## Misc. ======================================================================
+# Misc. =======================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."
   type        = string

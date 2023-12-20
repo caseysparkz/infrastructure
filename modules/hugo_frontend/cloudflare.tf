@@ -1,8 +1,6 @@
 ###############################################################################
 # Cloudflare
 #
-
-## Locals =====================================================================
 locals {
   cloudflare_comment = "Terraform managed."
   dmarc_policy = { #                                                            Parsed to string.
@@ -17,12 +15,12 @@ locals {
   }
 }
 
-## Data =======================================================================
+# Data ========================================================================
 data "cloudflare_zone" "domain" { #                                             Root zone.
   name = var.root_domain
 }
 
-## Resources ==================================================================
+# Resources ===================================================================
 resource "cloudflare_record" "root_cname" { #                                   Redirect bucket.
   zone_id         = data.cloudflare_zone.domain.id
   name            = var.root_domain

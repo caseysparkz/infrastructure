@@ -2,7 +2,7 @@
 # AWS Lambda
 #
 
-## Resources ==================================================================
+# Resources ===================================================================
 resource "aws_lambda_function" "contact_form" {
   description      = "Python function to send an email via AWS SES."
   function_name    = "contact_form"
@@ -28,3 +28,12 @@ resource "aws_lambda_permission" "api_gateway" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = aws_api_gateway_deployment.contact_form.execution_arn
 }
+
+# Outputs =====================================================================
+/*
+output "aws_lambda_function_invoke_arn" {
+  description = "Invocation URL for the Lambda function."
+  value       = aws_lambda_function.contact_form.invoke_arn
+  sensitive   = false
+}
+*/
