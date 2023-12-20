@@ -2,7 +2,6 @@
 # Terraform Config and Providers
 #
 
-## Terraform ==================================================================
 terraform {
   required_providers {
     archive = {

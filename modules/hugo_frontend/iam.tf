@@ -6,7 +6,7 @@ locals {
   aws_account_id = data.aws_caller_identity.current.account_id
 }
 
-## Data =======================================================================
+# Data ========================================================================
 data "aws_kms_alias" "lambda" {
   name = "alias/aws/lambda"
 }
@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "lambda_kms_decrypt" {
   }
 }
 
-## Resources ==================================================================
+# Resources ===================================================================
 resource "aws_iam_role" "lambda_contact_form" { # ----------------------------- IAM role.
   name               = "lambda_contact_form"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
