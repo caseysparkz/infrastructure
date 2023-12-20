@@ -19,7 +19,7 @@ terraform {
 
   backend "s3" { #                                                              ./modules/tf_backend_s3
     bucket  = "caseyspar.kz-tfstate"
-    key     = "caseysparkz.tfstate"
+    key     = "caseyspar.kz.tfstate"
     region  = "us-west-2"
     encrypt = true
   }
