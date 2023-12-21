@@ -5,7 +5,10 @@ Author:         Casey Sparks
 Description:    Sends a POST request to an AWS API gateway endpoint.
 */
 
+/*global $, alert, document, location*/
+
 function submitEvent(e) {
+    "use strict";
     e.preventDefault();
 
     var data = {                                                                // Format data.
@@ -13,7 +16,7 @@ function submitEvent(e) {
         sender_email: $("#sender_email").val(),
         subject: $("#subject").val(),
         message: $("#message").val(),
-        };
+    };
 
     $.ajax({                                                                    // Send POST request to API gateway endpoint.
         url: "https://2thztj5px2.execute-api.us-west-2.amazonaws.com/contact",
@@ -26,9 +29,9 @@ function submitEvent(e) {
             alert("Success");
             document.getElementById("contact-form").reset();
             location.reload();
-            },
+        },
         error: function () {
             alert("Error");
-            }
-        });
+        }
+    });
 }
