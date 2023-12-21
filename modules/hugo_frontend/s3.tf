@@ -82,7 +82,7 @@ resource "aws_s3_bucket_website_configuration" "web_root" {
 
 resource "aws_s3_object" "lambda_contact_form" { # ---------------------------- S3 Lambda artifact.
   bucket = var.artifact_bucket_id
-  key    = local.lambda_s3_object_key
+  key    = basename(data.archive_file.lambda_contact_form.output_path)
   source = data.archive_file.lambda_contact_form.output_path
   etag   = filemd5(data.archive_file.lambda_contact_form.output_path)
 }

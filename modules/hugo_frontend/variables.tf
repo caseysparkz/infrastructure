@@ -40,3 +40,15 @@ variable "subdomain" {
   type        = string
   sensitive   = false
 }
+
+variable "site_title" {
+  description = "Title of the website."
+  type        = string
+  sensitive   = false
+}
+
+variable "hugo_dir" {
+  description = "Absolute path of the Hugo directory."
+  type        = string
+  sensitive   = false
+}
