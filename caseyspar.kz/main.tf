@@ -129,6 +129,8 @@ module "www" { # -------------------------------------------------------------- 
   api_gateway_id               = module.api.aws_api_gateway_id
   api_gateway_root_resource_id = module.api.aws_api_gateway_root_resource_id
   api_gateway_execution_arn    = module.api.aws_api_gateway_execution_arn
+  site_title                   = var.root_domain
+  hugo_dir                     = abspath("frontend")
 }
 
 output "www_s3_bucket_endpoint" {

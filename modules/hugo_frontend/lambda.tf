@@ -2,7 +2,16 @@
 # AWS Lambda
 #
 
+# Data ========================================================================
+data "archive_file" "lambda_contact_form" { #                                   TODO. Will redeploy every time.
+  type        = "zip"
+  source_file = "${path.module}/lambda_contact_form.py"
+  output_path = "/tmp/contact_form_${random_uuid.contact_form.result}.py"
+}
+
 # Resources ===================================================================
+resource "random_uuid" "contact_form" {}
+
 resource "aws_lambda_function" "contact_form" {
   description      = "Python function to send an email via AWS SES."
   function_name    = "contact_form"
