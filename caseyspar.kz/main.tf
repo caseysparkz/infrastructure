@@ -16,7 +16,7 @@ locals {
 
 ## Modules and Outputs ========================================================
 module "artifacts" { # -------------------------------------------------------- S3: Artifacts.
-  source      = "../modules/artifacts"
+  source      = "../modules/s3_artifacts"
   root_domain = var.root_domain
 }
 
@@ -48,6 +48,7 @@ module "forward_zones" { # ---------------------------------------------------- 
   source        = "../modules/forward_zones"
   root_domain   = var.root_domain
   forward_zones = var.forward_zones
+  cloudflare_comment = local.cloudflare_comment
 }
 
 output "forward_zones_zone_data" {
@@ -122,7 +123,7 @@ output "ecr_registry_repository_urls" {
 }
 
 module "www" { # -------------------------------------------------------------- WWW.
-  source                       = "../modules/hugo_frontend"
+  source                       = "../modules/hugo_static_site"
   root_domain                  = var.root_domain
   subdomain                    = "www.${var.root_domain}"
   artifact_bucket_id           = module.artifacts.s3_bucket_id
