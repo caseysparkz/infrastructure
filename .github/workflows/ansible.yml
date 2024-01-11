@@ -57,6 +57,6 @@ jobs:
                       })
 
             - name: 'Auto merge.'
-              uses: 'pascalgn/automerge-action@v0.15.6'
+              uses: 'pascalgn/automerge-action@v0.16.2'
               if: steps.lint.outcome == 'success'
 ...
