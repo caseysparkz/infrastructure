@@ -87,7 +87,7 @@ variable "txt_records" {
   type        = map(string)
   sensitive   = false
   default = {
-    "keybase-site-verification=8MXkrublC6Bg6NPBvHAwmK12v1FledQETZS1ux_oi0A" = "@"
+    "keybase-site-verification=UUmTA-RUnGPfT6DPVs_WMPwjqGMEV6CbX7aoZRVwntM" = "@"
     "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3"      = "@"
     "did=did:plc:eop37ikcn6s33dedyhvejqv5"                                  = "_atproto"
   }
