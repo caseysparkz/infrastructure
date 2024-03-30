@@ -20,19 +20,17 @@ params:
     disable_theme_toggle: false
     disable_stay_uptodate: true
     p1:
-        heading: 'Our mission'
+        heading: 'The Mission?'
         image: 'images/pages/our-mission.png'
         content:
-            - text: '1. Try our best.'
-            - text: '2. Have fun.'
-            - text: '3. Safety.'
-    p2:
-        heading: 'We Bring'
-        image: 'images/pages/hacktoberfest.jpg'
-        content:
-            - text: '1. Bar.'
-            - text: '2. Music.'
-            - text: '3. Other stuff.'
+            - text: 'Replace the boilerplate Tailwinds artifacts, and figure out what to write here...'
+#   p2:
+#       heading: 'We Bring'
+#       image: 'images/pages/hacktoberfest.jpg'
+#       content:
+#           - text: '1. Bar.'
+#           - text: '2. Music.'
+#           - text: '3. Other stuff.'
     p4:
         heading: 'From the blog'
         content:
@@ -55,10 +53,10 @@ menu:
           name: 'About'
           url: '/about/'
           weight: 40
-        - identifier: 'contact'
-          name: 'Contact'
-          url: '/contact/'
-          weight: 99
+#       - identifier: 'contact'
+#         name: 'Contact'
+#         url: '/contact/'
+#         weight: 99
     resume:
         - identifier: 'resume_embedded'
           name: 'Embedded'
