@@ -109,6 +109,49 @@ variable "forward_zones" {
   default     = ["cspar.kz"]
 }
 
+## RouterOS ===================================================================
+variable "routeros_hosturl" {
+  description = "Host URL of the RouterOS device. Must include the scheme."
+  type        = string
+  sensitive   = false
+  default     = "api://192.168.88.1"
+
+  validation {
+    condition     = can(regex("^(apis?|https):\\/\\/.*$", var.routeros_hosturl))
+    error_message = "var.routeros_hosturl must begin with ('api'|'apis'|'https')."
+  }
+}
+
+variable "routeros_username" {
+  description = "Admin username for the RouterOS device."
+  type        = string
+  sensitive   = false
+  default     = "admin"
+}
+
+variable "routeros_passwd" {
+  description = "Admin password for the RouterOS device."
+  type        = string
+  sensitive   = true
+}
+
+variable "routeros_cacertificate" {
+  description = "Path of the CA certificate for the RouterOS device."
+  type        = string
+  sensitive   = false
+  default     = "./files/lan_ca_certificate.pem"
+
+  validation {
+    condition     = fileexists(var.routeros_cacertificate)
+    error_message = "${var.routeros_cacertificate} file does not exist."
+  }
+
+  validation {
+    condition     = can(regex("^.*\\.(pem|crt|cer)$", var.routeros_cacertificate))
+    error_message = "var.routeros_cacertificate must have extension .pem, .crt, or .cer."
+  }
+}
+
 ## Misc. ======================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."

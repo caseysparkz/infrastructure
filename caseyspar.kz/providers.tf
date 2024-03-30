@@ -15,6 +15,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 4.17.0"
     }
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = "~> 1.32.0"
+    }
   }
 
   backend "s3" { #                                                              ./modules/tf_backend_s3
@@ -41,4 +45,12 @@ provider "aws" { #                                                              
 
 provider "cloudflare" { #                                                       Cloudflare.
   api_token = var.cloudflare_api_token
+}
+
+provider "routeros" { #                                                         Mikrotik/RouterOS.
+  hosturl        = var.routeros_hosturl
+  username       = var.routeros_username
+  password       = var.routeros_passwd
+  ca_certificate = var.routeros_cacertificate
+  insecure       = false
 }
