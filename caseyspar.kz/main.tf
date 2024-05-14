@@ -45,9 +45,9 @@ output "artifacts_kms_key_alias" {
 }
 
 module "forward_zones" { # ---------------------------------------------------- Forward zones.
-  source        = "../modules/forward_zones"
-  root_domain   = var.root_domain
-  forward_zones = var.forward_zones
+  source             = "../modules/forward_zones"
+  root_domain        = var.root_domain
+  forward_zones      = var.forward_zones
   cloudflare_comment = local.cloudflare_comment
 }
 
