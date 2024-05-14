@@ -42,3 +42,10 @@ provider "aws" { #                                                              
 provider "cloudflare" { #                                                       Cloudflare.
   api_token = var.cloudflare_api_token
 }
+
+## Outputs ====================================================================
+output "aws_region" {
+  description = "Region to which tf config is deployed."
+  value       = var.aws_region
+  sensitive   = false
+}
