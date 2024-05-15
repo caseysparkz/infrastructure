@@ -95,7 +95,7 @@ menu:
           url: 'https://github.com/caseysparkz'
           weight: 01
         - identifier: 'linkedin'
-          name: 'Linkedin'
+          name: 'LinkedIn'
           url: 'https://linkedin.com/in/caseysparkz'
           weight: 02
     footer:

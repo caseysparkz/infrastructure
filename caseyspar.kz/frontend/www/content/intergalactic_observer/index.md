@@ -6,7 +6,7 @@ description: 'A magazine about that thing in the desert that I briefly published
 
 ---
 The Intergalactic Observer was a magazine that my friends and I briefly published about that thing in the desert,
-before Covid caused 2020's event to be cancelled, resulting in a lack of media for the publication.
+before COVID-19 caused 2020's event to be cancelled, extinguishing the publication's source for new media.
 
 
 * The magazine was not and is not for profit.
