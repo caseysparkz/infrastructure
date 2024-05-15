@@ -8,82 +8,109 @@ enableGitInfo: true
 enableRobotsTXT: true
 canonifyURLs: true
 paginate: 12
-darkmode_js:
-    - 'assets/js/darkmode.js'
+darkmode_js: ['assets/js/darkmode.js']
 enableInlineShortcodes: true
 params:
     author: 'Casey Sparks'
     authorimage: '../assets/images/global/caseysparkz.jpg'
     og_image: '/images/tailbliss-cover.png'
     moto: 'Enthusiast.'
-    # description: 'Enthusiast.'
+    description: ''
     disable_theme_toggle: false
     disable_stay_uptodate: true
-    p1:
-        heading: 'The Mission?'
-        image: 'images/pages/our-mission.png'
+    p1:                                                                         # Mission section.
+        heading: 'Mission Statement???'
+        image: 'images/pages/subhero.jpeg'
         content:
-            - text: 'Replace the boilerplate Tailwinds artifacts, and figure out what to write here...'
-#   p2:
-#       heading: 'We Bring'
-#       image: 'images/pages/hacktoberfest.jpg'
-#       content:
-#           - text: '1. Bar.'
-#           - text: '2. Music.'
-#           - text: '3. Other stuff.'
-    p4:
+            - text: 'idk man, probably:'
+            - text: '1. Replace the boilerplate Tailwinds artifacts.'
+            - text: '2. Fix the contact form.'
+            - text: '3. Figure out what to write here.'
+            - text: '4. Stay posting.'
+    # p2:
+    #     heading: ''
+    #     image: ''
+    #     content: [text: '']
+    # p3:
+    #     heading: ''
+    #     image: ''
+    #     content: [text: '']
+    p4:                                                                         # Blog
         heading: 'From the blog'
-        content:
-            - text: "Mostly just what music I'm listening to. Sometimes other stuff."
+        content: [text: "Mostly just what music I'm listening to. Sometimes code or case studies."]
 menu:
     main:
         - identifier: 'resume'
           name: 'Resume'
           pre: 'dropdown'
-          weight: 10
-        - identifier: 'categories'
-          name: 'Interests'
+          weight: 01
+        - identifier: 'blog'
+          name: 'Blog'
           pre: 'dropdown'
-          weight: 20
-        - identifier: 'git'
-          name: 'Github'
-          url: 'https://github.com/caseysparkz'
-          weight: 30
+          weight: 02
+        - identifier: 'misc'
+          pre: 'dropdown'
+          name: 'Misc.'
+          url: '/misc/'
+          weight: 03
+        - identifier: 'social'
+          pre: 'dropdown'
+          name: 'Social'
+          url: '/social/'
+          weight: 04
         - identifier: 'about'
           name: 'About'
           url: '/about/'
-          weight: 40
-#       - identifier: 'contact'
-#         name: 'Contact'
-#         url: '/contact/'
-#         weight: 99
+          weight: 05
+        # - identifier: 'contact'
+        #   name: 'Contact'
+        #   url: '/contact/'
+        #   weight: 99
     resume:
-        - identifier: 'resume_embedded'
-          name: 'Embedded'
+        - identifier: 'resume_html'
+          name: 'HTML'
           url: '/resume/casey_sparks'
-          weight: 10
+          weight: 01
         - identifier: 'resume_pdf'
           name: 'PDF'
           url: '/resume/casey_sparks.pdf'
-          weight: 20
-    categories:
+          weight: 02
+    blog:
         - identifier: 'code'
           name: 'Code'
           url: '/tags/code/'
-          weight: 10
+          weight: 01
         - identifier: 'music'
           name: 'Music'
           url: '/tags/music/'
-          weight: 20
+          weight: 02
+    misc:
+        - identifier: 'magazine'
+          name: 'Intergalactic Observer'
+          url: '/intergalactic_observer/'
+          weight: 01
+    social:
+        - identifier: 'github'
+          name: 'Github'
+          url: 'https://github.com/caseysparkz'
+          weight: 01
+        - identifier: 'linkedin'
+          name: 'Linkedin'
+          url: 'https://linkedin.com/in/caseysparkz'
+          weight: 02
     footer:
-        - identifier: 'contact'
-          name: 'Contact'
-          url: '/contact/'
-          weight: 99
+        - identifier: 'about'
+          name: 'About'
+          url: '/about/'
+          weight: 01
+        # - identifier: 'contact'
+        #   name: 'Contact'
+        #   url: '/contact/'
+        #   weight: 99
 markup:
     goldmark:
         renderer:
-          unsafe: true
+            unsafe: true                                                        # Allow external URLs.
 taxonomies:
     category: 'Categories'
     tag: 'Tags'
@@ -91,26 +118,17 @@ privacy:
     disqus:
         disable: true
     googleAnalytics:
-        anonymizeIP: true
         disable: true
-        respectDoNotTrack: true
-        useSessionStorage: true
     instagram:
         disable: true
-        simple: true
     twitter:
         disable: true
-        enableDNT: false
-        simple: true
     vimeo:
         disable: true
-        enableDNT: false
-        simple: true
     youtube:
         disable: true
-        privacyEnhanced: true
 module:
     hugoVersion:
         extended: true
-        min: '0.104.0'
+        min: '0.125.7'
 ...
