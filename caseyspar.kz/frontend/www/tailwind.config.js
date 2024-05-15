@@ -15,7 +15,7 @@ module.exports = {
             emerald: colors.emerald,
             indigo: colors.indigo,
             yellow: colors.yellow,
-        },
+            },
         extend: {
             colors: {
                 transparent: 'transparent',
@@ -32,7 +32,7 @@ module.exports = {
                     700: '#1317D1',
                     800: '#0E119E',
                     900: '#0A0C6A'
-                },
+                    },
                 'secondary': {
                     DEFAULT: '#EC4899',
                     50: '#FDEEF6',
@@ -45,7 +45,7 @@ module.exports = {
                     700: '#B11261',
                     800: '#7F0D45',
                     900: '#4C0829'
-                },
+                    },
                 'neutral': {
                     DEFAULT: '#6B7280',
                     50: '#CDD0D5',
@@ -58,7 +58,7 @@ module.exports = {
                     700: '#383C43',
                     800: '#1E2024',
                     900: '#050506'
-                },
+                    },
                 'pale-sky': {
                     DEFAULT: '#6B7280',
                     50: '#FFFFFF',
@@ -72,13 +72,13 @@ module.exports = {
                     800: '#8B919E',
                     900: '#747C8B',
                     950: '#6B7280'
-                },
+                    },
                 // To change these, use https://www.tailwindshades.com/ with https://tailwindcss.com/docs/customizing-colors or create your own custom colors.
-            },
+                },
             lineHeight: {
                 'extra-loose': '2.5',
                 '12': '3rem',
-            },
+                },
             typography: (theme) => ({
                 DEFAULT: {
                     css: {
@@ -114,13 +114,11 @@ module.exports = {
                         '--tw-prose-invert-pre-bg': theme('colors.gray[900]'),
                         '--tw-prose-invert-th-borders': theme('colors.zinc[100]'),
                         '--tw-prose-invert-td-borders': theme('colors.zinc[500]'),
+                        },
                     },
-                },
-            }),
+                }),
+            },
         },
-    },
-    variants: {
-        typography: ["dark"],
-    },
+    variants: {typography: ["dark"]},
     plugins: [require("@tailwindcss/typography")],
-};
+    };

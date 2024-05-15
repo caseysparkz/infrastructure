@@ -1,6 +1,5 @@
 ---
 title: 'Contact'
-date: '2021-10-03T13:10:36.000Z'
 draft: false
 language: 'en'
 description: 'Contact Page'
