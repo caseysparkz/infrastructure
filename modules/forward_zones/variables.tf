@@ -16,7 +16,7 @@ variable "forward_zones" {
 
 variable "cloudflare_comment" {
   description = "Default comment to apply to all Cloudflare resources."
-  type = string
-  sensitive = false
-  default = "Terraform managed."
+  type        = string
+  sensitive   = false
+  default     = "Terraform managed."
 }
