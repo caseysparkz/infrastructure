@@ -16,14 +16,16 @@ description: 'Contact Page'
             lg:mb-16
             dark:text-gray-400
             sm:text-xl"
-        >Want to reach out? Do it here.</p>
+            >
+            Want to reach out? Do it here.
+            </p>
         <form
             name="contact"
             id="contact-form"
             class="space-y-8"
             method="post"
             >
-            <!-- Sender name --><div class="my-4">
+            <div class="my-4">                                                  <!-- Sender name -->
                 <label
                     for="email"
                     class="
@@ -33,8 +35,10 @@ description: 'Contact Page'
                         text-gray-900
                         text-md
                         dark:text-gray-300
-                    "
-                ><strong>From</strong></label>
+                        "
+                    >
+                    <strong>From</strong>
+                    </label>
                 <input
                     type="text"
                     id="sender_name"
@@ -60,11 +64,11 @@ description: 'Contact Page'
                         dark:focus:ring-indigo-500
                         dark:focus:border-indigo-500
                         dark:shadow-sm-light
-                    "
+                        "
                     required
-                >
-            </div>
-            <!-- Sender email address --><div class="my-4">
+                    >
+                </div>
+            <div class="my-4">                                                  <!-- Sender email address -->
                 <input
                     type="email"
                     id="sender_email"
@@ -89,12 +93,12 @@ description: 'Contact Page'
                         dark:focus:ring-indigo-500
                         dark:focus:border-indigo-500
                         dark:shadow-sm-light
-                    "
+                        "
                     placeholder="your_email@example.com"
                     required
-                >
-            </div>
-            <!-- Email subject --><div class="my-4">
+                    >
+                </div>
+            <div class="my-4">                                                  <!-- Email subject -->
                 <label
                     for="subject"
                     class="
@@ -104,8 +108,10 @@ description: 'Contact Page'
                         text-gray-900
                         text-md
                         dark:text-gray-300
-                    "
-                ><strong>Subject</strong></label>
+                        "
+                    >
+                    <strong>Subject</strong>
+                    </label>
                 <input
                     type="text"
                     id="subject"
@@ -130,11 +136,11 @@ description: 'Contact Page'
                         dark:focus:ring-indigo-500
                         dark:focus:border-indigo-500
                         dark:shadow-sm-light
-                    "
+                        "
                     required
-                >
-            </div>
-            <!-- Email body --><div class="my-4 sm:col-span-2">
+                    >
+                </div>
+            <div class="my-4 sm:col-span-2">                                    <!-- Email body -->
                 <label
                     for="message"
                     class="
@@ -144,8 +150,10 @@ description: 'Contact Page'
                         text-gray-900
                         text-md
                         dark:text-gray-400
-                    "
-                ><strong>Body</strong></label>
+                        "
+                    >
+                    <strong>Body</strong>
+                    </label>
                 <textarea
                     id="message"
                     name="message"
@@ -169,10 +177,10 @@ description: 'Contact Page'
                         dark:text-white
                         dark:focus:ring-indigo-500
                         dark:focus:border-indigo-500
-                    "
-                ></textarea>
-            </div>
-            <!-- Submit button --><div class="mt-6 lg:pb-16">
+                        "
+                    ></textarea>
+                </div>
+            <div class="mt-6 lg:pb-16">                                         <!-- Submit button -->
                 <button
                     type="submit"
                     onClick="contactForm.submitEvent(event)"
@@ -193,9 +201,11 @@ description: 'Contact Page'
                         dark:bg-indigo-600
                         dark:hover:bg-indigo-700
                         dark:focus:ring-indigo-800
-                    "
-                >Send</button>
-            </div>
-        </form>
-    </div>
-</section>
+                        "
+                    >
+                    Send
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
