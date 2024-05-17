@@ -10,8 +10,8 @@ before COVID-19 caused 2020's event to be cancelled, extinguishing the publicati
 
 
 * The magazine was not and is not for profit.
-* All published media was approved for by the contributors and credited.
-* All published issues were approved by BMOrg's press team prior to publication.
+* All media was approved for publication by the contributors and appropriately credited.
+* All issues were approved for publication by BMOrg's press team.
 
 Published  issues can be read below.
 
