@@ -3,15 +3,13 @@
 #
 
 # Data ========================================================================
-data "archive_file" "lambda_contact_form" { #                                   TODO. Will redeploy every time.
+data "archive_file" "lambda_contact_form" { #                                   Zipfile for Lambda artifact.
   type        = "zip"
   source_file = "${path.module}/lambda_contact_form.py"
-  output_path = "/tmp/contact_form_${random_uuid.contact_form.result}.py"
+  output_path = "/tmp/${var.root_domain}_contact_form.zip"
 }
 
 # Resources ===================================================================
-resource "random_uuid" "contact_form" {}
-
 resource "aws_lambda_function" "contact_form" {
   description      = "Python function to send an email via AWS SES."
   function_name    = "contact_form"
@@ -24,9 +22,9 @@ resource "aws_lambda_function" "contact_form" {
 
   environment {
     variables = {
+      CLOUDFLARE_TURNSTILE_SECRET_KEY = var.turnstile_secret_key
       DEFAULT_RECIPIENT               = local.email_headers["default_recipient"]
       DEFAULT_SENDER                  = local.email_headers["default_sender"]
-      CLOUDFLARE_TURNSTILE_SECRET_KEY = var.turnstile_secret_key
     }
   }
 }
