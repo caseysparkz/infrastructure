@@ -10,18 +10,18 @@ from logging import getLogger, NullHandler
 from os import getenv
 from textwrap import dedent
 from boto3 import client
-from re import match as re_match
 
 (LOG := getLogger()).addHandler(NullHandler)
 REQUIRED_KEYS = {'message', 'sender_email', 'sender_name', 'subject'}
 
+
 def send_email(
     email_obj: dict
-    ) -> dict:
+        ) -> dict:
     '''
     Send an email via AWS SES.
         :param email_obj:   Dict containing `REQUIRED_KEYS'.
-        :return:            Dict containing the SES response.
+        :return:            The SES client response.
     '''
     assert isinstance(email_obj, dict), 'email_obj must be instance of dict().'
     assert REQUIRED_KEYS.intersection(email_obj.keys()) == REQUIRED_KEYS, 'email_obj missing keys.'
@@ -29,24 +29,22 @@ def send_email(
 
     ses_client = client('ses')                                                  # Instantiate SES client.
     response = ses_client.send_email(                                           # Send email.
+        Source=email_obj['default_sender'],
         Destination={'ToAddresses': [email_obj['default_recipient']]},
         Message={
-            'Body': {
-                'Text': {
-                    'Charset': 'UTF-8',
-                    'Data': dedent(f'''
-                        From: {email_obj['sender_name']}
-                        Email: {email_obj['sender_email']}
-                        Content: {email_obj['message']}
-                        ''').strip('\n')
-                    }
-                },
             'Subject': {
                 'Charset': 'UTF-8',
                 'Data': email_obj['subject'],
-                }
+                },
+            'Body': {'Text': {
+                'Charset': 'UTF-8',
+                'Data': dedent(f'''
+                    From: {email_obj['sender_name']}
+                    Email: {email_obj['sender_email']}
+                    Content: {email_obj['message']}
+                    ''').strip('\n')
+                }},
             },
-            Source=email_obj['default_sender']
         )
 
     LOG.debug(response)
@@ -57,11 +55,12 @@ def send_email(
 def lambda_handler(
     event: dict,
     context: dict
-    ) -> None:
+        ) -> dict:
     '''
     Default function for Lambda functions.
         :param event:   The Lamba event to handle.
         :param context: Context for said Lambda event.
+        :return:        Dictionary containing the Lambda response.
     '''
     LOG.debug(f'Event: {event}')                                                # Log event.
     LOG.debug(f'Context: {context}')                                            # Log context.
@@ -71,12 +70,12 @@ def lambda_handler(
     assert REQUIRED_KEYS.intersection(event_body.keys()) == REQUIRED_KEYS, 'Event body missing keys.'
 
     ses_response = send_email({                                                 # Send email.
-        'default_recipient': getenv('DEFAULT_RECIPIENT'),
         'default_sender': getenv('DEFAULT_SENDER'),
+        'default_recipient': getenv('DEFAULT_RECIPIENT'),
         'sender_email': event_body['sender_email'],
         'sender_name': event_body['sender_name'],
         'subject': event_body['subject'],
-        'message': event_body['message']
+        'message': event_body['message'],
         })
     lambda_response = {
         'statusCode': 200,
