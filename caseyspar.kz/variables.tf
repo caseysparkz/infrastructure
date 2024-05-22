@@ -91,7 +91,7 @@ variable "txt_records" {
   description = "List of TXT records for domain."
   sensitive   = false
   default = {
-    "keybase-site-verification=UUmTA-RUnGPfT6DPVs_WMPwjqGMEV6CbX7aoZRVwntM" = "@"
+    "keybase-site-verification=SoBke-JkS4OxorawZ3m1l-bDlP48198uwxzgwfs_UhQ" = "@"
     "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3"      = "@"
     "did=did:plc:eop37ikcn6s33dedyhvejqv5"                                  = "_atproto"
   }
