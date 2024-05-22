@@ -3,13 +3,13 @@
 #
 
 variable "root_domain" {
-  description = "Root domain of the Terraformed infrastructure."
   type        = string
+  description = "Root domain of the Terraformed infrastructure."
   sensitive   = false
 }
 
 variable "subdomain" {
-  description = "The subdomain of this Terraform module."
   type        = string
+  description = "The subdomain of this Terraform module."
   sensitive   = false
 }

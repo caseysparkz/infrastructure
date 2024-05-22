@@ -24,8 +24,9 @@ resource "aws_lambda_function" "contact_form" {
 
   environment {
     variables = {
-      DEFAULT_RECIPIENT = local.email_headers["default_recipient"]
-      DEFAULT_SENDER    = local.email_headers["default_sender"]
+      DEFAULT_RECIPIENT               = local.email_headers["default_recipient"]
+      DEFAULT_SENDER                  = local.email_headers["default_sender"]
+      CLOUDFLARE_TURNSTILE_SECRET_KEY = var.turnstile_secret_key
     }
   }
 }
@@ -39,10 +40,8 @@ resource "aws_lambda_permission" "api_gateway" {
 }
 
 # Outputs =====================================================================
-/*
 output "aws_lambda_function_invoke_arn" {
   description = "Invocation URL for the Lambda function."
   value       = aws_lambda_function.contact_form.invoke_arn
   sensitive   = false
 }
-*/

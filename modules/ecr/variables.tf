@@ -3,7 +3,7 @@
 #
 
 variable "root_domain" {
-  description = "Root domain of the infrastructure."
   type        = string
+  description = "Root domain of the infrastructure."
   sensitive   = false
 }

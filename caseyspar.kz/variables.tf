@@ -4,8 +4,8 @@
 
 ## AWS ========================================================================
 variable "aws_region" {
-  description = "AWS region to deploy to."
   type        = string
+  description = "AWS region to deploy to."
   sensitive   = false
   default     = "us-west-2"
 
@@ -16,44 +16,48 @@ variable "aws_region" {
 }
 
 variable "aws_access_key" {
-  description = "AWS access key for the deployment user."
   type        = string
+  description = "AWS access key for the deployment user."
   sensitive   = true
 }
 
 variable "aws_secret_key" {
-  description = "Secret key corresponding to the AWS access key."
   type        = string
+  description = "Secret key corresponding to the AWS access key."
   sensitive   = true
 }
 
 variable "ecr_repository_names" {
-  description = "List of ECR repository names to create."
   type        = list(string)
+  description = "List of ECR repository names to create."
   sensitive   = false
   default = [
     "alpine_base",
-    "python3_base"
+    "python3_base",
   ]
 
   validation {
-    condition = alltrue([
-      for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9_./]*$", v))
-    ])
+    condition     = alltrue([for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9_./]*$", v))])
     error_message = "ECR repository name contains invalid characters [a-zA-Z0-9-_./]."
   }
 }
 
 ## Cloudflare =================================================================
-variable "cloudflare_api_token" {
-  description = "API token for Cloudflare authentication."
+variable "cloudflare_account_id" {
   type        = string
+  description = "Cloudflare account ID."
+  sensitive   = false
+}
+
+variable "cloudflare_api_token" {
+  type        = string
+  description = "API token for Cloudflare authentication."
   sensitive   = true
 }
 
 variable "mx_servers" {
-  description = "MX servers for root domain. Syntax: {server: priority}."
   type        = map(string)
+  description = "MX servers for root domain. Syntax: {server: priority}."
   sensitive   = false
   default = {
     "mail.protonmail.ch"    = 10
@@ -62,8 +66,8 @@ variable "mx_servers" {
 }
 
 variable "dkim_records" {
-  description = "DKIM (CNAME) for root domain. Syntax: {host: pointer}."
   type        = map(string)
+  description = "DKIM (CNAME) for root domain. Syntax: {host: pointer}."
   sensitive   = false
   default = {
     "protonmail._domainkey"  = "protonmail.domainkey.dlnhnljjvlx6bfjjsleqnfvszipy5ver4qdnit24cx6ufem2qzgfq.domains.proton.ch"
@@ -73,18 +77,18 @@ variable "dkim_records" {
 }
 
 variable "spf_senders" {
-  description = "List of allowed SPF senders, like: [\"include:_spf.example.com\", \"ip4:127.0.0.1\"]."
   type        = list(string)
+  description = "List of allowed SPF senders, like: [\"include:_spf.example.com\", \"ip4:127.0.0.1\"]."
   sensitive   = false
   default = [
     "include:_spf.protonmail.ch",
-    "mx"
+    "mx",
   ]
 }
 
 variable "txt_records" {
-  description = "List of TXT records for domain."
   type        = map(string)
+  description = "List of TXT records for domain."
   sensitive   = false
   default = {
     "keybase-site-verification=UUmTA-RUnGPfT6DPVs_WMPwjqGMEV6CbX7aoZRVwntM" = "@"
@@ -94,32 +98,36 @@ variable "txt_records" {
 }
 
 variable "pka_records" {
-  description = "Map of PKA handles and fingerprints for root domain."
   type        = map(string)
-  default = {
-    himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5"
-  }
-  sensitive = false
+  description = "Map of PKA handles and fingerprints for root domain."
+  default     = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
+  sensitive   = false
 }
 
 variable "forward_zones" {
-  description = "Forward zones for the root domain."
   type        = list(string)
+  description = "Forward zones for the root domain."
   sensitive   = false
   default     = ["cspar.kz"]
 }
 
 ## Misc. ======================================================================
 variable "root_domain" {
+  type        = string
   description = "Root domain of Terraform infrastructure."
   default     = "caseyspar.kz"
-  type        = string
   sensitive   = false
 }
 
 variable "ssh_pubkey_path" {
-  description = "Path of the administrator SSH public key."
-  default     = "~/.ssh/keys/hck.pub"
   type        = string
+  description = "Path of the administrator SSH public key."
+  default     = "~/.ssh/keys/id_rsa.key"
   sensitive   = false
+
+  validation {
+    condition     = fileexists(var.ssh_pubkey_path)
+    error_message = "SSH pubkey file does not exist: ${var.ssh_pubkey_path}."
+  }
+
 }
