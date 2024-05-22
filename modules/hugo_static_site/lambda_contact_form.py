@@ -10,6 +10,7 @@ from logging import getLogger, NullHandler
 from os import getenv
 from textwrap import dedent
 from boto3 import client
+from re import match as re_match
 
 (LOG := getLogger()).addHandler(NullHandler)
 REQUIRED_KEYS = {'message', 'sender_email', 'sender_name', 'subject'}
@@ -24,15 +25,10 @@ def send_email(
     '''
     assert isinstance(email_obj, dict), 'email_obj must be instance of dict().'
     assert REQUIRED_KEYS.intersection(email_obj.keys()) == REQUIRED_KEYS, 'email_obj missing keys.'
-    assert all(isinstance(email_obj[value], str) for value in REQUIRED_KEYS), 'Invalid value type.'
-    assert all(
-        isinstance(email_obj[value], str)
-        for value
-        in ('default_recipient', 'default_sender')
-        ), 'Invalid value type.'
+    assert all(isinstance(item, str) for item in email_obj.values()), ':param email_obj: values must be str().'
 
-    ses_client = client('ses')                                              # Instantiate SES client.
-    response = ses_client.send_email(                                       # Send email.
+    ses_client = client('ses')                                                  # Instantiate SES client.
+    response = ses_client.send_email(                                           # Send email.
         Destination={'ToAddresses': [email_obj['default_recipient']]},
         Message={
             'Body': {
@@ -67,14 +63,14 @@ def lambda_handler(
         :param event:   The Lamba event to handle.
         :param context: Context for said Lambda event.
     '''
-    LOG.debug(f'Event: {event}')                                            # Log event.
-    LOG.debug(f'Context: {context}')                                        # Log context.
+    LOG.debug(f'Event: {event}')                                                # Log event.
+    LOG.debug(f'Context: {context}')                                            # Log context.
 
     event_body = loads(event['body'])
 
     assert REQUIRED_KEYS.intersection(event_body.keys()) == REQUIRED_KEYS, 'Event body missing keys.'
 
-    ses_response = send_email({                                             # Send email.
+    ses_response = send_email({                                                 # Send email.
         'default_recipient': getenv('DEFAULT_RECIPIENT'),
         'default_sender': getenv('DEFAULT_SENDER'),
         'sender_email': event_body['sender_email'],
