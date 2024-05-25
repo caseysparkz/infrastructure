@@ -91,9 +91,7 @@ variable "txt_records" {
   description = "List of TXT records for domain."
   sensitive   = false
   default = {
-    "keybase-site-verification=SoBke-JkS4OxorawZ3m1l-bDlP48198uwxzgwfs_UhQ" = "@"
-    "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3"      = "@"
-    "did=did:plc:eop37ikcn6s33dedyhvejqv5"                                  = "_atproto"
+    "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3" = "@"
   }
 }
 
@@ -129,5 +127,4 @@ variable "ssh_pubkey_path" {
     condition     = fileexists(var.ssh_pubkey_path)
     error_message = "SSH pubkey file does not exist: ${var.ssh_pubkey_path}."
   }
-
 }

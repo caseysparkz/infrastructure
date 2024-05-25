@@ -132,6 +132,7 @@ module "www" { # -------------------------------------------------------------- 
   api_gateway_execution_arn    = module.api.aws_api_gateway_execution_arn
   site_title                   = var.root_domain
   hugo_dir                     = abspath("frontend/www")
+  turnstile_site_key           = cloudflare_turnstile_widget.captcha.id
   turnstile_secret_key         = cloudflare_turnstile_widget.captcha.secret
 }
 
