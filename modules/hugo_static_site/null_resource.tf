@@ -11,14 +11,7 @@
 #         Always remember to ask an adult for help when using scissors.
 
 locals {
-  contact_form_template = "${var.hugo_dir}/content/contactForm.js.tftpl"
-  node_modules_hash = sha256(join( #                                            Check if node reqs/modules have changed.
-    "",
-    [
-      for file in setunion(fileset(var.hugo_dir, "node_modules/*"), fileset(var.hugo_dir, "package.json")) :
-      filesha1("${var.hugo_dir}/${file}")
-    ]
-  ))
+  contact_form_js_template = "${var.hugo_dir}/content/contactForm.js.tftpl"
   build_hash = sha256(join( #                                                   Check if Hugo build files have changed.
     "",
     [
@@ -29,17 +22,21 @@ locals {
       filesha1("${var.hugo_dir}/${file}")
     ]
   ))
-  deploy_hash = sha256(join( #                                                  Check if public/ has changed.
+  node_modules_hash = sha256(join( #                                            Check if node reqs/modules have changed.
     "",
-    [for file in fileset(var.hugo_dir, "content/*") : filesha1("${var.hugo_dir}/${file}")]
+    [
+      for file in setunion(fileset(var.hugo_dir, "node_modules/*"), fileset(var.hugo_dir, "package.json")) :
+      filesha1("${var.hugo_dir}/${file}")
+    ]
   ))
 }
 
 # Resources ===================================================================
 resource "local_file" "contact_form_js" {
-  filename = replace(local.contact_form_template, ".tftpl", "")
+  filename        = replace(local.contact_form_js_template, ".tftpl", "")
+  file_permission = "0770"
   content = templatefile(
-    local.contact_form_template,
+    local.contact_form_js_template,
     {
       execution_url = aws_api_gateway_deployment.contact_form.invoke_url
     }
@@ -60,6 +57,7 @@ resource "null_resource" "npm_install" {
 resource "null_resource" "compile_pages" {
   triggers = {
     build_hash = local.build_hash
+    contact_js = local_file.contact_form_js.content_sha1
   }
   depends_on = [
     local_file.contact_form_js,
@@ -73,9 +71,7 @@ resource "null_resource" "compile_pages" {
 }
 
 resource "null_resource" "deploy_site" {
-  triggers = {
-    deploy_hash = local.deploy_hash
-  }
+  triggers = null_resource.compile_pages.triggers
   depends_on = [
     aws_s3_bucket.www_site,
     null_resource.compile_pages,

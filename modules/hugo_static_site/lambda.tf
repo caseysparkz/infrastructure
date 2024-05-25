@@ -30,6 +30,11 @@ resource "aws_lambda_function" "contact_form" {
   }
 }
 
+resource "aws_lambda_function_url" "contact_form" {
+  function_name      = aws_lambda_function.contact_form.function_name
+  authorization_type = "NONE"
+}
+
 resource "aws_lambda_permission" "api_gateway" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -42,5 +47,11 @@ resource "aws_lambda_permission" "api_gateway" {
 output "aws_lambda_function_invoke_arn" {
   description = "Invocation URL for the Lambda function."
   value       = aws_lambda_function.contact_form.invoke_arn
+  sensitive   = false
+}
+
+output "aws_lambda_function_invoke_url" {
+  description = "Invocation URL for the Lambda function."
+  value       = aws_lambda_function_url.contact_form.function_url
   sensitive   = false
 }
