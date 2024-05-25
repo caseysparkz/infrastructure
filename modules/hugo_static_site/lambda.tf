@@ -35,14 +35,6 @@ resource "aws_lambda_function_url" "contact_form" {
   authorization_type = "NONE"
 }
 
-resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.contact_form.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = aws_api_gateway_deployment.contact_form.execution_arn
-}
-
 # Outputs =====================================================================
 output "aws_lambda_function_invoke_arn" {
   description = "Invocation URL for the Lambda function."
