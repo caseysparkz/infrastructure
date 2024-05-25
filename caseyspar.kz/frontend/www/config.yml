@@ -18,7 +18,7 @@ params:
     description: ''
     disable_theme_toggle: false
     disable_stay_uptodate: true
-    p1:                                                                         # Mission section.
+    p1:
         heading: 'Mission Statement???'
         image: 'images/pages/subhero.jpeg'
         content:
@@ -35,7 +35,7 @@ params:
     #     heading: ''
     #     image: ''
     #     content: [text: '']
-    p4:                                                                         # Blog
+    p4:
         heading: 'From the blog'
         content: [text: "Mostly just what music I'm listening to. Sometimes code or case studies."]
 menu:
@@ -85,8 +85,8 @@ menu:
           url: '/tags/music/'
           weight: 02
     misc:
-        - identifier: 'magazine'
-          name: 'Intergalactic Observer'
+        - identifier: 'intergalactic_observer'
+          name: 'The Intergalactic Observer'
           url: '/intergalactic_observer/'
           weight: 01
     social:
