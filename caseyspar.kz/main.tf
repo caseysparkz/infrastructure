@@ -57,54 +57,6 @@ output "forward_zones_zone_data" {
   sensitive   = false
 }
 
-module "api" { # -------------------------------------------------------------- API.
-  source      = "../modules/api_gateway"
-  root_domain = var.root_domain
-  subdomain   = "api.${var.root_domain}"
-}
-
-output "api_gateway_fqdn" {
-  description = "FQDN of the root API path."
-  value       = module.api.aws_api_gateway_fqdn
-  sensitive   = false
-}
-
-output "aws_api_gateway_id" {
-  description = "ID of the AWS API gateway."
-  value       = module.api.aws_api_gateway_id
-  sensitive   = false
-}
-
-output "api_gateway_root_resource_id" {
-  description = "ID of the API gateway root resource."
-  value       = module.api.aws_api_gateway_root_resource_id
-  sensitive   = false
-}
-
-output "api_gateway_arn" {
-  description = "ARN of the API gateway."
-  value       = module.api.aws_api_gateway_arn
-  sensitive   = true
-}
-
-output "api_gateway_execution_arn" {
-  description = "ARN of the API gateway."
-  value       = module.api.aws_api_gateway_execution_arn
-  sensitive   = true
-}
-
-output "api_acm_certificate_id" {
-  description = "ID of the ACM certificate for the API domain."
-  value       = module.api.aws_acm_certificate_id
-  sensitive   = true
-}
-
-output "api_acm_certificate_arn" {
-  description = "ARN of the ACM certificate for the API domain."
-  value       = module.api.aws_acm_certificate_arn
-  sensitive   = true
-}
-
 module "ecr" { # -------------------------------------------------------------- ECR.
   source      = "../modules/ecr"
   root_domain = var.root_domain
@@ -127,9 +79,6 @@ module "www" { # -------------------------------------------------------------- 
   root_domain                  = var.root_domain
   subdomain                    = "www.${var.root_domain}"
   artifact_bucket_id           = module.artifacts.s3_bucket_id
-  api_gateway_id               = module.api.aws_api_gateway_id
-  api_gateway_root_resource_id = module.api.aws_api_gateway_root_resource_id
-  api_gateway_execution_arn    = module.api.aws_api_gateway_execution_arn
   site_title                   = var.root_domain
   hugo_dir                     = abspath("frontend/www")
   turnstile_site_key           = cloudflare_turnstile_widget.captcha.id
@@ -146,22 +95,4 @@ output "www_s3_bucket_id" {
   description = "ID of the static site S3 bucket."
   value       = module.www.aws_s3_bucket_id
   sensitive   = false
-}
-
-output "www_api_gateway_deployment_execution_arn" {
-  description = "Execution ARN of the AWS API deployment for the contact page."
-  value       = module.www.aws_api_gateway_deployment_execution_arn
-  sensitive   = true
-}
-
-output "www_api_gateway_deployment_invoke_url" {
-  description = "Invocation URL of the AWS API deployment for the contact page."
-  value       = module.www.aws_api_gateway_deployment_invoke_url
-  sensitive   = false
-}
-
-output "www_api_gateway_source_arn" {
-  description = "Source ARN of API GW calls to Lambda."
-  value       = module.www.aws_api_gateway_source_arn
-  sensitive   = true
 }

@@ -38,7 +38,7 @@ resource "local_file" "contact_form_js" {
   content = templatefile(
     local.contact_form_js_template,
     {
-      execution_url = aws_api_gateway_deployment.contact_form.invoke_url
+      execution_url = aws_lambda_function_url.contact_form.function_url
     }
   )
 }

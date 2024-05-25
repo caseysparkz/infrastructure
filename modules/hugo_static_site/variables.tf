@@ -2,38 +2,6 @@
 # Variables.
 #
 
-# API Gateway =================================================================
-variable "api_gateway_id" {
-  type        = string
-  description = "ID of the AWS API gateway."
-  sensitive   = false
-
-  validation {
-    condition     = can(regex("^[a-z0-9]{10}$", var.api_gateway_id))
-    error_message = "Invalid AWS API Gateway ID."
-  }
-}
-
-variable "api_gateway_root_resource_id" {
-  type        = string
-  description = "ID of the AWS API gateway's root resource."
-  sensitive   = false
-}
-
-variable "api_gateway_execution_arn" {
-  type        = string
-  description = "Execution ARN of the AWS API gateway."
-  sensitive   = false
-
-  validation {
-    condition = can(regex(
-      "^arn:aws:execute-api:.*:[0-9]{12}:[a-z0-9]{10}$",
-      var.api_gateway_execution_arn
-    ))
-    error_message = "Invalid AWS API Gateway execution ARN: ${var.api_gateway_execution_arn}"
-  }
-}
-
 # Cloudflare ==================================================================
 variable "turnstile_site_key" {
   type        = string

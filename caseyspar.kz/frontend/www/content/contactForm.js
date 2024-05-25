@@ -2,7 +2,7 @@
 Name:           contactForm.js
 Date:           December 20, 2023
 Author:         Casey Sparks
-Description:    Sends a POST request to "https://2thztj5px2.execute-api.us-west-2.amazonaws.com/contact" an (AWS API
+Description:    Sends a POST request to "https://rf7ofwmksublonho3jiuo5wlyu0osasb.lambda-url.us-west-2.on.aws/" an (AWS API
                 gateway endpoint).
 */
 
@@ -20,7 +20,7 @@ function submitEvent(e) {
         };
 
     $.ajax({                                                                    // Send POST request to API gateway endpoint.
-        url: "https://2thztj5px2.execute-api.us-west-2.amazonaws.com/contact",
+        url: "https://rf7ofwmksublonho3jiuo5wlyu0osasb.lambda-url.us-west-2.on.aws/",
         type: "POST",
         dataType: "json",
         crossDomain: "true",
