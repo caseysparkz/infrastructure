@@ -35,6 +35,17 @@ variable "api_gateway_execution_arn" {
 }
 
 # Cloudflare ==================================================================
+variable "turnstile_site_key" {
+  type        = string
+  description = "Site key for the Cloudflare Turnstile widget."
+  sensitive   = true
+
+  validation {
+    condition     = can(regex("^0x[a-zA-Z0-9]{22}", var.turnstile_site_key))
+    error_message = "Invalid Turnstile site key."
+  }
+}
+
 variable "turnstile_secret_key" {
   type        = string
   description = "Secret key for the Cloudflare Turnstile widget."
