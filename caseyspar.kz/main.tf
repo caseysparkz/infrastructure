@@ -96,3 +96,9 @@ output "www_s3_bucket_id" {
   value       = module.www.aws_s3_bucket_id
   sensitive   = false
 }
+
+output "www_aws_lambda_function_invoke_url" {
+  description = "Invocation URL for the contact form Lambda function."
+  value       = module.www.aws_lambda_function_invoke_url
+  sensitive   = false
+}
