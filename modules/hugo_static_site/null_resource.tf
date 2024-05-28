@@ -78,8 +78,7 @@ resource "null_resource" "deploy_site" {
   ]
 
   provisioner "local-exec" {
-    command     = "aws s3 sync --delete ${var.hugo_dir}/public/ s3://${aws_s3_bucket.www_site.id}"
-    interpreter = ["bash"]
-    quiet       = true
+    command = "aws s3 sync --delete ${var.hugo_dir}/public/ s3://${aws_s3_bucket.www_site.id}/"
+    #quiet       = true
   }
 }

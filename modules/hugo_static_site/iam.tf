@@ -46,6 +46,19 @@ data "aws_iam_policy_document" "lambda_kms_decrypt" {
   }
 }
 
+data "aws_iam_policy_document" "lambda_logging" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    #resources = ["${aws_cloudwatch_log_group.lambda_contact_form.arn}:*"]
+    resources = ["arn:aws:logs:*:*:*"]
+  }
+}
+
 # Resources ===================================================================
 resource "aws_iam_role" "lambda_contact_form" { # ----------------------------- IAM role.
   name               = "lambda_contact_form"
@@ -64,6 +77,12 @@ resource "aws_iam_policy" "lambda_kms_decrypt" {
   policy      = data.aws_iam_policy_document.lambda_kms_decrypt.json
 }
 
+resource "aws_iam_policy" "lambda_logging" {
+  name        = "lambda_logging"
+  description = "IAM policy for logging from a Lambda function."
+  policy      = data.aws_iam_policy_document.lambda_logging.json
+}
+
 resource "aws_iam_role_policy_attachment" "lambda_ses_sendemail" { # ---------- Policy attachments.
   role       = aws_iam_role.lambda_contact_form.name
   policy_arn = aws_iam_policy.lambda_ses_sendemail.arn
@@ -72,4 +91,9 @@ resource "aws_iam_role_policy_attachment" "lambda_ses_sendemail" { # ---------- 
 resource "aws_iam_role_policy_attachment" "lambda_kms_decrypt" {
   role       = aws_iam_role.lambda_contact_form.name
   policy_arn = aws_iam_policy.lambda_kms_decrypt.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_logging" {
+  role       = aws_iam_role.lambda_contact_form.name
+  policy_arn = aws_iam_policy.lambda_logging.arn
 }
