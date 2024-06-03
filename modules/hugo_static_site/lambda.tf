@@ -33,6 +33,13 @@ resource "aws_lambda_function" "contact_form" {
 resource "aws_lambda_function_url" "contact_form" {
   function_name      = aws_lambda_function.contact_form.function_name
   authorization_type = "NONE"
+
+  cors {
+    allow_credentials = false
+    allow_origins     = ["*"]
+    allow_methods     = ["POST"]
+    allow_headers = ["Content-Type"]
+  }
 }
 
 # Outputs =====================================================================
