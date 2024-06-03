@@ -38,7 +38,7 @@ resource "aws_lambda_function_url" "contact_form" {
     allow_credentials = false
     allow_origins     = ["*"]
     allow_methods     = ["POST"]
-    allow_headers = ["Content-Type"]
+    allow_headers     = ["content-type"]
   }
 }
 

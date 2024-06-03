@@ -1,6 +1,7 @@
 # Build files
-./config.yaml
-./content/contact.md
+content/contact.md
+static/js/contactForm.js
+
 
 # Angular ##
 dist/
