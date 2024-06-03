@@ -15,6 +15,12 @@ locals {
 }
 
 ## Modules and Outputs ========================================================
+module "aws_billing" { # ------------------------------------------------------ AWS Cost Management
+  source                 = "../modules/aws_budget"
+  aws_budget_limit       = "100"
+  aws_budget_subscribers = ["aws_billing@${var.root_domain}"]
+}
+
 module "artifacts" { # -------------------------------------------------------- S3: Artifacts.
   source      = "../modules/s3_artifacts"
   root_domain = var.root_domain
