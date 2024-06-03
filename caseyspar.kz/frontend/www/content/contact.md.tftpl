@@ -34,23 +34,10 @@ description: 'Contact Page'
             method="post"
             >
             <div class="my-4">                                                  <!-- Sender name -->
-                <label
-                    for="email"
-                    class="
-                        block
-                        mb-2
-                        font-medium
-                        text-gray-900
-                        text-md
-                        dark:text-gray-300
-                        "
-                    >
-                    <strong>From</strong>
-                    </label>
                 <input
                     type="text"
                     id="sender_name"
-                    placeholder="Your Name"
+                    placeholder="Name"
                     name="sender_name"
                     class="
                         shadow-sm
@@ -102,66 +89,11 @@ description: 'Contact Page'
                         dark:focus:border-indigo-500
                         dark:shadow-sm-light
                         "
-                    placeholder="your_email@example.com"
-                    required
-                    >
-                </div>
-            <div class="my-4">                                                  <!-- Email subject -->
-                <label
-                    for="subject"
-                    class="
-                        block
-                        mb-2
-                        font-medium
-                        text-gray-900
-                        text-md
-                        dark:text-gray-300
-                        "
-                    >
-                    <strong>Subject</strong>
-                    </label>
-                <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    class="
-                        block
-                        w-full
-                        p-3
-                        text-gray-900
-                        border
-                        border-gray-300
-                        rounded-lg
-                        shadow-sm
-                        text-md
-                        bg-gray-50
-                        focus:ring-indigo-500
-                        focus:border-indigo-500
-                        dark:bg-gray-700
-                        dark:border-gray-600
-                        dark:placeholder-gray-400
-                        dark:text-white
-                        dark:focus:ring-indigo-500
-                        dark:focus:border-indigo-500
-                        dark:shadow-sm-light
-                        "
+                    placeholder="Email Address"
                     required
                     >
                 </div>
             <div class="my-4 sm:col-span-2">                                    <!-- Email body -->
-                <label
-                    for="message"
-                    class="
-                        block
-                        mb-2
-                        font-medium
-                        text-gray-900
-                        text-md
-                        dark:text-gray-400
-                        "
-                    >
-                    <strong>Body</strong>
-                    </label>
                 <textarea
                     id="message"
                     name="message"
@@ -186,6 +118,7 @@ description: 'Contact Page'
                         dark:focus:ring-indigo-500
                         dark:focus:border-indigo-500
                         "
+                    placeholder="Message"
                     required
                     ></textarea>
                 </div>

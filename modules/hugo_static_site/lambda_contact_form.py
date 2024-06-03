@@ -19,23 +19,18 @@ LOG.setLevel(0)                                                                 
 
 def send_email(
     data: dict,
-    sender: str = getenv('DEFAULT_SENDER'),
-    recipient: str = getenv('DEFAULT_RECIPIENT'),
         ) -> dict:
     '''
     Send an email via AWS SES.
         :param data:    Dict containing `REQUIRED_KEYS'.
         :return:        The SES client response.
     '''
-    LOG.debug(f'Email object: {data}')
-    LOG.debug(f'Type: {type(data)}')
-
     ses_client = client('ses')                                                  # Instantiate SES client.
     ses_response = ses_client.send_email(                                       # Send email.
-        Source=sender,
-        Destination={'ToAddresses': [recipient]},
+        Source=getenv('DEFAULT_SENDER'),
+        Destination={'ToAddresses': [getenv('DEFAULT_RECIPIENT')]},
         Message={
-            'Subject': {'Charset': 'UTF-8', 'Data': data['subject']},
+            'Subject': {'Charset': 'UTF-8', 'Data': 'Contact Form Response'},
             'Body': {'Text': {
                 'Charset': 'UTF-8',
                 'Data': dedent(f'''
@@ -65,12 +60,13 @@ def lambda_handler(
     LOG.debug(f'Event: {event}')                                                # Log event.
     LOG.debug(f'Context: {context}')                                            # Log context.
 
-    response = send_email(loads(event['body']))
-
     lambda_response = {
         'statusCode': 200,
         'headers': {'Content-Type': 'application/json'},
-        'body': dumps({'Success': True, 'SesResponse': response}),
+        'body': dumps({
+            'Success': True,
+            'SesResponse': send_email(loads(event['body'])),
+            }),
         }
 
     LOG.debug(lambda_response)
@@ -82,7 +78,6 @@ if __name__ == '__main__':
     response_data = lambda_handler(event={'body': {                             # Test Lambda function.
         'sender_email': 'test@test.com',
         'sender_name': 'John Doe',
-        'subject': 'LAMBDA TEST',
         'message': 'Test email body.',
         }})
 
