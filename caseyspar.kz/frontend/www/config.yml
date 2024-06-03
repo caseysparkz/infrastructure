@@ -24,9 +24,8 @@ params:
         content:
             - text: 'idk man, probably:'
             - text: '1. Replace the boilerplate Tailwinds artifacts.'
-            - text: '2. Fix the contact form.'
-            - text: '3. Figure out what to write here.'
-            - text: '4. Stay posting.'
+            - text: '2. Figure out what to write here.'
+            - text: '3. Stay posting.'
     # p2:
     #     heading: ''
     #     image: ''
@@ -62,10 +61,10 @@ menu:
           name: 'About'
           url: '/about/'
           weight: 05
-        # - identifier: 'contact'
-        #   name: 'Contact'
-        #   url: '/contact/'
-        #   weight: 99
+        - identifier: 'contact'
+          name: 'Contact'
+          url: '/contact/'
+          weight: 99
     resume:
         - identifier: 'resume_html'
           name: 'HTML'
@@ -103,10 +102,10 @@ menu:
           name: 'About'
           url: '/about/'
           weight: 01
-        # - identifier: 'contact'
-        #   name: 'Contact'
-        #   url: '/contact/'
-        #   weight: 99
+        - identifier: 'contact'
+          name: 'Contact'
+          url: '/contact/'
+          weight: 99
 markup:
     goldmark:
         renderer:
@@ -131,4 +130,6 @@ module:
     hugoVersion:
         extended: true
         min: '0.125.7'
+staticDir:
+    - 'static'
 ...
