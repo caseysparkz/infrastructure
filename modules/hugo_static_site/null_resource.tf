@@ -11,7 +11,6 @@
 #         Always remember to ask an adult for help when using scissors.
 
 locals {
-  contact_form_md_template = "${var.hugo_dir}/content/contact.md.tftpl"
   contact_form_js_template = "${var.hugo_dir}/static/js/contactForm.js.tftpl"
   build_hash = sha256(join( #                                                   Check if Hugo build files have changed.
     "",
@@ -33,25 +32,12 @@ locals {
 }
 
 # Resources ===================================================================
-resource "local_file" "contact_form_md" {
-  filename        = replace(local.contact_form_md_template, ".tftpl", "")
-  file_permission = "0770"
-  content = templatefile(
-    local.contact_form_md_template,
-    {
-      url = var.subdomain
-    }
-  )
-}
-
 resource "local_file" "contact_form_js" {
   filename        = replace(local.contact_form_js_template, ".tftpl", "")
   file_permission = "0770"
   content = templatefile(
     local.contact_form_js_template,
-    {
-      lambda_url = aws_lambda_function_url.contact_form.function_url
-    }
+    { lambda_url = aws_lambda_function_url.contact_form.function_url }
   )
 }
 
