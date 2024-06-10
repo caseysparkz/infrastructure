@@ -17,7 +17,7 @@ jobs:
             TF_ROOT: 'caseyspar.kz/terraform'
         steps:
             - name: 'Setup Infracost.'
-              uses: 'infracost/actions/setup@v2'
+              uses: 'infracost/actions/setup@v3'
               with:
                   api-key: '${{ secrets.INFRACOST_API_KEY }}'
 
