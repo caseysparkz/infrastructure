@@ -80,7 +80,7 @@ module "www" { # -------------------------------------------------------------- 
   subdomain            = "www.${var.root_domain}"
   artifact_bucket_id   = module.artifacts.s3_bucket_id
   site_title           = var.root_domain
-  hugo_dir             = abspath("frontend/www")
+  hugo_dir             = abspath("frontends/www")
   turnstile_site_key   = cloudflare_turnstile_widget.captcha.id
   turnstile_secret_key = cloudflare_turnstile_widget.captcha.secret
 }
