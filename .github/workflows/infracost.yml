@@ -4,6 +4,8 @@ on:
     pull_request:
         branches:
             - 'main'
+        paths:
+            - 'caseyspar.kz'
 jobs:
     infracost:
         name: 'Infracost.'
@@ -17,32 +19,32 @@ jobs:
             - name: 'Setup Infracost.'
               uses: 'infracost/actions/setup@v2'
               with:
-                  api-key: ${{ secrets.INFRACOST_API_KEY }}
-        
+                  api-key: '${{ secrets.INFRACOST_API_KEY }}'
+
             - name: 'Checkout base branch.'
               uses: 'actions/checkout@v3'
               with:
                   ref: '${{ github.event.pull_request.base.ref }}'
-        
+
             - name: 'Generate Infracost cost estimate baseline.'
               run: |
                   infracost breakdown                                       \
                       --path=${TF_ROOT}                                     \
                       --format=json                                         \
                       --out-file=/tmp/infracost-base.json
-        
+
             - name: 'Checkout PR branch.'
               uses: 'actions/checkout@v3'
-        
+
             - name: 'Generate Infracost diff.'
               working-directory: 'caseyspar.kz/terraform'
               run: |
-                infracost diff                                              \
-                    --path=${TF_ROOT}                                       \
-                    --format=json                                           \
-                    --compare-to=/tmp/infracost-base.json                   \
-                    --out-file=/tmp/infracost-diff.json
-        
+                  infracost diff                                            \
+                      --path=${TF_ROOT}                                     \
+                      --format=json                                         \
+                      --compare-to=/tmp/infracost-base.json                 \
+                      --out-file=/tmp/infracost-diff.json
+
             - name: 'Post Infracost comment.'
               run: |
                   infracost comment github                                  \
