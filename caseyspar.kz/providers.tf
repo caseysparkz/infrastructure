@@ -9,11 +9,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.8.0"
+      version = "~> 5.8"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.17.0"
+      version = "~> 4.33"
     }
     routeros = {
       source  = "terraform-routeros/routeros"
@@ -47,10 +47,17 @@ provider "cloudflare" { #                                                       
   api_token = var.cloudflare_api_token
 }
 
-provider "routeros" { #                                                         Mikrotik/RouterOS.
+provider "routeros" { #                                                         RouterOS.
   hosturl        = var.routeros_hosturl
   username       = var.routeros_username
   password       = var.routeros_passwd
   ca_certificate = var.routeros_cacertificate
   insecure       = false
+}
+
+## Outputs ====================================================================
+output "aws_region" {
+  description = "Region to which tf config is deployed."
+  value       = var.aws_region
+  sensitive   = false
 }

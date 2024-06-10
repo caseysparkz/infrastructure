@@ -4,7 +4,7 @@
 
 ## Misc. ======================================================================
 variable "root_domain" {
-  description = "Root domain of the deployed infrastructure."
   type        = string
+  description = "Root domain of the deployed infrastructure."
   sensitive   = false
 }

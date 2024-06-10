@@ -2,53 +2,62 @@
 # Variables.
 #
 
-# API Gateway =================================================================
-variable "api_gateway_id" {
-  description = "ID of the AWS API gateway."
+# Cloudflare ==================================================================
+variable "turnstile_site_key" {
   type        = string
-  sensitive   = false
+  description = "Site key for the Cloudflare Turnstile widget."
+  sensitive   = true
+
+  validation {
+    condition     = can(regex("^0x[a-zA-Z0-9]{22}", var.turnstile_site_key))
+    error_message = "Invalid Turnstile site key."
+  }
 }
 
-variable "api_gateway_root_resource_id" {
-  description = "ID of the AWS API gateway's root resource."
+variable "turnstile_secret_key" {
   type        = string
-  sensitive   = false
-}
+  description = "Secret key for the Cloudflare Turnstile widget."
+  sensitive   = true
 
-variable "api_gateway_execution_arn" {
-  description = "Execution ARN of the AWS API gateway."
-  type        = string
-  sensitive   = false
+  validation {
+    condition     = can(regex("^0x[a-zA-Z0-9]{33}", var.turnstile_secret_key))
+    error_message = "Invalid Turnstile secret key."
+  }
 }
 
 # Lambda ======================================================================
 variable "artifact_bucket_id" {
-  description = "ID of the S3 bucket in which lambda functions are kept."
   type        = string
+  description = "ID of the S3 bucket in which lambda functions are kept."
   sensitive   = false
 }
 
 # Misc. =======================================================================
 variable "root_domain" {
-  description = "Root domain of Terraform infrastructure."
   type        = string
+  description = "Root domain of Terraform infrastructure."
   sensitive   = false
 }
 
 variable "subdomain" {
-  description = "Subdomain of Terraform infrastructure."
   type        = string
+  description = "Subdomain of Terraform infrastructure."
   sensitive   = false
 }
 
 variable "site_title" {
-  description = "Title of the website."
   type        = string
+  description = "Title of the website."
   sensitive   = false
 }
 
 variable "hugo_dir" {
-  description = "Absolute path of the Hugo directory."
   type        = string
+  description = "Absolute path of the Hugo directory."
   sensitive   = false
+
+  validation {
+    condition     = fileexists("${var.hugo_dir}/config.yml")
+    error_message = "${var.hugo_dir}/config.yml does not exist."
+  }
 }

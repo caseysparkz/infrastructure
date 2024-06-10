@@ -57,7 +57,7 @@ resource "aws_s3_bucket_acl" "www_site" {
   acl    = "public-read"
   depends_on = [
     aws_s3_bucket_ownership_controls.www_site,
-    aws_s3_bucket_public_access_block.www_site
+    aws_s3_bucket_public_access_block.www_site,
   ]
 }
 
@@ -81,10 +81,10 @@ resource "aws_s3_bucket_website_configuration" "web_root" {
 }
 
 resource "aws_s3_object" "lambda_contact_form" { # ---------------------------- S3 Lambda artifact.
-  bucket = var.artifact_bucket_id
-  key    = basename(data.archive_file.lambda_contact_form.output_path)
-  source = data.archive_file.lambda_contact_form.output_path
-  etag   = filemd5(data.archive_file.lambda_contact_form.output_path)
+  bucket      = var.artifact_bucket_id
+  key         = basename(data.archive_file.lambda_contact_form.output_path)
+  source      = data.archive_file.lambda_contact_form.output_path
+  source_hash = filemd5(data.archive_file.lambda_contact_form.output_path)
 }
 
 # Outputs =====================================================================

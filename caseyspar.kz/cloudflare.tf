@@ -110,8 +110,27 @@ resource "cloudflare_record" "pka" { #                                          
   comment         = local.cloudflare_comment
 }
 
+resource "cloudflare_turnstile_widget" "captcha" { #                            ReCaptcha.
+  account_id = var.cloudflare_account_id
+  name       = var.root_domain
+  domains    = [var.root_domain]
+  mode       = "managed"
+}
+
 ## Outputs ====================================================================
 output "main_cloudflare_zone_root" {
   description = "Zone data for the root Cloudflare DNS zone."
   value       = data.cloudflare_zone.root_domain
+}
+
+output "turnstile_site_key" {
+  description = "Turnstile site key for root domain."
+  value       = cloudflare_turnstile_widget.captcha.id
+  sensitive   = false
+}
+
+output "turnstile_secret_key" {
+  description = "Turnstile secret key for root domain."
+  value       = cloudflare_turnstile_widget.captcha.secret
+  sensitive   = true
 }

@@ -6,89 +6,79 @@
 '''Python Lambda function for website contact page.'''
 
 from json import dumps, loads
-from logging import getLogger, NullHandler
+from logging import getLogger, StreamHandler
 from os import getenv
 from textwrap import dedent
 from boto3 import client
 
-(LOG := getLogger()).addHandler(NullHandler)
-REQUIRED_KEYS = {'message', 'sender_email', 'sender_name', 'subject'}
+LOG = getLogger()
+
+LOG.addHandler(StreamHandler())
+LOG.setLevel(0)                                                                 # NOTSET
+
 
 def send_email(
-    email_obj: dict
-    ) -> dict:
+    data: dict,
+        ) -> dict:
     '''
     Send an email via AWS SES.
-        :param email_obj:   Dict containing `REQUIRED_KEYS'.
-        :return:            Dict containing the SES response.
+        :param data:    Dict containing `REQUIRED_KEYS'.
+        :return:        The SES client response.
     '''
-    assert isinstance(email_obj, dict), 'email_obj must be instance of dict().'
-    assert REQUIRED_KEYS.intersection(email_obj.keys()) == REQUIRED_KEYS, 'email_obj missing keys.'
-    assert all(isinstance(email_obj[value], str) for value in REQUIRED_KEYS), 'Invalid value type.'
-    assert all(
-        isinstance(email_obj[value], str)
-        for value
-        in ('default_recipient', 'default_sender')
-        ), 'Invalid value type.'
-
-    ses_client = client('ses')                                              # Instantiate SES client.
-    response = ses_client.send_email(                                       # Send email.
-        Destination={'ToAddresses': [email_obj['default_recipient']]},
+    ses_client = client('ses')                                                  # Instantiate SES client.
+    ses_response = ses_client.send_email(                                       # Send email.
+        Source=getenv('DEFAULT_SENDER'),
+        Destination={'ToAddresses': [getenv('DEFAULT_RECIPIENT')]},
         Message={
-            'Body': {
-                'Text': {
-                    'Charset': 'UTF-8',
-                    'Data': dedent(f'''
-                        From: {email_obj['sender_name']}
-                        Email: {email_obj['sender_email']}
-                        Content: {email_obj['message']}
-                        ''').strip('\n')
-                    }
-                },
-            'Subject': {
+            'Subject': {'Charset': 'UTF-8', 'Data': 'Contact Form Response'},
+            'Body': {'Text': {
                 'Charset': 'UTF-8',
-                'Data': email_obj['subject'],
-                }
+                'Data': dedent(f'''
+                    From: {data['senderName']}
+                    Email: {data['senderEmail']}
+                    Content: {data['message']}
+                    ''').strip('\n')
+                }},
             },
-            Source=email_obj['default_sender']
         )
 
-    LOG.debug(response)
+    LOG.debug(ses_response)
 
-    return response
+    return ses_response
 
 
 def lambda_handler(
     event: dict,
-    context: dict
-    ) -> None:
+    context: dict = None,
+        ) -> dict:
     '''
     Default function for Lambda functions.
         :param event:   The Lamba event to handle.
         :param context: Context for said Lambda event.
+        :return:        Dictionary containing the Lambda response.
     '''
-    LOG.debug(f'Event: {event}')                                            # Log event.
-    LOG.debug(f'Context: {context}')                                        # Log context.
+    LOG.debug(f'Event: {event}')                                                # Log event.
+    LOG.debug(f'Context: {context}')                                            # Log context.
 
-    event_body = loads(event['body'])
-
-    assert REQUIRED_KEYS.intersection(event_body.keys()) == REQUIRED_KEYS, 'Event body missing keys.'
-
-    ses_response = send_email({                                             # Send email.
-        'default_recipient': getenv('DEFAULT_RECIPIENT'),
-        'default_sender': getenv('DEFAULT_SENDER'),
-        'sender_email': event_body['sender_email'],
-        'sender_name': event_body['sender_name'],
-        'subject': event_body['subject'],
-        'message': event_body['message']
-        })
     lambda_response = {
         'statusCode': 200,
         'headers': {'Content-Type': 'application/json'},
         'body': dumps({
             'Success': True,
-            'MessageId': ses_response['MessageId']
-            })
+            'SesResponse': send_email(loads(event['body'])),
+            }),
         }
 
+    LOG.debug(lambda_response)
+
     return lambda_response
+
+
+if __name__ == '__main__':
+    response_data = lambda_handler(event={'body': {                             # Test Lambda function.
+        'sender_email': 'test@test.com',
+        'sender_name': 'John Doe',
+        'message': 'Test email body.',
+        }})
+
+    LOG.info(response_data)
