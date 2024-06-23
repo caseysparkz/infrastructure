@@ -7,10 +7,10 @@ resource "docker_image" "build" { #                                             
   for_each   = local.dockerfiles
   depends_on = [aws_ecr_repository.ecr]
   name       = "${local.ecr_registry_url}/${each.key}"
-  triggers   = { filehash = filesha1("${local.dockerfile_dir}/${each.key}") } # If dockerfile has changed.
+  triggers   = { filehash = filesha1("${var.dockerfile_dir}/${each.key}") } # If dockerfile has changed.
 
   build {
-    context      = local.dockerfile_dir
+    context      = var.dockerfile_dir
     dockerfile   = each.key
     network_mode = "host"
     label        = { author = local.ecr_admin_email }

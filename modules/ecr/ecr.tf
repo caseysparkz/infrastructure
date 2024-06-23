@@ -11,9 +11,7 @@ data "aws_ecr_authorization_token" "token" {} #                                 
 
 # Resources ===================================================================
 resource "aws_ecr_repository" "ecr" {
-  for_each = toset([
-    for f in fileset(local.dockerfile_dir, "*") : replace(f, "/:.*$/", "")
-  ])
+  for_each             = toset([for f in fileset(var.dockerfile_dir, "*") : replace(f, "/:.*$/", "")])
   name                 = each.key
   image_tag_mutability = "IMMUTABLE"
   force_delete         = true
