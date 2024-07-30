@@ -12,7 +12,7 @@
 
 locals {
   contact_form_js_template = "${var.hugo_dir}/static/js/contactForm.js.tftpl"
-  build_hash = sha256(join( #                                                   Check if Hugo build files have changed.
+  build_hash = sha256(join(
     "",
     [
       for file in setsubtract(
@@ -22,11 +22,13 @@ locals {
       filesha1("${var.hugo_dir}/${file}")
     ]
   ))
-  node_modules_hash = sha256(join( #                                            Check if node reqs/modules have changed.
+  node_modules_hash = sha256(join(
     "",
     [
-      for file in setunion(fileset(var.hugo_dir, "node_modules/*"), fileset(var.hugo_dir, "package.json")) :
-      filesha1("${var.hugo_dir}/${file}")
+      for file in setunion(
+        fileset(var.hugo_dir, "node_modules/*"),
+        fileset(var.hugo_dir, "package.json")
+      ) : filesha1("${var.hugo_dir}/${file}")
     ]
   ))
 }
