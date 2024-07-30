@@ -92,7 +92,7 @@ variable "txt_records" {
   sensitive   = false
   default = {
     "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3" = "@"
-    "have-i-been-pwned-verification=dweb_4p3ixho2v4rzazpnhs3dahgz" = "@"
+    "have-i-been-pwned-verification=dweb_4p3ixho2v4rzazpnhs3dahgz"     = "@"
   }
 }
 
