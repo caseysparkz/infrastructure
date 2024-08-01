@@ -1,0 +1,53 @@
+#-*- coding:utf-8 -*-
+# Author:       Casey Sparks
+# Date:         July 31, 2024
+# Description:  Base image for all downstream docker images.
+---
+services:
+    python3:
+        image: '770088062852.dkr.ecr.us-west-2.amazonaws.com/python3.11:0.0.1'
+        build:
+            context: '.'
+            platforms: ['linux/amd64']
+            network: 'host'
+            args:
+                PYTHON_UNBUFFERED: 1
+            labels:
+                kz.caseyspar.docker.image.os.name: 'Debian'
+                kz.caseyspar.docker.image.os.version: '12'
+                kz.caseyspar.docker.image.description: 'Base Debian 12 image.'
+                kz.caseyspar.docker.maintainer.author.name: 'Casey Sparks'
+                kz.caseyspar.docker.maintainer.author.email: 'docker@caseyspar.kz'
+                kz.caseyspar.docker.app.name: 'python'
+                kz.caseyspar.docker.app.version: '3.11.2'
+                kz.caseyspar.docker.app.version.major: 3
+                kz.caseyspar.docker.app.version.minor: 11
+                kz.caseyspar.docker.app.version.revision: 2
+            dockerfile_inline: |
+                FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/debian12:0.0.1
+
+                ARG PYTHON_UNBUFFERED
+
+                ENV PYTHON_UNBUFFERED="$${PYTHON_UNBUFFERED}"
+
+                USER root
+
+                RUN apt-get update                                          \
+                    && apt-get install                                      \
+                        --assume-yes                                        \
+                        --no-install-recommends                             \
+                        'python3=3.11.2-1+b1'                               \
+                        'python3-boto3=1.26.27+dfsg-1'                      \
+                        'python3-boto=2.49.0-4.1'                           \
+                        'python3-dateutil=2.8.2-2'                          \
+                        'python3-jinja2=3.1.2-1'                            \
+                        'python3-requests=2.28.1+dfsg-1'                    \
+                    && rm                                                   \
+                        --recursive                                         \
+                        --force                                             \
+                        /var/cache/apt/*
+
+                USER "$${APP_USER}"
+
+                ENTRYPOINT ["/usr/bin/python3"]
+...

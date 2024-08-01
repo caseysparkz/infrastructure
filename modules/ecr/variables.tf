@@ -8,8 +8,8 @@ variable "root_domain" {
   sensitive   = false
 }
 
-variable "dockerfile_dir" {
+variable "docker_compose_dir" {
   type        = string
-  description = "Absolute path to the dir containing the Dockerfiles."
+  description = "Absolute path to the dir containing the docker-compose files."
   sensitive   = false
 }
