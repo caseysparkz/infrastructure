@@ -102,9 +102,9 @@ module "home_caseyspar_kz" { # ------------------------------------------------ 
 }
 
 module "ecr" { # -------------------------------------------------------------- ECR.
-  source         = "../modules/ecr"
-  root_domain    = var.root_domain
-  dockerfile_dir = abspath("./dockerfiles")
+  source             = "../modules/ecr"
+  root_domain        = var.root_domain
+  docker_compose_dir = abspath("./docker_compose")
 }
 
 output "ecr_registry_url" {
