@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 # Author:       Casey Sparks
 # Date:         July 31, 2024
-# Description:  Base image for all downstream docker images.
+# Description:  Python 3.11.2 image.
 ---
 services:
     python3:
@@ -11,11 +11,15 @@ services:
             platforms: ['linux/amd64']
             network: 'host'
             args:
+                REGISTRY: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
+                IMAGE: 'debian12'
+                VERSION: '0.0.1'
                 PYTHON_UNBUFFERED: 1
             labels:
-                kz.caseyspar.docker.image.os.name: 'Debian'
+                kz.caseyspar.docker.image.os.name: 'debian'
                 kz.caseyspar.docker.image.os.version: '12'
-                kz.caseyspar.docker.image.description: 'Base Debian 12 image.'
+                kz.caseyspar.docker.image.architecture: 'amd64'
+                kz.caseyspar.docker.image.description: 'Base Python 3.11 image.'
                 kz.caseyspar.docker.maintainer.author.name: 'Casey Sparks'
                 kz.caseyspar.docker.maintainer.author.email: 'docker@caseyspar.kz'
                 kz.caseyspar.docker.app.name: 'python'
@@ -24,7 +28,11 @@ services:
                 kz.caseyspar.docker.app.version.minor: 11
                 kz.caseyspar.docker.app.version.revision: 2
             dockerfile_inline: |
-                FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/debian12:0.0.1
+                ARG REGISTRY
+                ARG IMAGE
+                ARG VERSION
+
+                FROM "$${REGISTRY}/$${IMAGE}:$${VERSION}"
 
                 ARG PYTHON_UNBUFFERED
 
@@ -32,7 +40,8 @@ services:
 
                 USER root
 
-                RUN apt-get update                                          \
+                RUN true                                                    \
+                    && apt-get update                                       \
                     && apt-get install                                      \
                         --assume-yes                                        \
                         --no-install-recommends                             \

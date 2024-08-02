@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 # Author:       Casey Sparks
 # Date:         July 31, 2024
-# Description:  Base image for all downstream docker images.
+# Description:  Debian 12 image.
 ---
 services:
     debian:
@@ -11,18 +11,26 @@ services:
             platforms: ['linux/amd64']
             network: 'host'
             args:
+                REGISTRY: 'docker.io/library'
+                IMAGE: 'debian'
+                VERSION: '12'
                 APP_USER: 'app'
                 DEBCONF_NOWARNINGS: 'yes'
                 DEBIAN_FRONTEND: 'noninteractive'
                 TZ: 'America/Los_Angeles'
             labels:
-                kz.caseyspar.docker.image.os.name: 'Debian'
+                kz.caseyspar.docker.image.os.name: 'debian'
                 kz.caseyspar.docker.image.os.version: '12'
+                kz.caseyspar.docker.image.architecture: 'amd64'
                 kz.caseyspar.docker.image.description: 'Base Debian 12 image.'
                 kz.caseyspar.docker.maintainer.author.name: 'Casey Sparks'
                 kz.caseyspar.docker.maintainer.author.email: 'docker@caseyspar.kz'
             dockerfile_inline: |
-                FROM docker.io/library/debian:12
+                ARG REGISTRY
+                ARG IMAGE
+                ARG VERSION
+
+                FROM "$${REGISTRY}/$${IMAGE}:$${VERSION}"
 
                 ARG APP_USER
                 ARG DEBCONF_NOWARNINGS
@@ -50,7 +58,6 @@ services:
                         --recursive                                         \
                         --force                                             \
                         /var/lib/apt/lists/*                                \
-                    &&  echo "$${APP_USER}"                                 \
                     &&  useradd                                             \
                         --home-dir "/home/$${APP_USER}"                     \
                         --create-home                                       \
