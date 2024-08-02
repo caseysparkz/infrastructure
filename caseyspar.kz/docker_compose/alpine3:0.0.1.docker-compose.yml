@@ -20,12 +20,15 @@ services:
                 LANGUAGE: 'en_US.UTF8'
                 LC_ALL: 'en_US.UTF8'
             labels:
-                kz.caseyspar.docker.image.os.name: 'alpine'
-                kz.caseyspar.docker.image.os.version: '3.20.2'
-                kz.caseyspar.docker.image.architecture: 'amd64'
-                kz.caseyspar.docker.image.description: 'Base Alpine 3 image.'
-                kz.caseyspar.docker.maintainer.author.name: 'Casey Sparks'
-                kz.caseyspar.docker.maintainer.author.email: 'docker@caseyspar.kz'
+                kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
+                kz.caseyspar.name: 'alpine3'
+                kz.caseyspar.version: '0.0.1'
+                kz.caseyspar.os.name: 'alpine'
+                kz.caseyspar.os.version: '3.20.2'
+                kz.caseyspar.architecture: 'amd64'
+                kz.caseyspar.description: 'Base Alpine 3 image.'
+                kz.caseyspar.maintainer.author.name: 'Casey Sparks'
+                kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
             dockerfile_inline: |
                 ARG REGISTRY
                 ARG IMAGE

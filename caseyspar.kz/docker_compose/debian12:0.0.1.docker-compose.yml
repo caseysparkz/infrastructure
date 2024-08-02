@@ -19,12 +19,15 @@ services:
                 DEBIAN_FRONTEND: 'noninteractive'
                 TZ: 'America/Los_Angeles'
             labels:
-                kz.caseyspar.docker.image.os.name: 'debian'
-                kz.caseyspar.docker.image.os.version: '12'
-                kz.caseyspar.docker.image.architecture: 'amd64'
-                kz.caseyspar.docker.image.description: 'Base Debian 12 image.'
-                kz.caseyspar.docker.maintainer.author.name: 'Casey Sparks'
-                kz.caseyspar.docker.maintainer.author.email: 'docker@caseyspar.kz'
+                kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
+                kz.caseyspar.name: 'debian12'
+                kz.caseyspar.version: '0.0.1'
+                kz.caseyspar.os.name: 'debian'
+                kz.caseyspar.os.version: '12'
+                kz.caseyspar.architecture: 'amd64'
+                kz.caseyspar.description: 'Base Debian 12 image.'
+                kz.caseyspar.maintainer.author.name: 'Casey Sparks'
+                kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
             dockerfile_inline: |
                 ARG REGISTRY
                 ARG IMAGE
