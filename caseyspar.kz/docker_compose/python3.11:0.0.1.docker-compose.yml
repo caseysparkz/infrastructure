@@ -16,17 +16,20 @@ services:
                 VERSION: '0.0.1'
                 PYTHON_UNBUFFERED: 1
             labels:
-                kz.caseyspar.docker.image.os.name: 'debian'
-                kz.caseyspar.docker.image.os.version: '12'
-                kz.caseyspar.docker.image.architecture: 'amd64'
-                kz.caseyspar.docker.image.description: 'Base Python 3.11 image.'
-                kz.caseyspar.docker.maintainer.author.name: 'Casey Sparks'
-                kz.caseyspar.docker.maintainer.author.email: 'docker@caseyspar.kz'
-                kz.caseyspar.docker.app.name: 'python'
-                kz.caseyspar.docker.app.version: '3.11.2'
-                kz.caseyspar.docker.app.version.major: 3
-                kz.caseyspar.docker.app.version.minor: 11
-                kz.caseyspar.docker.app.version.revision: 2
+                kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
+                kz.caseyspar.name: 'python3.11'
+                kz.caseyspar.version: '0.0.1'
+                kz.caseyspar.os.name: 'debian'
+                kz.caseyspar.os.version: '12'
+                kz.caseyspar.architecture: 'amd64'
+                kz.caseyspar.description: 'Base Python 3.11 image.'
+                kz.caseyspar.maintainer.author.name: 'Casey Sparks'
+                kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
+                kz.caseyspar.app.name: 'python'
+                kz.caseyspar.app.version: '3.11.2'
+                kz.caseyspar.app.version.major: 3
+                kz.caseyspar.app.version.minor: 11
+                kz.caseyspar.app.version.revision: 2
             dockerfile_inline: |
                 ARG REGISTRY
                 ARG IMAGE
