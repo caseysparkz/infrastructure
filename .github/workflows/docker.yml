@@ -1,0 +1,48 @@
+---
+name: 'Validate Dockerfiles'
+# Author:       Casey Sparks
+# Date:         September 03, 2024
+# Description:  Lint all Dockerfiles with Hadolint.
+
+on:
+  pull_request:
+    branches: ['main']
+    paths:
+      - '**/*Dockerfile'
+      - '**/*docker-compose.yml'
+jobs:
+  hadolint:
+    name: 'Hadolint'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4'
+        with:
+          fetch-depth: 0
+
+      - uses: 'hadolint/hadolint-action@v3.1.0'
+        with:
+          dockerfile: '*Dockerfile'
+          recursive: true
+          no-color: true
+          no-fail: false
+          format: 'tty'
+
+#  docker_compose_lint:                                                          # TODO
+#    name: 'docker-compose lint'
+#    runs-on: 'ubuntu-latest'
+#    steps:
+#      - name: 'Checkout'
+#        uses: 'actions/checkout@v4'
+#        with:
+#          fetch-depth: 0
+
+#  docker_compose_push:                                                          # TODO
+#    name: 'Push Docker images to ECR'
+#    runs-on: 'ubuntu-latest'
+#    steps:
+#      - name: 'Checkout'
+#        uses: 'actions/checkout@v4'
+#        with:
+#          fetch-depth: 0
+...
