@@ -1,0 +1,20 @@
+---
+version: '0.1'
+projects:
+  - name: 'caseyspar.kz'
+    path: 'caseyspar.kz'
+    skip_autodetect: true
+    usage_file: 'caseyspar.kz/.infracost_usage.yml'
+    dependency_paths:
+      - 'caseyspar.kz/**'
+      - 'modules/cloudflare_dns_zone/**'
+      - 'modules/ecr/**'
+      - 'modules/forward_zones/**'
+      - 'modules/hugo_static_site/**'
+      - 'modules/s3_artifacts/**'
+
+  - name: 'tfstate_backend'
+    path: 'tfstate_backend'
+    skip_autodetect: true
+    usage_file: 'tfstate_backend/.infracost_usage.yml'
+...
