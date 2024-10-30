@@ -8,9 +8,6 @@ on:
   pull_request:
     branches: ['main']
     paths: ['**/*.tf']
-  push:
-    branches: ['main']
-    paths: ['**/*.tf']
 env:
   TF_VER: '1.9.8'                                                               # Increment to update.
 jobs:
@@ -25,7 +22,6 @@ jobs:
           - 'tfstate_backend'
           - 'modules'
           - 'caseyspar.kz'
-          - 'lazzykaffo.com'
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@v4'
