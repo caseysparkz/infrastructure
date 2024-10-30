@@ -1,5 +1,5 @@
 # caseysparkz/infrastructure
-This repository is a monorepo for all infrastructure in both my personal homelab, and personal domain.
+This repository is a monorepo for all infrastructure in my personal domain.
 
 
 ## Filesystem Heirarchy
