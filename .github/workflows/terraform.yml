@@ -48,9 +48,6 @@ jobs:
     needs: ['terraform_validate']
     permissions:
       contents: 'write'
-    defaults:
-      run:
-        working-directory: './terraform/'
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@v4'
@@ -90,50 +87,48 @@ jobs:
     needs: ['terraform_validate']
     permissions:
       contents: 'read'
-      pull-requests: 'write'                                                    # Required to post comments.
-    defaults:
-      run:
-        working-directory: './terraform/'
+      pull-requests: 'write'
     steps:
-      - name: 'Check out base branch'
-        uses: 'actions/checkout@v4'
-        with:
-          ref: '${{ github.event.pull_request.base.ref }}'
-          fetch-depth: 0
-
       - name: 'Setup Infracost'
         uses: 'infracost/actions/setup@v3.0.1'
         with:
           api-key: '${{ secrets.INFRACOST_API_KEY }}'
+          github-token: '${{ github.token }}'
 
-      - name: 'Generate Infracost cost estimate baseline'                       # Generate base branch cost.
+      - name: 'Check out base branch'
+        uses: 'actions/checkout@v4'
+        with:
+          fetch-depth: 0
+          ref: '${{ github.event.pull_request.base.ref }}'
+
+      - name: 'Generate Infracost cost estimate baseline'
         run: |
           infracost breakdown                                               \
             --config-file .infracost.yml                                    \
             --format json                                                   \
-            --out-file /tmp/infracost-base.json
+            --out-file /tmp/infracost_base.json
 
-      - name: 'Checkout PR branch'                                              # Checkout the current PR branch.
+      - name: 'Checkout PR branch'
         uses: 'actions/checkout@v4'
         with:
           fetch-depth: 0
 
-      - name: 'Generate Infracost diff'                                         # Generate a cost diff.
+      - name: 'Generate Infracost diff'
         run: |
           infracost diff                                                    \
             --config-file .infracost.yml                                    \
             --format json                                                   \
-            --compare-to /tmp/infracost-base.json                           \
-            --out-file /tmp/infracost.json
+            --compare-to /tmp/infracost_base.json                           \
+            --out-file /tmp/infracost_diff.json
 
-      - name: 'Post Infracost comment'                                          # Comment cost diff. to PR.
+      - name: 'Post Infracost comment'
         run: |
           infracost comment github                                          \
-            --path /tmp/infracost.json                                      \
-            --repo "${GITHUB_REPOSITORY}"                                   \
-            --github-token ${{ github.token }}                              \
+            --path /tmp/infracost_diff.json                                 \
+            --repo ${{ github.repository }}                                 \
             --pull-request ${{ github.event.pull_request.number }}          \
-            --behavior update
+            --github-token ${{ github.token }}                              \
+            --behavior hide-and-new
 
 # HOLD ON THIS UNTIL READY FOR CI DEPLOYMENTS =================================
 #  terraform_plan:                                                               # terraform plan
@@ -170,7 +165,7 @@ jobs:
 #        uses: 'hashicorp/setup-terraform@v3.1.2'
 #        with:
 #          terraform_version: '${{ env.TF_VER }}'
-# 
+#
 #      - name: 'Initialize Terraform.'
 #        run: 'terraform init'
 
