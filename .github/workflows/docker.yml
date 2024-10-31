@@ -16,11 +16,12 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: 'Checkout'
-        uses: 'actions/checkout@v4'
+        uses: 'actions/checkout@11bd719'                                        # v4.2.2
         with:
           fetch-depth: 0
 
-      - uses: 'hadolint/hadolint-action@v3.1.0'
+      - name: 'Lint Dockerfiles'
+        uses: 'hadolint/hadolint-action@54c9adb'                                # v3.1.0
         with:
           dockerfile: '*Dockerfile'
           recursive: true
@@ -28,21 +29,21 @@ jobs:
           no-fail: false
           format: 'tty'
 
-#  docker_compose_lint:                                                          # TODO
-#    name: 'docker-compose lint'
-#    runs-on: 'ubuntu-latest'
-#    steps:
-#      - name: 'Checkout'
-#        uses: 'actions/checkout@v4'
-#        with:
-#          fetch-depth: 0
+# docker_compose_lint:                                                          # TODO
+#   name: 'docker-compose lint'
+#   runs-on: 'ubuntu-latest'
+#   steps:
+#     - name: 'Checkout'
+#       uses: 'actions/checkout@11bd719'                                        # v4.2.2
+#       with:
+#         fetch-depth: 0
 
-#  docker_compose_push:                                                          # TODO
-#    name: 'Push Docker images to ECR'
-#    runs-on: 'ubuntu-latest'
-#    steps:
-#      - name: 'Checkout'
-#        uses: 'actions/checkout@v4'
-#        with:
-#          fetch-depth: 0
+# docker_compose_push:                                                          # TODO
+#   name: 'Push Docker images to ECR'
+#   runs-on: 'ubuntu-latest'
+#   steps:
+#     - name: 'Checkout'
+#       uses: 'actions/checkout@11bd719'                                        # v4.2.2
+#       with:
+#         fetch-depth: 0
 ...
