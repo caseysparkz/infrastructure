@@ -2,7 +2,7 @@
 name: 'Validate YAML files'
 # Author:       Casey Sparks
 # Date:         June 06, 2024
-# Description:  Run yamllint against **all** YAML files in the repository.
+# Description:  Run yamllint against all YAML files in the repository.
 
 on:
   pull_request:
@@ -16,12 +16,12 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: 'Checkout'
-        uses: 'actions/checkout@v4'
+        uses: 'actions/checkout@11bd719'                                        # v4.2.2
         with:
           fetch-depth: 0
 
       - name: 'Yamllint'
-        uses: 'karancode/yamllint-github-action@v2.1.1'
+        uses: 'karancode/yamllint-github-action@fdef6bc'                        # v2.1.1
         with:
           yamllint_file_or_dir: './'
           yamllint_strict: true
