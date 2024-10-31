@@ -2,22 +2,17 @@
 # Main
 #
 locals {
-  environment = lookup( #                                                       Map workspace > environment.
-    {
-      default : ""
-      production : ""
-      staging : "stage"
-      development : "dev"
-    },
-    terraform.workspace,
-    "dev"
-  )
+  common_tags = {
+    terraform = true
+    domain    = var.root_domain
+  }
 }
 
 ## Modules and Outputs ========================================================
 module "artifacts" { # -------------------------------------------------------- S3: Artifacts.
   source      = "../modules/s3_artifacts"
   root_domain = var.root_domain
+  common_tags = local.common_tags
 }
 
 output "artifacts_s3_bucket_id" {
@@ -105,6 +100,7 @@ module "ecr" { # -------------------------------------------------------------- 
   source             = "../modules/ecr"
   root_domain        = var.root_domain
   docker_compose_dir = abspath("./docker_compose")
+  common_tags        = local.common_tags
 }
 
 output "ecr_registry_url" {
@@ -128,6 +124,7 @@ module "www" { # -------------------------------------------------------------- 
   hugo_dir             = abspath("frontends/www")
   turnstile_site_key   = cloudflare_turnstile_widget.captcha.id
   turnstile_secret_key = cloudflare_turnstile_widget.captcha.secret
+  common_tags          = local.common_tags
 }
 
 output "www_s3_bucket_endpoint" {
