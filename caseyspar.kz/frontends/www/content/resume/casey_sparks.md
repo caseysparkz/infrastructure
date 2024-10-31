@@ -1,6 +1,6 @@
 ---
 title: 'Resume'
-date: '2023-10-03:11:09+08:00'
+#date: '2023-10-03:11:09+08:00'
 draft: false
 language: 'en'
 description: 'Resume - Casey Sparks'
@@ -15,6 +15,23 @@ Certified Cloud Practitioner, _2022_
 
 ---
 # Experience
+### Tau Motors
+
+**Business Operations Lead -- IT, InfoSec, DevOps**, _October 2023--Present_
+* Ported all existing cloud infrastructure to continuously deployed Terraform configurations.
+* Migrated existing Windows 10 server infrastructure to Ansible-managed bare-metal Debian environment.
+* Increased DevOps test coverage from 0% to 100% in under six months, maintaining 100% coverage to date.
+* Implemented CI/CD pipelines via Github Actions for: software testing, Terraform-managed cloud infrastructure,
+and on-premise hardware tests (via Jenkins + local Github runners).
+* Migrated non-hierarchical, single-site Sonicwall network to segmented pfSense+Mikrotik LAN spanning multiple
+IPsec-connected offices with active load-balancing on highly available WAN gateways.
+* Authored and implemented information security policies in order to achieve TISAX ISMS certification in under
+seven months.
+* Implemented MDM, IdP, and EDR, bringing previously unmanaged accounts and systems under management in compliance
+with new security requirements
+
+
+
 ### Prime Trust
 
 **Director of Information Technology**, _September 2019--October 2023_
@@ -64,7 +81,7 @@ market risks as they pertained to the hedge fund’s capital investments.
 **Languages and Operating Systems.** Python, Shell (bash). Linux (RHEL, Debian, Alpine, Arch), FreeBSD.
 OpenWrt.
 
-**Networking and Cloud.** AWS, Heroku, Cisco Meraki, Fortigate/Fortinet, pfSense, OpenWrt, MikroTik.
+**Networking and Cloud.** AWS, Heroku, Cisco Meraki, Fortigate/Fortinet, pfSense, OpenWrt, Mikrotik.
 
 **Policy and Certification.** ISO-27001, SOC2, TISAX.
 

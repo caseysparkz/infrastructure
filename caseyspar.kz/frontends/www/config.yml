@@ -8,7 +8,7 @@ enableEmoji: false
 enableGitInfo: true
 enableRobotsTXT: true
 canonifyURLs: true
-paginate: 12
+#paginate: 12
 darkmode_js: ['assets/js/darkmode.js']
 enableInlineShortcodes: true
 params:

@@ -3,14 +3,14 @@
 #
 
 variable "zone_id" {
-  type        = string
   description = "Root domain of the deployed infrastructure."
+  type        = string
   sensitive   = false
 }
 
 variable "dns_records" {
-  type        = list(map(string))
   description = "Map of MX, TXT, and CNAME records to create."
+  type        = list(map(string))
   sensitive   = false
 
   validation {
@@ -28,8 +28,8 @@ variable "dns_records" {
 }
 
 variable "default_comment" {
-  type        = string
   description = "Default comment to apply to all Cloudflare resources."
+  type        = string
   sensitive   = false
   default     = "Terraform managed."
 }
