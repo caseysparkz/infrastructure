@@ -57,11 +57,13 @@ jobs:
           for FILE in $(find ./ -name requirements.txt -type f); do
             python -m pip install                                           \
               --no-cache-dir                                                \
-              --requirement "${FILE}"
+              --requirement                                                 \
+              "${FILE}"
           done
 
       - name: 'Install PyLint'
-        run: 'python -m pip install pylint'
+        run: >
+          python -m pip install pylint
 
       - name: 'Get changed files'
         id: 'changed_files'
