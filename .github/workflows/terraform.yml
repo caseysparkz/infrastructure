@@ -22,6 +22,9 @@ jobs:
           - 'tfstate_backend'
           - 'modules'
           - 'caseyspar.kz'
+    defaults:
+      run:
+        working-directory: '${{ matrix.work_dir }}'
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@11bd719'                                        # v4.2.2
@@ -34,12 +37,12 @@ jobs:
           terraform_version: '${{ env.TF_VER }}'
 
       - name: 'Initialize Terraform'
-        run: 'terraform init -backend=false'
-        working-directory: '${{ matrix.work_dir }}'
+        run: >
+          terraform init -backend=false
 
       - name: 'Validate Terraform configs.'
-        run: 'terraform validate'
-        working-directory: '${{ matrix.work_dir }}'
+        run: >
+          terraform validate
 
   terraform_fmt:
     name: 'Terraform Format'
@@ -60,7 +63,8 @@ jobs:
           terraform_version: '${{ env.TF_VER }}'
 
       - name: 'terraform fmt'
-        run: 'terraform fmt -recursive'
+        run: >
+          terraform fmt --recursive
 
 #     - name: 'Import PGP identity'                                             # So we can sign the commit.
 #       id: 'import_pgp'
@@ -102,10 +106,10 @@ jobs:
           ref: '${{ github.event.pull_request.base.ref }}'
 
       - name: 'Generate Infracost baseline estimate'
-        run: |
-          infracost breakdown                                               \
-            --config-file .infracost.yml                                    \
-            --format json                                                   \
+        run: >
+          infracost breakdown
+            --config-file .infracost.yml
+            --format json
             --out-file /tmp/infracost_base.json
 
       - name: 'Checkout pull request branch'
@@ -114,20 +118,20 @@ jobs:
           fetch-depth: 0
 
       - name: 'Generate Infracost diff'
-        run: |
-          infracost diff                                                    \
-            --config-file .infracost.yml                                    \
-            --format json                                                   \
-            --compare-to /tmp/infracost_base.json                           \
+        run: >
+          infracost diff
+            --config-file .infracost.yml
+            --format json
+            --compare-to /tmp/infracost_base.json
             --out-file /tmp/infracost_diff.json
 
       - name: 'Post Infracost diff to pull request'
-        run: |
-          infracost comment github                                          \
-            --path /tmp/infracost_diff.json                                 \
-            --repo ${{ github.repository }}                                 \
-            --pull-request ${{ github.event.pull_request.number }}          \
-            --github-token ${{ github.token }}                              \
+        run: >
+          infracost comment github
+            --path /tmp/infracost_diff.json
+            --repo ${{ github.repository }}
+            --pull-request ${{ github.event.pull_request.number }}
+            --github-token ${{ github.token }}
             --behavior hide-and-new
 
 # HOLD ON THIS UNTIL READY FOR CI DEPLOYMENTS =================================
