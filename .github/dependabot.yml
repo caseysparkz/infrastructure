@@ -1,6 +1,70 @@
+---
 version: 2
 updates:
-  - package-ecosystem: github-actions
-    directory: /
+  - package-ecosystem: 'docker'                                                 # docker
+    directory: 'caseysparkz/docker_compose/'
+    rebase-strategy: 'auto'
+    reviewers: ['caseysparkz']
+    target-branch: 'main'
     schedule:
-      interval: daily
+      interval: 'weekly'
+      day: 'friday'
+      time: '16:45'
+      timezone: 'America/Los_Angeles'
+    commit-message:
+      prefix: 'chore(dependabot)'
+
+  - package-ecosystem: 'gitsubmodule'                                           # git submodule
+    directory: '.'
+    rebase-strategy: 'auto'
+    reviewers: ['caseysparkz']
+    target-branch: 'main'
+    schedule:
+      interval: 'weekly'
+      day: 'friday'
+      time: '16:45'
+      timezone: 'America/Los_Angeles'
+    commit-message:
+      prefix: 'chore(dependabot)'
+
+  - package-ecosystem: 'github-actions'                                         # github-actions
+    directory: '.github/workflows'
+    rebase-strategy: 'auto'
+    reviewers: ['caseysparkz']
+    target-branch: 'main'
+    schedule:
+      interval: 'weekly'
+      day: 'friday'
+      time: '16:45'
+      timezone: 'America/Los_Angeles'
+    commit-message:
+      prefix: 'chore(dependabot)'
+
+  - package-ecosystem: 'pip'                                                    # pip
+    directory: '.'
+    rebase-strategy: 'auto'
+    reviewers: ['caseysparkz']
+    target-branch: 'main'
+    versioning-strategy: 'increase-if-necessary'
+    schedule:
+      interval: 'weekly'
+      day: 'friday'
+      time: '16:45'
+      timezone: 'America/Los_Angeles'
+    commit-message:
+      prefix: 'chore(dependabot)'
+
+  - package-ecosystem: 'terraform'                                              # terraform
+    directory: '.'
+    rebase-strategy: 'auto'
+    reviewers: ['caseysparkz']
+    target-branch: 'main'
+    schedule:
+      interval: 'weekly'
+      day: 'friday'
+      time: '16:45'
+      timezone: 'America/Los_Angeles'
+    commit-message:
+      prefix: 'chore(dependabot)'
+...
+
