@@ -1,0 +1,66 @@
+---
+name: 'Scan Code for Vulnerabilities'
+# Author:       Casey Sparks
+# Date:         November 07, 2024
+# Description:  Run code scanning tools against codebase to detect vulnerabilities.
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - '**/*.Dockerfile'                                                       # Docker
+      - '**/*.tf'                                                               # Terraform
+env:
+  TF_VAR_cloudflare_api_token: '${{ secrets.TF_VAR_CLOUDFLARE_API_TOKEN }}'
+  PR_COMMENT: '/tmp/pull_request_comment.md'
+  SARIF_FILE: '/tmp/trivy_output.json'
+  VULN_LEVELS: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'                               # All vuln levels.
+  IGNORE_UNPATCHABLE: false
+jobs:
+  trivy:
+    name: 'Trivy'
+    if: '${{ github.event_name }} == "pull_request"'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: 'Run vulnerability scanner'
+        uses: 'aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2' # v0.28.0
+        with:
+          scan-type: 'fs'
+          format: 'sarif'
+          limit-severities-for-sarif: true
+          ignore-unfixed: '${{ env.IGNORE_UNPATCHABLE }}'
+          severity: '${{ env.VULN_LEVELS }}'
+          output: '${{ env.SARIF_FILE }}'
+
+      - name: 'Publish Trivy output to summary'
+        id: 'publish_summary'
+        run: |
+          if [[ -s ${{ env.SARIF_FILE }} ]]; then
+            {
+              echo "### Security Output"
+              echo "<details><summary>Click to expand</summary>"
+              echo ""
+              echo '```json'
+              cat ${{ env.SARIF_FILE }}
+              echo '```'
+              echo "<details>"
+            } >> ${{ env.PR_COMMENT }}
+          fi
+
+      - name: 'Comment Trivy output on pull request'
+        id: 'publish_comment'
+        run: 'gh pr comment ${{ github.event.pull_request.number }} --body "$(cat ${{ env.PR_COMMENT }})"'
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
+
+      # # Requires GitHub Advanced Security.
+      # - name: 'Upload scan results to GitHub Security tab'
+      #   uses: 'github/codeql-action/upload-sarif@662472033e021d55d94146f66f6058822b0b39fd' # v3.27.0
+      #   with:
+      #     sarif_file: '${{ env.SARIF_FILE }}'
+...
