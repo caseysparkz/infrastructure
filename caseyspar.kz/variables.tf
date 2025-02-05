@@ -15,18 +15,6 @@ variable "aws_region" {
   }
 }
 
-variable "aws_access_key" {
-  type        = string
-  description = "AWS access key for the deployment user."
-  sensitive   = true
-}
-
-variable "aws_secret_key" {
-  type        = string
-  description = "Secret key corresponding to the AWS access key."
-  sensitive   = true
-}
-
 variable "ecr_repository_names" {
   type        = list(string)
   description = "List of ECR repository names to create."
