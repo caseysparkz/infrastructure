@@ -3,7 +3,6 @@
 ./**/*.tfstate
 ./**/*.tfstate.*
 ./**/*.log
-./**/*.tfvars
 ./**/*.tfvars.json
 ./**/override.tf
 ./**/override.tf.json
