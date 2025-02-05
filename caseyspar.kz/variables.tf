@@ -31,10 +31,7 @@ variable "ecr_repository_names" {
   type        = list(string)
   description = "List of ECR repository names to create."
   sensitive   = false
-  default = [
-    "alpine_base",
-    "python3_base",
-  ]
+  default = []
 
   validation {
     condition     = alltrue([for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9_./]*$", v))])
@@ -59,70 +56,56 @@ variable "mx_servers" {
   type        = map(string)
   description = "MX servers for root domain. Syntax: {server: priority}."
   sensitive   = false
-  default = {
-    "mail.protonmail.ch"    = 10
-    "mailsec.protonmail.ch" = 20
-  }
+  default = {}
 }
 
 variable "dkim_records" {
   type        = map(string)
   description = "DKIM (CNAME) for root domain. Syntax: {host: pointer}."
   sensitive   = false
-  default = {
-    "protonmail._domainkey"  = "protonmail.domainkey.dlnhnljjvlx6bfjjsleqnfvszipy5ver4qdnit24cx6ufem2qzgfq.domains.proton.ch"
-    "protonmail2._domainkey" = "protonmail2.domainkey.dlnhnljjvlx6bfjjsleqnfvszipy5ver4qdnit24cx6ufem2qzgfq.domains.proton.ch"
-    "protonmail3._domainkey" = "protonmail3.domainkey.dlnhnljjvlx6bfjjsleqnfvszipy5ver4qdnit24cx6ufem2qzgfq.domains.proton.ch"
-  }
+  default = {}
 }
 
 variable "spf_senders" {
   type        = list(string)
   description = "List of allowed SPF senders, like: [\"include:_spf.example.com\", \"ip4:127.0.0.1\"]."
   sensitive   = false
-  default = [
-    "include:_spf.protonmail.ch",
-    "mx",
-  ]
+  default = []
 }
 
 variable "txt_records" {
   type        = map(string)
   description = "List of TXT records for domain."
   sensitive   = false
-  default = {
-    "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3" = "@"
-    "have-i-been-pwned-verification=dweb_4p3ixho2v4rzazpnhs3dahgz"     = "@"
-  }
+  default = {}
 }
 
 variable "pka_records" {
   type        = map(string)
   description = "Map of PKA handles and fingerprints for root domain."
-  default     = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
   sensitive   = false
+  default     = {}
 }
 
 variable "forward_zones" {
   type        = list(string)
   description = "Forward zones for the root domain."
   sensitive   = false
-  default     = ["cspar.kz"]
+  default     = []
 }
 
 ## Misc. ======================================================================
 variable "root_domain" {
   type        = string
   description = "Root domain of Terraform infrastructure."
-  default     = "caseyspar.kz"
   sensitive   = false
 }
 
 variable "ssh_pubkey_path" {
   type        = string
   description = "Path of the administrator SSH public key."
-  default     = "~/.ssh/keys/id_rsa.key"
   sensitive   = false
+  default     = "~/.ssh/keys/id_rsa.pub"
 
   validation {
     condition     = fileexists(var.ssh_pubkey_path)
