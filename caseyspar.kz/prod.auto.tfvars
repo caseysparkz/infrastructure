@@ -27,9 +27,9 @@ txt_records = {
   "protonmail-verification=fe3be76ae32c8b2a12ec3e6348d6a598e4e4a4f3" = "@"
   "have-i-been-pwned-verification=dweb_4p3ixho2v4rzazpnhs3dahgz"     = "@"
 }
-pka_records = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
+pka_records   = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
 forward_zones = ["cspar.kz"]
 
 ## Misc. ======================================================================
-root_domain = "caseyspar.kz"
+root_domain     = "caseyspar.kz"
 ssh_pubkey_path = "~/.ssh/keys/hck.pub"
