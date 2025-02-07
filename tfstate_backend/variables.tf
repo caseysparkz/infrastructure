@@ -4,10 +4,10 @@
 
 # AWS =========================================================================
 variable "aws_region" {
-  default     = "us-west-2"
   description = "AWS region to deploy to."
   type        = string
   sensitive   = false
+  default     = "us-west-2"
 
   validation {
     condition     = contains(["us-east-1", "us-west-2"], var.aws_region)
@@ -15,23 +15,9 @@ variable "aws_region" {
   }
 }
 
-variable "aws_access_key" {
-  description = "Access key for the AWS IAM account deploying the infrastructure."
-  type        = string
-  sensitive   = true
-}
-
-variable "aws_secret_key" {
-  description = "Secret key corresponding to var.aws_access_key."
-  type        = string
-  sensitive   = true
-}
-
-
 # Misc. =======================================================================
 variable "bucket_name" {
   description = "Name of the AWS bucket to create."
   type        = string
   sensitive   = false
-  default     = "caseyspar.kz-tfstate"
 }
