@@ -18,16 +18,17 @@ terraform {
   }
 
   backend "s3" { #                                                              ./modules/tf_backend_s3
-    bucket  = "caseyspar.kz-tfstate"
-    key     = "caseyspar.kz.tfstate"
-    region  = "us-west-2"
-    encrypt = true
+    bucket       = "caseyspar.kz-tfstate"
+    key          = "caseyspar.kz.tfstate"
+    region       = "us-west-2"
+    use_lockfile = true
+    encrypt      = true
   }
 }
 
 ## Providers ==================================================================
 provider "aws" { #                                                              AWS.
-  region     = var.aws_region
+  region = var.aws_region
 
   default_tags {
     tags = {
