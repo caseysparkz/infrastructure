@@ -23,6 +23,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 5.0.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.5.0"
+    }
   }
 }
 
@@ -39,6 +43,11 @@ provider "aws" { #                                                              
 }
 
 provider "cloudflare" { api_token = var.cloudflare_api_token } #                Cloudflare.
+
+provider "github" {
+  # token = var.github_token
+  owner = var.github_owner
+}
 
 ## Outputs ====================================================================
 output "aws_region" {
