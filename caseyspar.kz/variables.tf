@@ -19,7 +19,7 @@ variable "ecr_repository_names" {
   type        = list(string)
   description = "List of ECR repository names to create."
   sensitive   = false
-  default = []
+  default     = []
 
   validation {
     condition     = alltrue([for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9_./]*$", v))])
@@ -44,28 +44,28 @@ variable "mx_servers" {
   type        = map(string)
   description = "MX servers for root domain. Syntax: {server: priority}."
   sensitive   = false
-  default = {}
+  default     = {}
 }
 
 variable "dkim_records" {
   type        = map(string)
   description = "DKIM (CNAME) for root domain. Syntax: {host: pointer}."
   sensitive   = false
-  default = {}
+  default     = {}
 }
 
 variable "spf_senders" {
   type        = list(string)
   description = "List of allowed SPF senders, like: [\"include:_spf.example.com\", \"ip4:127.0.0.1\"]."
   sensitive   = false
-  default = []
+  default     = []
 }
 
 variable "txt_records" {
   type        = map(string)
   description = "List of TXT records for domain."
   sensitive   = false
-  default = {}
+  default     = {}
 }
 
 variable "pka_records" {
