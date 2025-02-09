@@ -60,12 +60,14 @@ data "aws_iam_policy_document" "lambda_logging" {
 }
 
 # Resources ===================================================================
-resource "aws_iam_role" "lambda_contact_form" { # ----------------------------- IAM role.
+# IAM role --------------------------------------------------------------------
+resource "aws_iam_role" "lambda_contact_form" {
   name               = "lambda_contact_form"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
-resource "aws_iam_policy" "lambda_ses_sendemail" { # -------------------------- Policies.
+# Policies --------------------------------------------------------------------
+resource "aws_iam_policy" "lambda_ses_sendemail" {
   name        = "lambda_ses_sendemail"
   description = "Policy for Lambda to send emails via AWS SES."
   policy      = data.aws_iam_policy_document.lambda_ses_sendemail.json
@@ -83,7 +85,8 @@ resource "aws_iam_policy" "lambda_logging" {
   policy      = data.aws_iam_policy_document.lambda_logging.json
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_ses_sendemail" { # ---------- Policy attachments.
+# Policy attachments ----------------------------------------------------------
+resource "aws_iam_role_policy_attachment" "lambda_ses_sendemail" {
   role       = aws_iam_role.lambda_contact_form.name
   policy_arn = aws_iam_policy.lambda_ses_sendemail.arn
 }

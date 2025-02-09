@@ -22,7 +22,7 @@ resource "cloudflare_record" "cname" {
   for_each        = local.zone_map
   zone_id         = each.value
   name            = each.key
-  value           = var.root_domain
+  content         = var.root_domain
   type            = "CNAME"
   ttl             = 1
   proxied         = true
@@ -34,7 +34,7 @@ resource "cloudflare_record" "cname_www" {
   for_each        = local.zone_map
   zone_id         = each.value
   name            = "www.${each.key}"
-  value           = var.root_domain
+  content         = var.root_domain
   type            = "CNAME"
   ttl             = 1
   proxied         = true

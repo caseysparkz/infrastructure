@@ -43,7 +43,7 @@ resource "cloudflare_record" "mx" { #                                           
   for_each        = var.mx_servers
   zone_id         = local.cloudflare_zone_id
   name            = var.root_domain
-  value           = each.key
+  content         = each.key
   type            = "MX"
   ttl             = 1
   proxied         = false
@@ -56,7 +56,7 @@ resource "cloudflare_record" "dkim" { #                                         
   for_each        = var.dkim_records
   zone_id         = local.cloudflare_zone_id
   name            = each.key
-  value           = each.value
+  content         = each.value
   type            = "CNAME"
   ttl             = 1
   proxied         = false
@@ -67,7 +67,7 @@ resource "cloudflare_record" "dkim" { #                                         
 resource "cloudflare_record" "dmarc" { #                                        DMARC policy.
   zone_id         = local.cloudflare_zone_id
   name            = "_dmarc"
-  value           = "v=DMARC1;${join("; ", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
+  content         = "v=DMARC1;${join("; ", [for k, v in local.dmarc_policy : "${k}=${v}"])}"
   type            = "TXT"
   ttl             = 1
   proxied         = false
@@ -78,7 +78,7 @@ resource "cloudflare_record" "dmarc" { #                                        
 resource "cloudflare_record" "spf" { #                                          SPF record.
   zone_id         = local.cloudflare_zone_id
   name            = var.root_domain
-  value           = "v=spf1 ${join(" ", var.spf_senders)} -all"
+  content         = "v=spf1 ${join(" ", var.spf_senders)} -all"
   type            = "TXT"
   ttl             = 1
   proxied         = false
@@ -90,7 +90,7 @@ resource "cloudflare_record" "txt" { #                                          
   for_each        = var.txt_records
   zone_id         = local.cloudflare_zone_id
   name            = each.value
-  value           = each.key
+  content         = each.key
   type            = "TXT"
   ttl             = 1
   proxied         = false
@@ -102,7 +102,7 @@ resource "cloudflare_record" "pka" { #                                          
   for_each        = var.pka_records
   zone_id         = local.cloudflare_zone_id
   name            = "${each.key}._pka"
-  value           = "v=pka1; fpr=${each.value}"
+  content         = "v=pka1; fpr=${each.value}"
   type            = "TXT"
   ttl             = 1
   proxied         = false
@@ -110,27 +110,8 @@ resource "cloudflare_record" "pka" { #                                          
   comment         = local.cloudflare_comment
 }
 
-resource "cloudflare_turnstile_widget" "captcha" { #                            ReCaptcha.
-  account_id = var.cloudflare_account_id
-  name       = var.root_domain
-  domains    = [var.root_domain]
-  mode       = "managed"
-}
-
 ## Outputs ====================================================================
 output "main_cloudflare_zone_root" {
   description = "Zone data for the root Cloudflare DNS zone."
-  value       = data.cloudflare_zone.root_domain
-}
-
-output "turnstile_site_key" {
-  description = "Turnstile site key for root domain."
-  value       = cloudflare_turnstile_widget.captcha.id
-  sensitive   = false
-}
-
-output "turnstile_secret_key" {
-  description = "Turnstile secret key for root domain."
-  value       = cloudflare_turnstile_widget.captcha.secret
-  sensitive   = true
+  value     = data.cloudflare_zone.root_domain
 }
