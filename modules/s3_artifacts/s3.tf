@@ -6,20 +6,13 @@
 resource "aws_s3_bucket" "artifacts" {
   bucket        = "${var.root_domain}-artifacts"
   force_destroy = false
-  tags = merge(
-    {
-      service = "s3"
-    },
-    local.common_tags
-  )
+  tags          = merge({ service = "s3" }, local.common_tags)
 }
 
 resource "aws_s3_bucket_ownership_controls" "artifacts" {
   bucket = aws_s3_bucket.artifacts.id
 
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
+  rule { object_ownership = "BucketOwnerPreferred" }
 }
 
 resource "aws_s3_bucket_acl" "artifacts" {

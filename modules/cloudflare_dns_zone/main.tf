@@ -8,7 +8,7 @@ resource "cloudflare_record" "record" {
   count           = length(var.dns_records)
   zone_id         = var.zone_id
   name            = var.dns_records[count.index].name
-  value           = var.dns_records[count.index].value
+  content         = var.dns_records[count.index].value
   type            = var.dns_records[count.index].type
   ttl             = lookup(var.dns_records[count.index], "ttl", 1)
   proxied         = lookup(var.dns_records[count.index], "proxied", false)

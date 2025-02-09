@@ -19,7 +19,8 @@ data "aws_iam_policy_document" "s3_public_read_access" {
 }
 
 # Resources ===================================================================
-resource "aws_s3_bucket" "www_site" { # --------------------------------------- WWW site.
+# WWW site --------------------------------------------------------------------
+resource "aws_s3_bucket" "www_site" {
   bucket        = var.subdomain
   force_destroy = true
   tags          = local.common_tags
@@ -28,20 +29,14 @@ resource "aws_s3_bucket" "www_site" { # --------------------------------------- 
 resource "aws_s3_bucket_website_configuration" "www_site" {
   bucket = aws_s3_bucket.www_site.id
 
-  index_document {
-    suffix = "index.html"
-  }
-  error_document {
-    key = "404.html"
-  }
+  index_document { suffix = "index.html" }
+  error_document { key = "404.html" }
 }
 
 resource "aws_s3_bucket_ownership_controls" "www_site" {
   bucket = aws_s3_bucket.www_site.id
 
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
+  rule { object_ownership = "BucketOwnerPreferred" }
 }
 
 resource "aws_s3_bucket_public_access_block" "www_site" {
@@ -66,7 +61,8 @@ resource "aws_s3_bucket_policy" "www_site" {
   policy = data.aws_iam_policy_document.s3_public_read_access.json
 }
 
-resource "aws_s3_bucket" "web_root" { # --------------------------------------- Redirect root.
+# Redirect root ---------------------------------------------------------------
+resource "aws_s3_bucket" "web_root" {
   bucket        = var.root_domain
   force_destroy = true
   tags          = local.common_tags
@@ -75,12 +71,11 @@ resource "aws_s3_bucket" "web_root" { # --------------------------------------- 
 resource "aws_s3_bucket_website_configuration" "web_root" {
   bucket = aws_s3_bucket.web_root.id
 
-  redirect_all_requests_to {
-    host_name = aws_s3_bucket.www_site.id
-  }
+  redirect_all_requests_to { host_name = aws_s3_bucket.www_site.id }
 }
 
-resource "aws_s3_object" "lambda_contact_form" { # ---------------------------- S3 Lambda artifact.
+# S3 Lambda artifact ----------------------------------------------------------
+resource "aws_s3_object" "lambda_contact_form" {
   bucket      = var.artifact_bucket_id
   key         = basename(data.archive_file.lambda_contact_form.output_path)
   source      = data.archive_file.lambda_contact_form.output_path

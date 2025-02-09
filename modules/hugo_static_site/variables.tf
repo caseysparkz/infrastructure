@@ -2,29 +2,6 @@
 # Variables.
 #
 
-# Cloudflare ==================================================================
-variable "turnstile_site_key" {
-  description = "Site key for the Cloudflare Turnstile widget."
-  type        = string
-  sensitive   = true
-
-  validation {
-    condition     = can(regex("^0x[a-zA-Z0-9]{22}", var.turnstile_site_key))
-    error_message = "Invalid Turnstile site key."
-  }
-}
-
-variable "turnstile_secret_key" {
-  description = "Secret key for the Cloudflare Turnstile widget."
-  type        = string
-  sensitive   = true
-
-  validation {
-    condition     = can(regex("^0x[a-zA-Z0-9]{33}", var.turnstile_secret_key))
-    error_message = "Invalid Turnstile secret key."
-  }
-}
-
 # Lambda ======================================================================
 variable "artifact_bucket_id" {
   description = "ID of the S3 bucket in which lambda functions are kept."

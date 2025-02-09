@@ -3,9 +3,4 @@
 #
 
 ## Locals =====================================================================
-locals {
-  common_tags = merge(
-    var.common_tags,
-    { service = "artifacts" }
-  )
-}
+locals { common_tags = merge(var.common_tags, { service = "artifacts" }) }
