@@ -116,15 +116,13 @@ output "ecr_registry_repository_urls" {
 }
 
 module "www" { # -------------------------------------------------------------- WWW.
-  source               = "../modules/hugo_static_site"
-  root_domain          = var.root_domain
-  subdomain            = "www.${var.root_domain}"
-  artifact_bucket_id   = module.artifacts.s3_bucket_id
-  site_title           = var.root_domain
-  hugo_dir             = abspath("frontends/www")
-  turnstile_site_key   = cloudflare_turnstile_widget.captcha.id
-  turnstile_secret_key = cloudflare_turnstile_widget.captcha.secret
-  common_tags          = local.common_tags
+  source             = "../modules/hugo_static_site"
+  root_domain        = var.root_domain
+  subdomain          = "www.${var.root_domain}"
+  artifact_bucket_id = module.artifacts.s3_bucket_id
+  site_title         = var.root_domain
+  hugo_dir           = abspath("frontends/www")
+  common_tags        = local.common_tags
 }
 
 output "www_s3_bucket_endpoint" {

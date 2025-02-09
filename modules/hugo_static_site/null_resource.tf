@@ -15,20 +15,15 @@ locals {
   build_hash = sha256(join(
     "",
     [
-      for file in setsubtract(
-        fileset(var.hugo_dir, "*"),
-        fileset("${var.hugo_dir}/public", "*")
-      ) :
+      for file in setsubtract(fileset(var.hugo_dir, "*"), fileset("${var.hugo_dir}/public", "*")) :
       filesha1("${var.hugo_dir}/${file}")
     ]
   ))
   node_modules_hash = sha256(join(
     "",
     [
-      for file in setunion(
-        fileset(var.hugo_dir, "node_modules/*"),
-        fileset(var.hugo_dir, "package.json")
-      ) : filesha1("${var.hugo_dir}/${file}")
+      for file in setunion(fileset(var.hugo_dir, "node_modules/*"), fileset(var.hugo_dir, "package.json")) :
+      filesha1("${var.hugo_dir}/${file}")
     ]
   ))
 }

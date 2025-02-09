@@ -16,9 +16,7 @@ locals {
 }
 
 # Data ========================================================================
-data "cloudflare_zone" "domain" { #                                             Root zone.
-  name = var.root_domain
-}
+data "cloudflare_zone" "domain" { name = var.root_domain } #                    Root zone.
 
 # Resources ===================================================================
 resource "cloudflare_record" "root_cname" { #                                   Redirect bucket.

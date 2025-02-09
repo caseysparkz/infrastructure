@@ -23,9 +23,8 @@ resource "aws_lambda_function" "contact_form" {
 
   environment {
     variables = {
-      CLOUDFLARE_TURNSTILE_SECRET_KEY = var.turnstile_secret_key
-      DEFAULT_RECIPIENT               = local.email_headers["default_recipient"]
-      DEFAULT_SENDER                  = local.email_headers["default_sender"]
+      DEFAULT_RECIPIENT = local.email_headers["default_recipient"]
+      DEFAULT_SENDER    = local.email_headers["default_sender"]
     }
   }
 }
