@@ -4,71 +4,71 @@
 # Description:  Debian 12 image.
 ---
 services:
-    debian:
-        image: '770088062852.dkr.ecr.us-west-2.amazonaws.com/debian12:0.0.1'
-        build:
-            context: '.'
-            platforms: ['linux/amd64']
-            network: 'host'
-            args:
-                REGISTRY: 'docker.io/library'
-                IMAGE: 'debian'
-                VERSION: '12'
-                APP_USER: 'app'
-                DEBCONF_NOWARNINGS: 'yes'
-                DEBIAN_FRONTEND: 'noninteractive'
-                TZ: 'America/Los_Angeles'
-            labels:
-                kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
-                kz.caseyspar.name: 'debian12'
-                kz.caseyspar.version: '0.0.1'
-                kz.caseyspar.os.name: 'debian'
-                kz.caseyspar.os.version: '12'
-                kz.caseyspar.architecture: 'amd64'
-                kz.caseyspar.description: 'Base Debian 12 image.'
-                kz.caseyspar.maintainer.author.name: 'Casey Sparks'
-                kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
-            dockerfile_inline: |
-                ARG REGISTRY
-                ARG IMAGE
-                ARG VERSION
+  debian:
+    image: '770088062852.dkr.ecr.us-west-2.amazonaws.com/debian12:0.0.1'
+    build:
+      context: '.'
+      platforms: ['linux/amd64']
+      network: 'host'
+      args:
+        REGISTRY: 'docker.io/library'
+        IMAGE: 'debian'
+        VERSION: '12'
+        APP_USER: 'app'
+        DEBCONF_NOWARNINGS: 'yes'
+        DEBIAN_FRONTEND: 'noninteractive'
+        TZ: 'America/Los_Angeles'
+      labels:
+        kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
+        kz.caseyspar.name: 'debian12'
+        kz.caseyspar.version: '0.0.1'
+        kz.caseyspar.os.name: 'debian'
+        kz.caseyspar.os.version: '12'
+        kz.caseyspar.architecture: 'amd64'
+        kz.caseyspar.description: 'Base Debian 12 image.'
+        kz.caseyspar.maintainer.author.name: 'Casey Sparks'
+        kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
+      dockerfile_inline: |
+        ARG REGISTRY
+        ARG IMAGE
+        ARG VERSION
 
-                FROM "$${REGISTRY}/$${IMAGE}:$${VERSION}"
+        FROM "$${REGISTRY}/$${IMAGE}:$${VERSION}"
 
-                ARG APP_USER
-                ARG DEBCONF_NOWARNINGS
-                ARG DEBIAN_FRONTEND
-                ARG TZ
+        ARG APP_USER
+        ARG DEBCONF_NOWARNINGS
+        ARG DEBIAN_FRONTEND
+        ARG TZ
 
-                ENV APP_USER="$${APP_USER}"
-                ENV DEBCONF_NOWARNINGS="$${DEBCONF_NOWARNINGS}"
-                ENV DEBIAN_FRONTEND="$${DEBIAN_FRONTEND}"
-                ENV TZ="$${TZ}"
+        ENV APP_USER="$${APP_USER}"
+        ENV DEBCONF_NOWARNINGS="$${DEBCONF_NOWARNINGS}"
+        ENV DEBIAN_FRONTEND="$${DEBIAN_FRONTEND}"
+        ENV TZ="$${TZ}"
 
-                RUN echo "$${TZ}" > /etc/timezone                           \
-                    &&  apt-get update                                      \
-                    &&  apt-get install                                     \
-                        --assume-yes                                        \
-                        --no-install-recommends                             \
-                        'locales=2.36-9+deb12u7'                            \
-                    &&  localedef                                           \
-                        -i en_US                                            \
-                        -c                                                  \
-                        -f UTF-8                                            \
-                        -A /usr/share/locale/locale.alias                   \
-                        en_US.UTF-8                                         \
-                    &&  rm                                                  \
-                        --recursive                                         \
-                        --force                                             \
-                        /var/lib/apt/lists/*                                \
-                    &&  useradd                                             \
-                        --home-dir "/home/$${APP_USER}"                     \
-                        --create-home                                       \
-                        --shell /usr/bin/bash                               \
-                        --system                                            \
-                        "$${APP_USER}"
+        RUN echo "$${TZ}" > /etc/timezone                                     \
+          &&  apt-get update                                                  \
+          &&  apt-get install                                                 \
+            --assume-yes                                                      \
+            --no-install-recommends                                           \
+            'locales=2.36-9+deb12u7'                                          \
+          &&  localedef                                                       \
+            -i en_US                                                          \
+            -c                                                                \
+            -f UTF-8                                                          \
+            -A /usr/share/locale/locale.alias                                 \
+            en_US.UTF-8                                                       \
+          &&  rm                                                              \
+            --recursive                                                       \
+            --force                                                           \
+            /var/lib/apt/lists/*                                              \
+          &&  useradd                                                         \
+            --home-dir "/home/$${APP_USER}"                                   \
+            --create-home                                                     \
+            --shell /usr/bin/bash                                             \
+            --system                                                          \
+            "$${APP_USER}"
 
-                WORKDIR "/home/$${APP_USER}"
+        WORKDIR "/home/$${APP_USER}"
 
-                USER "$${APP_USER}"
+        USER "$${APP_USER}"
 ...
