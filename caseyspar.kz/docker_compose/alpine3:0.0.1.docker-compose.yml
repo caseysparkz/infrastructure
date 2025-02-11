@@ -4,64 +4,57 @@
 # Description:  Alpine 3.20.2 image.
 ---
 services:
-    alpine:
-        image: '770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine3:0.0.1'
-        build:
-            context: '.'
-            platforms: ['linux/amd64']
-            network: 'host'
-            args:
-                REGISTRY: 'docker.io/library'
-                IMAGE: 'alpine'
-                VERSION: '3.20.2'
-                APP_USER: 'app'
-                TZ: 'America/Los_Angeles'
-                LANG: 'en_US.UTF8'
-                LANGUAGE: 'en_US.UTF8'
-                LC_ALL: 'en_US.UTF8'
-            labels:
-                kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
-                kz.caseyspar.name: 'alpine3'
-                kz.caseyspar.version: '0.0.1'
-                kz.caseyspar.os.name: 'alpine'
-                kz.caseyspar.os.version: '3.20.2'
-                kz.caseyspar.architecture: 'amd64'
-                kz.caseyspar.description: 'Base Alpine 3 image.'
-                kz.caseyspar.maintainer.author.name: 'Casey Sparks'
-                kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
-            dockerfile_inline: |
-                ARG REGISTRY
-                ARG IMAGE
-                ARG VERSION
+  alpine:
+    image: '770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine3:0.0.1'
+    build:
+      context: '.'
+      platforms: ['linux/amd64']
+      network: 'host'
+      args:
+        APP_USER: 'app'
+        TZ: 'America/Los_Angeles'
+        LANG: 'en_US.UTF8'
+        LANGUAGE: 'en_US.UTF8'
+        LC_ALL: 'en_US.UTF8'
+      labels:
+        kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
+        kz.caseyspar.name: 'alpine3'
+        kz.caseyspar.version: '0.0.1'
+        kz.caseyspar.os.name: 'alpine'
+        kz.caseyspar.os.version: '3.20.2'
+        kz.caseyspar.architecture: 'amd64'
+        kz.caseyspar.description: 'Base Alpine 3 image.'
+        kz.caseyspar.maintainer.author.name: 'Casey Sparks'
+        kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
+      dockerfile_inline: |
+        FROM docker.io/library/alpine:3.20.2
 
-                FROM "$${REGISTRY}/$${IMAGE}:$${VERSION}"
+        ARG APP_USER
+        ARG LANG
+        ARG LANGUAGE
+        ARG LC_ALL
+        ARG TZ
 
-                ARG APP_USER
-                ARG LANG
-                ARG LANGUAGE
-                ARG LC_ALL
-                ARG TZ
+        ENV APP_USER="$${APP_USER}"
+        ENV TZ="$${TZ}"
 
-                ENV APP_USER="$${APP_USER}"
-                ENV TZ="$${TZ}"
+        RUN true                                                              \
+          && apk add --no-cache                                               \
+            musl-locales=0.1.0-r1                                             \
+            musl-locales-lang=0.1.0-r1                                        \
+            tzdata=2024b-r0                                                   \
+          && ln                                                               \
+            -s                                                                \
+            "/usr/share/zoneinfo/$${TZ}"                                      \
+            /etc/localtime                                                    \
+          && echo "$${TZ}" > /etc/timezone                                    \
+          && adduser                                                          \
+            -h "/home/$${APP_USER}"                                           \
+            -s /usr/bin/bash                                                  \
+            -S                                                                \
+            "$${APP_USER}"
 
-                RUN true                                                    \
-                    && apk add --no-cache                                   \
-                        musl-locales=0.1.0-r1                               \
-                        musl-locales-lang=0.1.0-r1                          \
-                        tzdata=2024a-r1                                     \
-                    && ln                                                   \
-                        -s                                                  \
-                        "/usr/share/zoneinfo/$${TZ}"                        \
-                        /etc/localtime                                      \
-                    && echo "$${TZ}" > /etc/timezone                        \
-                    && adduser                                              \
-                        -h "/home/$${APP_USER}"                             \
-                        -s /usr/bin/bash                                    \
-                        -S                                                  \
-                        "$${APP_USER}"
+        WORKDIR "/home/$${APP_USER}"
 
-                WORKDIR "/home/$${APP_USER}"
-
-                USER "$${APP_USER}"
+        USER "$${APP_USER}"
 ...
