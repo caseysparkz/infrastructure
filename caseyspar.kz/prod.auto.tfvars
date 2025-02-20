@@ -30,6 +30,12 @@ txt_records = {
 pka_records   = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
 forward_zones = ["cspar.kz"]
 
+## GitHub =====================================================================
+github_owner = "caseysparkz"
+github_repositories = { #                                                       TODO
+  infrastructure = {}
+}
+
 ## Misc. ======================================================================
 root_domain     = "caseyspar.kz"
 ssh_pubkey_path = "~/.ssh/keys/hck.pub"

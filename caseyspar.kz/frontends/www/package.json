@@ -41,8 +41,5 @@
   "bugs": {
     "url": "https://github.com/nusserstudios/tailbliss/issues"
   },
-  "homepage": "https://github.com/nusserstudios/tailbliss",
-  "dependencies": {
-    "eslint": "^8.52.0"
-  }
+  "homepage": "https://github.com/nusserstudios/tailbliss"
 }

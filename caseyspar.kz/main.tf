@@ -1,6 +1,7 @@
 ###############################################################################
 # Main
 #
+
 locals {
   common_tags = {
     terraform = true
@@ -9,8 +10,8 @@ locals {
 }
 
 ## Modules and Outputs ========================================================
-module "artifacts" { # -------------------------------------------------------- S3: Artifacts.
-  source      = "../modules/s3_artifacts"
+module "artifacts" { # -------------------------------------------------------- S3: Artifacts
+  source      = "git::https://github.com/caseysparkz/tfmodules.git//s3_artifacts"
   root_domain = var.root_domain
   common_tags = local.common_tags
 }
@@ -39,8 +40,8 @@ output "artifacts_kms_key_alias" {
   sensitive   = false
 }
 
-module "forward_zones" { # ---------------------------------------------------- Forward zones.
-  source             = "../modules/forward_zones"
+module "forward_zones" { # ---------------------------------------------------- Forward zones
+  source             = "git::https://github.com/caseysparkz/tfmodules.git//forward_zones"
   root_domain        = var.root_domain
   forward_zones      = var.forward_zones
   cloudflare_comment = local.cloudflare_comment
@@ -52,52 +53,46 @@ output "forward_zones_zone_data" {
   sensitive   = false
 }
 
-module "home_caseyspar_kz" { # ------------------------------------------------ home subdomin records.
-  source  = "../modules/cloudflare_dns_zone"
-  zone_id = local.cloudflare_zone_id
+module "home_caseyspar_kz" { # ------------------------------------------------ home.caseyspar.kz DNS records
+  source          = "git::https://github.com/caseysparkz/tfmodules.git//cloudflare_dns_zone"
+  zone_id         = local.cloudflare_zone_id
+  default_comment = local.cloudflare_comment
   dns_records = [
     {
-      name : "protonmail._domainkey.home"
-      value : "protonmail.domainkey.dok2malzbe4elcaifzhg2d6n7z7b63mmmndojsdamrmfzbaro6qfa.domains.proton.ch"
-      type : "CNAME"
-      allow_overwrite : true
+      name  = "protonmail._domainkey.home"
+      value = "protonmail.domainkey.dok2malzbe4elcaifzhg2d6n7z7b63mmmndojsdamrmfzbaro6qfa.domains.proton.ch"
+      type  = "CNAME"
     },
     {
-      name : "protonmail2._domainkey.home"
-      value : "protonmail2.domainkey.dok2malzbe4elcaifzhg2d6n7z7b63mmmndojsdamrmfzbaro6qfa.domains.proton.ch"
-      type : "CNAME"
-      allow_overwrite : true
+      name  = "protonmail2._domainkey.home"
+      value = "protonmail2.domainkey.dok2malzbe4elcaifzhg2d6n7z7b63mmmndojsdamrmfzbaro6qfa.domains.proton.ch"
+      type  = "CNAME"
     },
     {
-      name : "protonmail3._domainkey.home"
-      value : "protonmail3.domainkey.dok2malzbe4elcaifzhg2d6n7z7b63mmmndojsdamrmfzbaro6qfa.domains.proton.ch"
-      type : "CNAME"
-      allow_overwrite : true
+      name  = "protonmail3._domainkey.home"
+      value = "protonmail3.domainkey.dok2malzbe4elcaifzhg2d6n7z7b63mmmndojsdamrmfzbaro6qfa.domains.proton.ch"
+      type  = "CNAME"
     },
     {
-      name : "_dmarc.home"
-      value : "v=DMARC1; adkim=s; aspf=s; fo=1; p=reject; pct=5; rua=mailto:dmarc_rua@caseyspar.kz; ruf=mailto:dmarc_ruf@caseyspar.kz; sp=reject"
-      type : "TXT"
-      allow_overwrite : true
+      name  = "_dmarc.home"
+      value = "v=DMARC1; adkim=s; aspf=s; fo=1; p=reject; pct=5; rua=mailto:dmarc_rua@caseyspar.kz; ruf=mailto:dmarc_ruf@caseyspar.kz; sp=reject"
+      type  = "TXT"
     },
     {
-      name : "home"
-      value : "v=spf1 include:_spf.protonmail.ch -all"
-      type : "TXT"
-      allow_overwrite : true
+      name  = "home"
+      value = "v=spf1 include:_spf.protonmail.ch -all"
+      type  = "TXT"
     },
     {
-      name : "home"
-      value : "protonmail-verification=6ac5ecc9a46a3c1e0ee4138867f9d7041f404f25"
-      type : "TXT"
-      allow_overwrite : true
+      name  = "home"
+      value = "protonmail-verification=6ac5ecc9a46a3c1e0ee4138867f9d7041f404f25"
+      type  = "TXT"
     },
   ]
-  default_comment = local.cloudflare_comment
 }
 
-module "ecr" { # -------------------------------------------------------------- ECR.
-  source             = "../modules/ecr"
+module "ecr" { # -------------------------------------------------------------- ECR
+  source             = "git::https://github.com/caseysparkz/tfmodules.git//ecr"
   root_domain        = var.root_domain
   docker_compose_dir = abspath("./docker_compose")
   common_tags        = local.common_tags
@@ -115,8 +110,8 @@ output "ecr_registry_repository_urls" {
   sensitive   = false
 }
 
-module "www" { # -------------------------------------------------------------- WWW.
-  source             = "../modules/hugo_static_site"
+module "www" { # -------------------------------------------------------------- WWW
+  source             = "git::https://github.com/caseysparkz/tfmodules.git//hugo_static_site"
   root_domain        = var.root_domain
   subdomain          = "www.${var.root_domain}"
   artifact_bucket_id = module.artifacts.s3_bucket_id
