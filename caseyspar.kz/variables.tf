@@ -76,6 +76,25 @@ variable "forward_zones" {
   default     = []
 }
 
+## GitHub =====================================================================
+variable "github_owner" {
+  description = "GitHub account to manage."
+  type        = string
+  sensitive   = true
+}
+
+variable "github_token" {
+  description = "GitHub fine-grained token."
+  type        = string
+  sensitive   = true
+}
+
+variable "github_repositories" {
+  description = "Map of GitHub repositories that should exist in the organization."
+  type        = map(map(string))
+  sensitive   = false
+}
+
 ## Misc. ======================================================================
 variable "root_domain" {
   type        = string

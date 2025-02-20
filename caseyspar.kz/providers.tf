@@ -23,11 +23,15 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 5.0.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.5.0"
+    }
   }
 }
 
 ## Providers ==================================================================
-provider "aws" { #                                                              AWS.
+provider "aws" { #                                                              AWS
   region = var.aws_region
 
   default_tags {
@@ -38,7 +42,12 @@ provider "aws" { #                                                              
   }
 }
 
-provider "cloudflare" { api_token = var.cloudflare_api_token } #                Cloudflare.
+provider "cloudflare" { api_token = var.cloudflare_api_token } #                Cloudflare
+
+provider "github" { #                                                           GitHub
+  token = var.github_token
+  owner = var.github_owner
+}
 
 ## Outputs ====================================================================
 output "aws_region" {
