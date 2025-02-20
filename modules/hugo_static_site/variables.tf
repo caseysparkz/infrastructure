@@ -9,6 +9,12 @@ variable "artifact_bucket_id" {
   sensitive   = false
 }
 
+variable "js_contact_form_template_path" {
+  description = "String contaning the Javascript for the contact form Lambda backend."
+  type        = string
+  sensitive   = false
+}
+
 # Misc. =======================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."

@@ -11,7 +11,6 @@
 #         Always remember to ask an adult for help when using scissors.
 
 locals {
-  contact_form_js_template = "${var.hugo_dir}/static/js/contactForm.js.tftpl"
   build_hash = sha256(join(
     "",
     [
@@ -30,10 +29,10 @@ locals {
 
 # Resources ===================================================================
 resource "local_file" "contact_form_js" {
-  filename        = replace(local.contact_form_js_template, ".tftpl", "")
+  filename        = replace(var.js_contact_form_template_path, ".tftpl", "")
   file_permission = "0770"
   content = templatefile(
-    local.contact_form_js_template,
+    var.js_contact_form_template_path,
     { lambda_url = aws_lambda_function_url.contact_form.function_url }
   )
 }
