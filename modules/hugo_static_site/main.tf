@@ -7,6 +7,7 @@ locals {
     default_recipient = "form@${var.root_domain}"
     default_sender    = "form@${var.subdomain}"
   }
+  reverse_dns_subdomain_dir = join(".", reverse(split(".", var.subdomain)))
 }
 
 # Data ========================================================================
