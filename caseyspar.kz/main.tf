@@ -11,7 +11,7 @@ locals {
 
 ## Modules and Outputs ========================================================
 module "artifacts" { # -------------------------------------------------------- S3: Artifacts
-  source      = "git::https://github.com/caseysparkz/tfmodules.git//s3_artifacts"
+  source      = "../modules/s3_artifacts"
   root_domain = var.root_domain
   common_tags = local.common_tags
 }
@@ -41,7 +41,7 @@ output "artifacts_kms_key_alias" {
 }
 
 module "forward_zones" { # ---------------------------------------------------- Forward zones
-  source             = "git::https://github.com/caseysparkz/tfmodules.git//forward_zones"
+  source             = "../modules/forward_zones"
   root_domain        = var.root_domain
   forward_zones      = var.forward_zones
   cloudflare_comment = local.cloudflare_comment
@@ -54,7 +54,7 @@ output "forward_zones_zone_data" {
 }
 
 module "home_caseyspar_kz" { # ------------------------------------------------ home.caseyspar.kz DNS records
-  source          = "git::https://github.com/caseysparkz/tfmodules.git//cloudflare_dns_zone"
+  source          = "../modules/cloudflare_dns_zone"
   zone_id         = local.cloudflare_zone_id
   default_comment = local.cloudflare_comment
   dns_records = [
@@ -92,7 +92,7 @@ module "home_caseyspar_kz" { # ------------------------------------------------ 
 }
 
 module "ecr" { # -------------------------------------------------------------- ECR
-  source             = "git::https://github.com/caseysparkz/tfmodules.git//ecr"
+  source             = "../modules/ecr"
   root_domain        = var.root_domain
   docker_compose_dir = abspath("./docker_compose")
   common_tags        = local.common_tags
@@ -111,7 +111,7 @@ output "ecr_registry_repository_urls" {
 }
 
 module "www" { # -------------------------------------------------------------- WWW
-  source             = "git::https://github.com/caseysparkz/tfmodules.git//hugo_static_site"
+  source             = "../modules/hugo_static_site"
   root_domain        = var.root_domain
   subdomain          = "www.${var.root_domain}"
   artifact_bucket_id = module.artifacts.s3_bucket_id
