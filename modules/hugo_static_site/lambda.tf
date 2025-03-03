@@ -13,7 +13,7 @@ data "archive_file" "lambda_contact_form" { #                                   
 resource "aws_lambda_function" "contact_form" {
   depends_on       = [aws_s3_object.lambda_contact_form]
   description      = "Python function to send an email via AWS SES."
-  function_name    = "contact_form"
+  function_name    = "${var.subdomain}/contact_form"
   s3_bucket        = var.artifact_bucket_id
   s3_key           = aws_s3_object.lambda_contact_form.key
   runtime          = "python3.10"
