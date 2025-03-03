@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "lambda_logging" {
 # Resources ===================================================================
 # IAM role --------------------------------------------------------------------
 resource "aws_iam_role" "lambda_contact_form" {
-  name               = "${var.subdomain}-lambda_contact_form"
+  name               = "${local.reverse_dns_subdomain_dir}-lambda_contact_form"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
@@ -74,13 +74,13 @@ resource "aws_iam_policy" "lambda_ses_sendemail" {
 }
 
 resource "aws_iam_policy" "lambda_kms_decrypt" {
-  name        = "${var.subdomain}/lambda_kms_decrypt"
+  name        = "${local.reverse_dns_subdomain_dir}-lambda_kms_decrypt"
   description = "Policy for Lambda to use KMS keys with S3 artifacts bucket."
   policy      = data.aws_iam_policy_document.lambda_kms_decrypt.json
 }
 
 resource "aws_iam_policy" "lambda_logging" {
-  name        = "${var.subdomain}/contact/lambda_logging"
+  name        = "${local.reverse_dns_subdomain_dir}-contact-lambda_logging"
   description = "IAM policy for logging from a Lambda function."
   policy      = data.aws_iam_policy_document.lambda_logging.json
 }
