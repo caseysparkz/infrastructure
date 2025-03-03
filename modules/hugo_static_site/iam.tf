@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "lambda_logging" {
 # Resources ===================================================================
 # IAM role --------------------------------------------------------------------
 resource "aws_iam_role" "lambda_contact_form" {
-  name               = "${var.sub_domain}-lambda_contact_form"
+  name               = "${var.subdomain}-lambda_contact_form"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
