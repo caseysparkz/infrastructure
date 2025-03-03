@@ -68,7 +68,7 @@ resource "aws_iam_role" "lambda_contact_form" {
 
 # Policies --------------------------------------------------------------------
 resource "aws_iam_policy" "lambda_ses_sendemail" {
-  name        = "lambda_ses_sendemail"
+  name        = "${local.reverse_dns_subdomain_dir}-lambda-ses-sendemail"
   description = "Policy for Lambda to send emails via AWS SES."
   policy      = data.aws_iam_policy_document.lambda_ses_sendemail.json
 }
