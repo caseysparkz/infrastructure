@@ -66,5 +66,3 @@ updates:
       timezone: 'America/Los_Angeles'
     commit-message:
       prefix: 'chore(dependabot)'
-...
-
