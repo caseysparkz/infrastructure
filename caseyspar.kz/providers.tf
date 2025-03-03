@@ -2,6 +2,10 @@
 # Terraform and Providers
 #
 
+locals {
+  aws_account_id = data.aws_caller_identity.current.account_id
+}
+
 ## Terraform ==================================================================
 terraform {
   required_version = "~> 1.10.5"
@@ -21,7 +25,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 5.0.0"
+      version = "~> 5.1.0"
     }
     github = {
       source  = "integrations/github"
@@ -42,11 +46,32 @@ provider "aws" { #                                                              
   }
 }
 
-provider "cloudflare" { api_token = var.cloudflare_api_token } #                Cloudflare
+provider "cloudflare" { #                                                       Cloudflare
+  api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string
+}
 
 provider "github" { #                                                           GitHub
   token = var.github_token
   owner = var.github_owner
+}
+
+## Data =======================================================================
+data "aws_caller_identity" "current" {} #                                       AWS
+
+data "aws_secretsmanager_secret" "cloudflare_token" {
+  arn = "arn:aws:secretsmanager:${var.aws_region}:${local.aws_account_id}:secret:cloudflare/api_token"
+}
+
+data "aws_secretsmanager_secret_version" "cloudflare_token" {
+  secret_id = data.aws_secretsmanager_secret.cloudflare_token.id
+}
+
+data "aws_secretsmanager_secret" "github_token" {
+  arn = "arn:aws:secretsmanager:${var.aws_region}:${local.aws_account_id}:secret:github/api_token"
+}
+
+data "aws_secretsmanager_secret_version" "github_token" {
+  secret_id = data.aws_secretsmanager_secret.github_token.id
 }
 
 ## Outputs ====================================================================

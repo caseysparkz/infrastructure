@@ -10,6 +10,6 @@ resource "aws_kms_key" "artifacts" {
 }
 
 resource "aws_kms_alias" "artifacts" {
-  name          = "alias/s3/artifacts"
+  name          = "alias/s3/${local.reverse_dns_domain_dir}-artifacts"
   target_key_id = aws_kms_key.artifacts.key_id
 }

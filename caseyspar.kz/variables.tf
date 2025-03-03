@@ -28,12 +28,6 @@ variable "ecr_repository_names" {
 }
 
 ## Cloudflare =================================================================
-variable "cloudflare_api_token" {
-  type        = string
-  description = "API token for Cloudflare authentication."
-  sensitive   = true
-}
-
 variable "mx_servers" {
   type        = map(string)
   description = "MX servers for root domain. Syntax: {server: priority}."
@@ -79,12 +73,6 @@ variable "forward_zones" {
 ## GitHub =====================================================================
 variable "github_owner" {
   description = "GitHub account to manage."
-  type        = string
-  sensitive   = true
-}
-
-variable "github_token" {
-  description = "GitHub fine-grained token."
   type        = string
   sensitive   = true
 }

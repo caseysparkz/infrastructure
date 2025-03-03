@@ -111,13 +111,14 @@ output "ecr_registry_repository_urls" {
 }
 
 module "www" { # -------------------------------------------------------------- WWW
-  source             = "../modules/hugo_static_site"
-  root_domain        = var.root_domain
-  subdomain          = "www.${var.root_domain}"
-  artifact_bucket_id = module.artifacts.s3_bucket_id
-  site_title         = var.root_domain
-  hugo_dir           = abspath("frontends/www")
-  common_tags        = local.common_tags
+  source                        = "../modules/hugo_static_site"
+  root_domain                   = var.root_domain
+  subdomain                     = "www.${var.root_domain}"
+  artifact_bucket_id            = module.artifacts.s3_bucket_id
+  site_title                    = var.root_domain
+  hugo_dir                      = abspath("frontends/www")
+  js_contact_form_template_path = abspath("frontends/www/static/js/contactForm.js.tftpl")
+  common_tags                   = local.common_tags
 }
 
 output "www_s3_bucket_endpoint" {
