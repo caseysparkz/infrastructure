@@ -8,9 +8,9 @@ locals {
 
 ## Terraform ==================================================================
 terraform {
-  required_version = "~> 1.10.5"
+  required_version = ">= 1.10.5, < 2.0.0"
 
-  backend "s3" { #                                                              ./modules/tf_backend_s3
+  backend "s3" { #                                                              ./modules/tfstate_backend
     bucket       = "caseyspar.kz-tfstate"
     key          = "caseyspar.kz.tfstate"
     region       = "us-west-2"
@@ -21,7 +21,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.89.0"
+      version = "~> 5.91.0"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
