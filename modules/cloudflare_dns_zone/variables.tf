@@ -31,5 +31,4 @@ variable "default_comment" {
   description = "Default comment to apply to all Cloudflare resources."
   type        = string
   sensitive   = false
-  default     = "Terraform managed."
 }

@@ -22,9 +22,7 @@ resource "aws_ecr_repository" "ecr" {
     kms_key         = aws_kms_key.ecr.arn
   }
 
-  image_scanning_configuration {
-    scan_on_push = true
-  }
+  image_scanning_configuration { scan_on_push = true }
 }
 
 # Outputs =====================================================================

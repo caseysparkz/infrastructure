@@ -15,9 +15,7 @@ resource "null_resource" "docker_compose_build" { #                             
     aws_ecr_repository.ecr,
     null_resource.docker_login
   ]
-  triggers = {
-    filehash = filesha1("${var.docker_compose_dir}/${each.key}") #              If dockerfile has changed.
-  }
+  triggers = { filehash = filesha1("${var.docker_compose_dir}/${each.key}") } # If dockerfile has changed.
 
   provisioner "local-exec" {
     working_dir = var.docker_compose_dir

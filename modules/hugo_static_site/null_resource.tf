@@ -38,9 +38,7 @@ resource "local_file" "contact_form_js" {
 }
 
 resource "null_resource" "npm_install" {
-  triggers = {
-    build_hash = local.node_modules_hash
-  }
+  triggers = { build_hash = local.node_modules_hash }
 
   provisioner "local-exec" {
     command     = "npm install"
@@ -73,6 +71,5 @@ resource "null_resource" "deploy_site" {
 
   provisioner "local-exec" {
     command = "aws s3 sync --delete ${var.hugo_dir}/public/ s3://${aws_s3_bucket.www_site.id}/"
-    #quiet       = true
   }
 }
