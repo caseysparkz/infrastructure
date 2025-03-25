@@ -1,49 +1,47 @@
----
-name: 'Validate Dockerfiles'
 # Author:       Casey Sparks
 # Date:         September 03, 2024
 # Description:  Lint all Dockerfiles with Hadolint.
-
+---
+name: "Validate Dockerfiles"
 on:
   pull_request:
-    branches: ['main']
+    branches: ["main"]
     paths:
-      - '**/*Dockerfile'
-      - '**/*docker-compose.yml'
+      - "**/*Dockerfile"
+      - "**/*docker-compose.yml"
 jobs:
   hadolint:
-    name: 'Hadolint'
-    runs-on: 'ubuntu-latest'
+    name: "Hadolint"
+    runs-on: "ubuntu-latest"
     steps:
-      - name: 'Checkout'                                                        # v4.2.2
-        uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+      - name: "Checkout"
+        uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
         with:
           fetch-depth: 0
 
-      - name: 'Lint Dockerfiles'                                                # v3.1.0
-        uses: 'hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf'
+      - name: "Lint Dockerfiles"
+        uses: "hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf"
         with:
-          dockerfile: '*Dockerfile'
+          dockerfile: "*Dockerfile"
           recursive: true
           no-color: true
           no-fail: false
-          format: 'tty'
+          format: "tty"
 
 # docker_compose_lint:                                                          # TODO
-#   name: 'docker-compose lint'
-#   runs-on: 'ubuntu-latest'
+#   name: "docker-compose lint"
+#   runs-on: "ubuntu-latest"
 #   steps:
-#     - name: 'Checkout'                                                        # v4.2.2
-#       uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+#     - name: "Checkout"
+#       uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
 #       with:
 #         fetch-depth: 0
 
 # docker_compose_push:                                                          # TODO
-#   name: 'Push Docker images to ECR'
-#   runs-on: 'ubuntu-latest'
+#   name: "Push Docker images to ECR"
+#   runs-on: "ubuntu-latest"
 #   steps:
-#     - name: 'Checkout'                                                        # v4.2.2
-#       uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+#     - name: "Checkout"
+#       uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
 #       with:
 #         fetch-depth: 0
-...

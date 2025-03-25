@@ -1,76 +1,73 @@
----
-name: 'Validate Python code'
 # Author:       Casey Sparks
 # Date:         November 15, 2023
 # Description:  Lint all Python files with both Pylint and Flake8.
-
+---
+name: "Validate Python code"
 on:
   pull_request:
-    branches: ['main']
-    paths: ['**/*.py']
+    branches: ["main"]
+    paths: ["**/*.py"]
 env:
-  PY_VER: '3.11'
+  PY_VER: "3.11"
   PY_MAX_LINES: 120
 jobs:
   flake8:
-    name: 'flake8'
-    runs-on: 'ubuntu-latest'
+    name: "flake8"
+    runs-on: "ubuntu-latest"
     steps:
-      - name: 'Checkout'                                                        # v4.2.2
-        uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+      - name: "Checkout"
+        uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
         with:
           fetch-depth: 0
 
-      - name: 'Get changed files'                                               # v45.0.3
-        id: 'changed_files'
-        uses: 'tj-actions/changed-files@c3a1bb2c992d77180ae65be6ae6c166cf40f857c'
+      - name: "Get changed files"
+        id: "changed_files"
+        uses: "tj-actions/changed-files@c3a1bb2c992d77180ae65be6ae6c166cf40f857c"
         with:
-          files: '**.py'
+          files: "**.py"
 
-      - name: 'Set up Python environment'                                       # v5.3.0
-        uses: 'actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b'
+      - name: "Set up Python environment"
+        uses: "actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b"
         with:
-          python-version: '${{ env.PY_VER }}'
+          python-version: "${{ env.PY_VER }}"
 
-      - name: 'flake8 lint'                                                     # v2.3.0
-        uses: 'py-actions/flake8@84ec6726560b6d5bd68f2a5bed83d62b52bb50ba'
+      - name: "flake8 lint"
+        uses: "py-actions/flake8@84ec6726560b6d5bd68f2a5bed83d62b52bb50ba"
         with:
-          max-line-length: '${{ env.PY_MAX_LINES }}'
-          path: '${{ steps.changed_files.outputs.all_changed_files }}'
+          max-line-length: "${{ env.PY_MAX_LINES }}"
+          path: "${{ steps.changed_files.outputs.all_changed_files }}"
 
   pylint:
-    name: 'pylint'
-    runs-on: 'ubuntu-latest'
+    name: "pylint"
+    runs-on: "ubuntu-latest"
     steps:
-      - name: 'Checkout'                                                        # v4.2.2
-        uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+      - name: "Checkout"
+        uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
         with:
           fetch-depth: 0
 
-      - name: 'Set up Python environment'                                       # v5.3.0
-        uses: 'actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b'
+      - name: "Set up Python environment"
+        uses: "actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b"
         with:
-          python-version: '${{ env.PY_VER }}'
+          python-version: "${{ env.PY_VER }}"
 
-      - name: 'Install dependencies'
-        run: |
-          for FILE in $(find ./ -name requirements.txt -type f); do
-            python -m pip install                                           \
-              --no-cache-dir                                                \
-              --requirement                                                 \
-              "${FILE}"
-          done
+      - name: "Install dependencies"
+        run: >
+          find "${PWD}"
+            -name requirements.txt
+            -type f
+            -exec python -m pip install --no-cache-dir --requirement {} \;
 
-      - name: 'Install PyLint'
-        run: 'python -m pip install pylint'
+      - name: "Install PyLint"
+        run: "python -m pip install pylint"
 
-      - name: 'Get changed files'                                               # v45.0.3
-        id: 'changed_files'
-        uses: 'tj-actions/changed-files@c3a1bb2c992d77180ae65be6ae6c166cf40f857c'
+      - name: "Get changed files"
+        id: "changed_files"
+        uses: "tj-actions/changed-files@c3a1bb2c992d77180ae65be6ae6c166cf40f857c"
         with:
-          files: '**.py'
+          files: "**.py"
 
-      - name: 'Lint Python scripts with PyLint'
+      - name: "Lint Python scripts with PyLint"
         run: >
           pylint
             --recursive yes
@@ -79,41 +76,39 @@ jobs:
             ${{ steps.changed_files.outputs.all_changed_files }}
 
 # ruff:
-#   name: 'ruff format --check'
-#   runs-on: 'ubuntu-latest'
+#   name: "ruff format --check"
+#   runs-on: "ubuntu-latest"
 #   steps:
-#     - name: 'Checkout'                                                        # v4.2.2
-#       uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+#     - name: "Checkout"
+#       uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
 #       with:
 #         fetch-depth: 0
 
-#     - name: 'Reformat all Python code'                                        # v1.1.1
-#       id: 'ruff'
-#       uses: 'astral-sh/ruff-action@d0a0e814ec17e92d33be7d24dd922b479f1bcd38'
+#     - name: "Reformat all Python code"
+#       id: "ruff"
+#       uses: "astral-sh/ruff-action@d0a0e814ec17e92d33be7d24dd922b479f1bcd38"
 #       with:
-#         args: 'format --config .github/workflows/ruff.toml'
-#         changed-files: 'true'
+#         args: "format --config .github/workflows/ruff.toml"
+#         changed-files: "true"
 
-#     - name: 'Get files changed by lint'
-#       run: |
-#         git fetch origin main:main
+#     - name: "Get files changed by lint"
+#       run: "git fetch origin main:main"
 
-#     - name: 'Import PGP identity'                                             # v6.2.0
-#       id: 'import_pgp'
-#       uses: 'crazy-max/ghaction-import-gpg@cb9bde2e2525e640591a934b1fd28eef1dcaf5e5'
+#     - name: "Import PGP identity"
+#       id: "import_pgp"
+#       uses: "crazy-max/ghaction-import-gpg@cb9bde2e2525e640591a934b1fd28eef1dcaf5e5"
 #       with:
-#         gpg_private_key: '${{ secrets.ORG_SIGNING_KEY }}'
-#         passphrase: '${{ secrets.ORG_SIGNING_KEY_PASSPHRASE }}'
+#         gpg_private_key: "${{ secrets.ORG_SIGNING_KEY }}"
+#         passphrase: "${{ secrets.ORG_SIGNING_KEY_PASSPHRASE }}"
 #         git_user_signingkey: true
 #         git_commit_gpgsign: true
 
-#     - name: 'Auto-commit/push changes'                                        # v5.0.1
-#       id: 'auto_commit'
-#       uses: 'stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842'
+#     - name: "Auto-commit/push changes"
+#       id: "auto_commit"
+#       uses: "stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842"
 #       with:
-#         commit_author: '${{ steps.import_pgp.outputs.name }} <${{ steps.import_pgp.outputs.email }}>'
-#         commit_user_email: '${{ steps.import_pgp.outputs.email }}'
-#         commit_user_name: '${{ steps.import_pgp.outputs.name }}'
-#         commit_message: 'style(python): Auto-reformatted Terraform configs'
-#         file_pattern: '*.py'
-...
+#         commit_author: "${{ steps.import_pgp.outputs.name }} <${{ steps.import_pgp.outputs.email }}>"
+#         commit_user_email: "${{ steps.import_pgp.outputs.email }}"
+#         commit_user_name: "${{ steps.import_pgp.outputs.name }}"
+#         commit_message: "style(python): Auto-reformatted Terraform configs"
+#         file_pattern: "*.py"
