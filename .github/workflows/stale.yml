@@ -1,0 +1,32 @@
+# Author:       Casey Sparks
+# Date:         March 25, 2025
+# Description:  Manage stale pull requests.
+# Notes:        Refer to the [documentation](https://github.com/actions/stale).
+---
+name: "Close stale pull requests"
+on:
+  schedule:
+    - cron: "30 1 * * *"
+permissions:
+  contents: "write"                                                             # For delete-branch option
+  issues: "write"
+  pull-requests: "write"
+jobs:
+  stale:
+    name: "Stale"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/stale@5bef64f19d7facfb25b37b414482c7164d639639"  # v9.1.0
+        with:
+          days-before-stale: 14
+          days-before-close: 7
+          stale-pr-label: "stale"
+          remove-stale-when-updated: true
+          labels-to-remove-when-unstale: "stale"
+          delete-branch: false
+          exempt-pr-labels: "bot,dependabot,ignore-stale"
+          stale-pr-message: |
+            This pull request has been open for 14 days with no activity.
+            It will be automatically closed in seven days unless you remove the 'stale' label.
+            Add the 'ignore-stale' label to the pull request to disable future runs of this action.
+          close-pr-message: "This pull request has been closed because it was open for 21 days with no activity."
