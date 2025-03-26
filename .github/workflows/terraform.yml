@@ -7,6 +7,9 @@ on:
   pull_request:
     branches: ["main"]
     paths: ["**/*.tf"]
+  push:
+    branches: ["main"]
+    paths: ["**/*.tf"]
 env:
   TF_VER: "1.11.2"                                                              # Increment to update terraform version
 jobs:
@@ -59,7 +62,7 @@ jobs:
         with:
           terraform_version: "${{ env.TF_VER }}"
 
-      - name: "terraform fmt"
+      - name: "Terraform format"
         run: "terraform fmt --recursive"
 
       - name: "Import PGP identity"
@@ -89,24 +92,20 @@ jobs:
       contents: "read"
       pull-requests: "write"
     steps:
-      - name: "Setup Infracost"
-        uses: "infracost/actions/setup@e9d6e6cd65e168e76b0de50ff9957d2fe8bb1832"
-        with:
-          api-key: "${{ secrets.INFRACOST_API_KEY }}"
-          github-token: "${{ github.token }}"
-
       - name: "Checkout"
         uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
         with:
           fetch-depth: 0
           ref: "${{ github.event.pull_request.base.ref }}"
 
+      - name: "Setup Infracost"
+        uses: "infracost/actions/setup@e9d6e6cd65e168e76b0de50ff9957d2fe8bb1832"
+        with:
+          api-key: "${{ secrets.INFRACOST_API_KEY }}"
+          github-token: "${{ github.token }}"
+
       - name: "Generate Infracost baseline estimate"
-        run: >
-          infracost breakdown
-            --config-file .infracost.yml
-            --format json
-            --out-file /tmp/infracost_base.json
+        run: "infracost breakdown --config-file .infracost.yml --format json --out-file /tmp/infracost_base.json"
 
       - name: "Checkout pull request branch"
         uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
@@ -130,39 +129,86 @@ jobs:
             --github-token ${{ github.token }}
             --behavior hide-and-new
 
-# HOLD ON THIS UNTIL READY FOR CI DEPLOYMENTS =================================
+  terraform_plan:
+    name: "Terraform Plan"
+    if: "${{ github.event_name }} == 'pull_request'"
+    runs-on: "ubuntu-latest"
+    needs: ["infracost_update_pr"]
+    permissions:
+      contents: "write"
+    strategy:
+      matrix:
+        work_dir:
+          - "./caseyspar.kz"
+          - "./tfstate_backend"
+    defaults:
+      run:
+        working-directory: "${{ matrix.work_dir }}"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
+        with:
+          fetch-depth: 1
+
+      - name: "Log in to AWS CLI"
+        uses: "aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722"
+        with:
+          aws-access-key-id: "${{ secrets.AWS_ACCESS_KEY_ID}}"
+          aws-secret-access-key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          aws-region: "${{ secrets.AWS_REGION }}"
+
+      - name: "Set up Terraform"
+        uses: "hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd"
+        with:
+          terraform_version: "${{ env.TF_VER }}"
+
+      - name: "Initialize Terraform."
+        run: "terraform init --upgrade --backend=false"
+
+      - name: "Create Terraform plan"
+        run: "terraform plan --var-file=production.tfvars --out=planfile"
+
+      - name: "Cache Terraform plan"
+        uses: "actions/cache@5a3ec84eff668545956fd18022155c47e93e2684"
+        with:
+          path: "/tmp/production.tfplan"
+          key: "${{ matrix.workdir}}/production.tfplan"
+
+      - name: "Post PR comment"
+        uses: "borchero/terraform-plan-comment@872735c9f574898bcb14478f8d5503dc2bb6895c"
+        with:
+          token: "${{ github.token }}"
+          planfile: "planfile"
+
+# ========================= HOLD UNTIL READY FOR CD ===========================
 # terraform_plan needs to cache the planfile
 # terraform_apply needs to retrieve the planfile from cache and apply it
-
-# terraform_plan:
-#   name: "Terraform Plan"
-#   if: "${{ github.event_name }} == 'pull_request'"
+# -----------------------------------------------------------------------------
+# terraform_apply:
+#   name: "Terraform Apply"
+#   if: "${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/main'"
 #   runs-on: "ubuntu-latest"
-#   needs:
-#     - "terraform_validate"
-#     - "infracost_update_pr"
-#   permissions:
-#     contents: "write"
+#   needs: ["terraform_plan"] #???
 #   strategy:
 #     matrix:
 #       work_dir:
-#         - "./tfstate_backend"
 #         - "./caseyspar.kz"
+#         - "./tfstate_backend"
 #   defaults:
 #     run:
 #       working-directory: "${{ matrix.work_dir }}"
 #   steps:
 #     - name: "Checkout"
 #       uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
-
 #       with:
-#         fetch-depth: 1
-
-#     - name: "Cache runner public IP"
-#       run: "echo 'IP_ADDR=$(curl https://ipinfo.io/ip)' >> ${GITHUB_ENV}"
+#         fetch-depth: 0
 
 #     - name: "Log in to AWS CLI"
-#       run: "echo TODO"
+#       uses: "aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722"
+#       with:
+#         aws-access-key-id: "${{ secrets.AWS_ACCESS_KEY_ID}}"
+#         aws-secret-access-key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+#         aws-region: "${{ secrets.AWS_REGION }}"
 
 #     - name: "Set up Terraform"
 #       uses: "hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd"
@@ -170,49 +216,13 @@ jobs:
 #         terraform_version: "${{ env.TF_VER }}"
 
 #     - name: "Initialize Terraform."
-#       run: "terraform init"
+#       run: "terraform init --upgrade --backend=false"
 
-#     - name: "Create Terraform plan"
-#       run: "terraform plan -out planfile"
-
-#     - name: "Post PR comment"
-#       uses: "borchero/terraform-plan-comment@872735c9f574898bcb14478f8d5503dc2bb6895c"
+#     - name: "Retrieve Terraform plan"
+#       uses: "actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684"
 #       with:
-#         token: "${{ github.token }}"
-#         planfile: "planfile"
+#         path: "/tmp/production.tfplan"
+#         key: "${{ matrix.workdir}}/production.tfplan"
 
-# terraform_apply:
-#   name: "Terraform Apply"
-#   if: "${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/main'"
-#   runs-on: "ubuntu-latest"
-#   needs: ["terraform_validate"]
-#   permissions:
-#     contents: "write"
-#   strategy:
-#     matrix:
-#       work_dir:
-#         - "./tfstate_backend"
-#         - "./caseyspar.kz"
-#   defaults:
-#     run:
-#       working-directory: "${{ matrix.work_dir }}"
-#   steps:
-#     - name: "Checkout"
-#       uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
-#       with:
-#           fetch-depth: 0
-
-#     - name: "Log in to AWS CLI"
-#       run: "echo TODO"
-
-#     - name: "Set up Terraform"
-#       uses: "hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd"
-#       with:
-#         terraform_version: "${{ env.TF_VER }}"
-
-#     - name: "Initialize Terraform"
-#       run: "terraform init"
-
-#     - name: "Apply Terraform configs"
-#       id: "apply"
-#       run: "terraform apply -auto-approve"
+#     - name: "Terraform apply"
+#       run: "terraform apply --var-file=production.tfvars --auto-approve /tmp/production.tfplan"
