@@ -16,7 +16,7 @@ jobs:
 
       - name: "Tag commit"
         id: "ccv"
-        uses: "smix/ccv@7318e2f25a52dcd550e75384b84983973251a1f8"
+        uses: "smlx/ccv@7318e2f25a52dcd550e75384b84983973251a1f8"
         with:
           write-tag: true
 
