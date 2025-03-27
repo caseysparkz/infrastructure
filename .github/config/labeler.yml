@@ -1,76 +1,75 @@
----
 # Author:       Casey Sparks
 # Date:         November 13, 2024
 # Description:  Config file for the pull request labeler action.
 # Notes:        Read the [docs](https://github.com/actions/labeler) for configuration settings.
-
+---
 # PR type labels
-bot:
-  - head-branch: ['^dependabot/*']
+bot: [head-branch: ["^dependabot/*"]]
 chore:
   - head-branch:
-    - '^chore*'
-    - '^dependabot*'
-feature:
-  - head-branch: ['^feat*']
-fix:
-  - head-branch: ['^fix*']
+      - "^chore*"
+      - "^dependabot*"
+feature: [head-branch: ["^feat*"]]
+fix: [head-branch: ["^fix*"]]
 
 # Filetype/language labels
 ansible:
   - changed-files:
-    - any-glob-to-any-file: ['ansible/**']
+      - any-glob-to-any-file: ["ansible/**"]
 ci: &ci
   - changed-files:
-    - any-glob-to-any-file:
-      - '.github/workflows/*.yml'
-      - '.github/config/*'
-codeowners: 
+      - any-glob-to-any-file:
+          - ".github/workflows/*.yml"
+          - ".github/config/*"
+codeowners:
   - changed-files:
-    - any-glob-to-any-file: ['./github/CODEOWNERS']
-dependabot: 
+      - any-glob-to-any-file: ["./github/CODEOWNERS"]
+dependabot:
   - changed-files:
-    - any-glob-to-any-file: ['./github/dependabot.yml']
+      - any-glob-to-any-file: ["./github/dependabot.yml"]
 docker:
   - changed-files:
-    - any-glob-to-any-file:
-      - 'docker/**/*Dockerfile'
-      - 'docker/**/*docker-compose.yml'
+      - any-glob-to-any-file:
+          - "docker/**/*Dockerfile"
+          - "docker/**/*docker-compose.yml"
 documentation:
   - changed-files:
-    - any-glob-to-any-file:
-      - '**/*.md'
-      - '**/doc/**'
-      - '**/docs/**'
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "**/doc/**"
+          - "**/docs/**"
 git:
   - changed-files:
-    - any-glob-to-any-file:
-      - '**/.gitignore'
-      - '.git*'
-      - '.gitattributes'
-      - '.gitmodules'
+      - any-glob-to-any-file:
+          - "**/.gitignore"
+          - ".git*"
+          - ".gitattributes"
+          - ".gitmodules"
 github:
   - changed-files:
-    - any-glob-to-any-file: ['.github/**']
+      - any-glob-to-any-file: [".github/**"]
 intune:
   - changed-files:
-    - any-glob-to-any-file: ['intune/**']
+      - any-glob-to-any-file: ["intune/**"]
+javascript:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.js"]
 powershell:
   - changed-files:
-    - any-glob-to-any-file: ['**/*.ps1']
+      - any-glob-to-any-file: ["**/*.ps1"]
 python:
   - changed-files:
-    - any-glob-to-any-file: ['**/*.py']
+      - any-glob-to-any-file: ["**/*.py"]
 shell:
   - changed-files:
-    - any-glob-to-any-file:
-      - '**/*.bash'
-      - '**/*.rsc'
-      - '**/*.sh'
+      - any-glob-to-any-file:
+          - "**/*.bash"
+          - "**/*.rsc"
+          - "**/*.sh"
 terraform:
   - changed-files:
-    - any-glob-to-any-file:
-      - '**/*.hcl'
-      - '**/*.tf'
-      - 'terraform/**'
-...
+      - any-glob-to-any-file:
+          - "**/*.hcl"
+          - "**/*.tf"
+          - "**/*.tftpl"
+          - "terraform/**"

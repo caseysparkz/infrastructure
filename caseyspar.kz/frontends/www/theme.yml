@@ -1,37 +1,36 @@
 ---
-name: 'TailBliss'
-license: 'Apache-2.0'
-licenselink: 'https://github.com/nusserstudios/tailbliss/blob/main/LICENSE'
+name: "TailBliss"
+license: "Apache-2.0"
+licenselink: "https://github.com/nusserstudios/tailbliss/blob/main/LICENSE"
 description: <
     TailBliss is an Hugo Starter with Tailwind CSS 3.2 and Alpine.js with
     light and dark modes. Submitted for Hacktoberfest 2022.
-homepage: 'https://github.com/nusserstudios/tailbliss'
-demosite: 'https://tailbliss.netlify.app/'
+homepage: "https://github.com/nusserstudios/tailbliss"
+demosite: "https://tailbliss.netlify.app/"
 tags:
-    - 'blog'
-    - 'company'
-    - 'dark'
-    - 'gallery'
-    - 'light'
-    - 'minimal'
-    - 'personal'
-    - 'portfolio'
-    - 'responsive'
-    - 'tailwind'
-    - 'tailwindcss'
+    - "blog"
+    - "company"
+    - "dark"
+    - "gallery"
+    - "light"
+    - "minimal"
+    - "personal"
+    - "portfolio"
+    - "responsive"
+    - "tailwind"
+    - "tailwindcss"
 features:
-    - 'alpinejs'
-    - 'blog'
-    - 'categories'
-    - 'tailwind3'
-    - 'webp'
-min_version: '0.104.0'
+    - "alpinejs"
+    - "blog"
+    - "categories"
+    - "tailwind3"
+    - "webp"
+min_version: "0.104.0"
 author:
-    name: 'Jeremy Nusser'
-    homepage: 'https://nusserstudios.com'
+    name: "Jeremy Nusser"
+    homepage: "https://nusserstudios.com"
 original:
-    name: 'Hugo-Tailwind-3.1'
-    author: '4044ever'
-    homepage: 'https://github.com/4044ever'
-    repo: 'https://github.com/4044ever/Hugo-Tailwind-3.1'
-...
+    name: "Hugo-Tailwind-3.1"
+    author: "4044ever"
+    homepage: "https://github.com/4044ever"
+    repo: "https://github.com/4044ever/Hugo-Tailwind-3.1"

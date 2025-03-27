@@ -1,2 +1,3 @@
+---
 wordCount:
-    other: '{{ .WordCount }} words'
+    other: "{{ .WordCount }} words"

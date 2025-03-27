@@ -1,31 +1,30 @@
-#-*- coding:utf-8 -*-
 # Author:       Casey Sparks
 # Date:         July 31, 2024
-# Description:  Alpine 3.20.2 image.
+# Description:  Alpine 3.20.2
 ---
 services:
   alpine:
-    image: '770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine3:0.0.1'
+    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine3:0.0.1"
     build:
-      context: '.'
-      platforms: ['linux/amd64']
-      network: 'host'
+      context: "."
+      platforms: ["linux/amd64"]
+      network: "host"
       args:
-        APP_USER: 'app'
-        TZ: 'America/Los_Angeles'
-        LANG: 'en_US.UTF8'
-        LANGUAGE: 'en_US.UTF8'
-        LC_ALL: 'en_US.UTF8'
+        APP_USER: "app"
+        TZ: "America/Los_Angeles"
+        LANG: "en_US.UTF8"
+        LANGUAGE: "en_US.UTF8"
+        LC_ALL: "en_US.UTF8"
       labels:
-        kz.caseyspar.registry: '770088062852.dkr.ecr.us-west-2.amazonaws.com'
-        kz.caseyspar.name: 'alpine3'
-        kz.caseyspar.version: '0.0.1'
-        kz.caseyspar.os.name: 'alpine'
-        kz.caseyspar.os.version: '3.20.2'
-        kz.caseyspar.architecture: 'amd64'
-        kz.caseyspar.description: 'Base Alpine 3 image.'
-        kz.caseyspar.maintainer.author.name: 'Casey Sparks'
-        kz.caseyspar.maintainer.author.email: 'docker@caseyspar.kz'
+        kz.caseyspar.registry: "770088062852.dkr.ecr.us-west-2.amazonaws.com"
+        kz.caseyspar.name: "alpine3"
+        kz.caseyspar.version: "0.0.1"
+        kz.caseyspar.os.name: "alpine"
+        kz.caseyspar.os.version: "3.20.2"
+        kz.caseyspar.architecture: "amd64"
+        kz.caseyspar.description: "Base Alpine 3 image."
+        kz.caseyspar.maintainer.author.name: "Casey Sparks"
+        kz.caseyspar.maintainer.author.email: "docker@caseyspar.kz"
       dockerfile_inline: |
         FROM docker.io/library/alpine:3.20.2
 
@@ -57,4 +56,3 @@ services:
         WORKDIR "/home/$${APP_USER}"
 
         USER "$${APP_USER}"
-...

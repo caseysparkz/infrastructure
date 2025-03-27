@@ -1,136 +1,137 @@
+# Author:       Casey Sparks
+# Date:         March 27, 2025
+# Description:  Hugo configuration
 ---
 # b6754cb7-a796-497d-bb3e-2eeb62ea7169
-baseURL: 'https://www.caseyspar.kz'
-title: 'caseyspar.kz'
-languageCode: 'en-us'
-DefaultContentLanguage: 'en'
+baseURL: "https://www.caseyspar.kz"
+title: "caseyspar.kz"
+languageCode: "en-us"
+DefaultContentLanguage: "en"
 enableEmoji: false
 enableGitInfo: true
 enableRobotsTXT: true
 canonifyURLs: true
 #paginate: 12
-darkmode_js: ['assets/js/darkmode.js']
+darkmode_js: ["assets/js/darkmode.js"]
 enableInlineShortcodes: true
 params:
-    author: 'Casey Sparks'
-    authorimage: '../assets/images/global/caseysparkz.jpg'
-    og_image: '/images/tailbliss-cover.png'
-    moto: 'Enthusiast.'
-    description: ''
-    disable_theme_toggle: false
-    disable_stay_uptodate: true
-    p1:
-        heading: 'Mission Statement???'
-        image: 'images/pages/subhero.jpeg'
-        content:
-            - text: 'idk man, probably:'
-            - text: '1. Replace the boilerplate Tailwinds artifacts.'
-            - text: '2. Figure out what to write here.'
-            - text: '3. Stay posting.'
-    # p2:
-    #     heading: ''
-    #     image: ''
-    #     content: [text: '']
-    # p3:
-    #     heading: ''
-    #     image: ''
-    #     content: [text: '']
-    p4:
-        heading: 'From the blog'
-        content: [text: "Mostly just what music I'm listening to. Sometimes code or case studies."]
+  author: "Casey Sparks"
+  authorimage: "../assets/images/global/caseysparkz.jpg"
+  og_image: "/images/tailbliss-cover.png"
+  moto: "Enthusiast."
+  description: ""
+  disable_theme_toggle: false
+  disable_stay_uptodate: true
+  p1:
+    heading: "Mission Statement???"
+    image: "images/pages/subhero.jpeg"
+    content:
+      - text: "idk man, probably:"
+      - text: "1. Replace the boilerplate Tailwinds artifacts."
+      - text: "2. Figure out what to write here."
+      - text: "3. Stay posting."
+  # p2:
+  #   heading: ""
+  #   image: ""
+  #   content: [text: ""]
+  # p3:
+  #   heading: ""
+  #   image: ""
+  #   content: [text: ""]
+  p4:
+    heading: "From the blog"
+    content: [text: "Mostly just what music I'm listening to. Sometimes code or case studies."]
 menu:
-    main:
-        - identifier: 'resume'
-          name: 'Resume'
-          pre: 'dropdown'
-          weight: 01
-        - identifier: 'blog'
-          name: 'Blog'
-          pre: 'dropdown'
-          weight: 02
-        - identifier: 'misc'
-          pre: 'dropdown'
-          name: 'Misc.'
-          url: '/misc/'
-          weight: 03
-        - identifier: 'social'
-          pre: 'dropdown'
-          name: 'Social'
-          url: '/social/'
-          weight: 04
-        - identifier: 'about'
-          name: 'About'
-          url: '/about/'
-          weight: 05
-        - identifier: 'contact'
-          name: 'Contact'
-          url: '/contact/'
-          weight: 99
-    resume:
-        - identifier: 'resume_html'
-          name: 'HTML'
-          url: '/resume/casey_sparks'
-          weight: 01
-        - identifier: 'resume_pdf'
-          name: 'PDF'
-          url: '/resume/casey_sparks.pdf'
-          weight: 02
-    blog:
-        - identifier: 'code'
-          name: 'Code'
-          url: '/tags/code/'
-          weight: 01
-        - identifier: 'music'
-          name: 'Music'
-          url: '/tags/music/'
-          weight: 02
-    misc:
-        - identifier: 'intergalactic_observer'
-          name: 'The Intergalactic Observer'
-          url: '/intergalactic_observer/'
-          weight: 01
-    social:
-        - identifier: 'github'
-          name: 'Github'
-          url: 'https://github.com/caseysparkz'
-          weight: 01
-        - identifier: 'linkedin'
-          name: 'LinkedIn'
-          url: 'https://linkedin.com/in/caseysparkz'
-          weight: 02
-    footer:
-        - identifier: 'about'
-          name: 'About'
-          url: '/about/'
-          weight: 01
-        - identifier: 'contact'
-          name: 'Contact'
-          url: '/contact/'
-          weight: 99
+  main:
+    - identifier: "resume"
+      name: "Resume"
+      pre: "dropdown"
+      weight: 01
+    - identifier: "blog"
+      name: "Blog"
+      pre: "dropdown"
+      weight: 02
+    - identifier: "misc"
+      pre: "dropdown"
+      name: "Misc."
+      url: "/misc/"
+      weight: 03
+    - identifier: "social"
+      pre: "dropdown"
+      name: "Social"
+      url: "/social/"
+      weight: 04
+    - identifier: "about"
+      name: "About"
+      url: "/about/"
+      weight: 05
+    - identifier: "contact"
+      name: "Contact"
+      url: "/contact/"
+      weight: 99
+  resume:
+    - identifier: "resume_html"
+      name: "HTML"
+      url: "/resume/casey_sparks"
+      weight: 01
+    - identifier: "resume_pdf"
+      name: "PDF"
+      url: "/resume/casey_sparks.pdf"
+      weight: 02
+  blog:
+    - identifier: "code"
+      name: "Code"
+      url: "/tags/code/"
+      weight: 01
+    - identifier: "music"
+      name: "Music"
+      url: "/tags/music/"
+      weight: 02
+  misc:
+    - identifier: "intergalactic_observer"
+      name: "The Intergalactic Observer"
+      url: "/intergalactic_observer/"
+      weight: 01
+  social:
+    - identifier: "github"
+      name: "Github"
+      url: "https://github.com/caseysparkz"
+      weight: 01
+    - identifier: "linkedin"
+      name: "LinkedIn"
+      url: "https://linkedin.com/in/caseysparkz"
+      weight: 02
+  footer:
+    - identifier: "about"
+      name: "About"
+      url: "/about/"
+      weight: 01
+    - identifier: "contact"
+      name: "Contact"
+      url: "/contact/"
+      weight: 99
 markup:
-    goldmark:
-        renderer:
-            unsafe: true                                                        # Allow external URLs.
+  goldmark:
+    renderer:
+      unsafe: true                                                              # Allow external URLs
 taxonomies:
-    category: 'Categories'
-    tag: 'Tags'
+  category: "Categories"
+  tag: "Tags"
 privacy:
-    disqus:
-        disable: true
-    googleAnalytics:
-        disable: true
-    instagram:
-        disable: true
-    twitter:
-        disable: true
-    vimeo:
-        disable: true
-    youtube:
-        disable: true
+  disqus:
+    disable: true
+  googleAnalytics:
+    disable: true
+  instagram:
+    disable: true
+  twitter:
+    disable: true
+  vimeo:
+    disable: true
+  youtube:
+    disable: true
 module:
-    hugoVersion:
-        extended: true
-        min: '0.125.7'
-staticDir:
-    - 'static'
-...
+  hugoVersion:
+    extended: true
+    min: "0.125.7"
+staticDir: ["static"]
