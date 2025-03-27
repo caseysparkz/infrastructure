@@ -1,68 +1,107 @@
 ---
-version: 2
+version: "2"
 updates:
-  - package-ecosystem: 'docker'                                                 # docker
-    directory: 'caseysparkz/docker_compose/'
-    rebase-strategy: 'auto'
-    reviewers: ['caseysparkz']
-    target-branch: 'main'
+  - package-ecosystem: "docker"                                                 # docker
+    directory: "."
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
     schedule:
-      interval: 'weekly'
-      day: 'friday'
-      time: '16:45'
-      timezone: 'America/Los_Angeles'
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
     commit-message:
-      prefix: 'chore(dependabot)'
+      prefix: "chore(docker)"
 
-  - package-ecosystem: 'gitsubmodule'                                           # git submodule
-    directory: '.'
-    rebase-strategy: 'auto'
-    reviewers: ['caseysparkz']
-    target-branch: 'main'
+  - package-ecosystem: "docker-compose"                                         # docker-compose
+    directory: "."
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
     schedule:
-      interval: 'weekly'
-      day: 'friday'
-      time: '16:45'
-      timezone: 'America/Los_Angeles'
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
     commit-message:
-      prefix: 'chore(dependabot)'
+      prefix: "chore(docker-compose)"
 
-  - package-ecosystem: 'github-actions'                                         # github-actions
-    directory: '.github/workflows'
-    rebase-strategy: 'auto'
-    reviewers: ['caseysparkz']
-    target-branch: 'main'
+  - package-ecosystem: "github-actions"                                         # github-actions
+    directory: ".github/workflows"
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
     schedule:
-      interval: 'weekly'
-      day: 'friday'
-      time: '16:45'
-      timezone: 'America/Los_Angeles'
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
     commit-message:
-      prefix: 'chore(dependabot)'
+      prefix: "chore(github-actions)"
 
-  - package-ecosystem: 'pip'                                                    # pip
-    directory: '.'
-    rebase-strategy: 'auto'
-    reviewers: ['caseysparkz']
-    target-branch: 'main'
-    versioning-strategy: 'increase-if-necessary'
+  - package-ecosystem: "gitsubmodule"                                           # git submodule
+    directory: "."
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
     schedule:
-      interval: 'weekly'
-      day: 'friday'
-      time: '16:45'
-      timezone: 'America/Los_Angeles'
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
     commit-message:
-      prefix: 'chore(dependabot)'
+      prefix: "chore(gitsubmodule)"
 
-  - package-ecosystem: 'terraform'                                              # terraform
-    directory: '.'
-    rebase-strategy: 'auto'
-    reviewers: ['caseysparkz']
-    target-branch: 'main'
+  - package-ecosystem: "gomod"                                                  # Go modules
+    directory: "."
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
     schedule:
-      interval: 'weekly'
-      day: 'friday'
-      time: '16:45'
-      timezone: 'America/Los_Angeles'
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
     commit-message:
-      prefix: 'chore(dependabot)'
+      prefix: "chore(go-module)"
+
+  - package-ecosystem: "npm"                                                    # NPM/Yarn
+    directory: "."
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
+    commit-message:
+      prefix: "chore(npm-yarn)"
+
+  - package-ecosystem: "pip"                                                    # pip
+    directory: "."
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
+    versioning-strategy: "increase-if-necessary"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
+    commit-message:
+      prefix: "chore(python-pip)"
+
+  - package-ecosystem: "terraform"                                              # terraform
+    directory: "."
+    rebase-strategy: "auto"
+    reviewers: ["caseysparkz"]
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:45"
+      timezone: "America/Los_Angeles"
+    commit-message:
+      prefix: "chore(terraform)"
