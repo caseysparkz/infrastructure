@@ -18,12 +18,6 @@ jobs:
         id: "ccv"
         uses: "smlx/ccv@7318e2f25a52dcd550e75384b84983973251a1f8"
         with:
-          write-tag: false
-
-      - name: "Tag commit"
-        if: "${{ steps.ccv.outputs.new-tag }}"
-        uses: "smlx/ccv@7318e2f25a52dcd550e75384b84983973251a1f8"
-        with:
           write-tag: true
 
       - name: "Echo changes to console"
