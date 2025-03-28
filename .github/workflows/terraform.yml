@@ -179,7 +179,7 @@ jobs:
           key: "${{ matrix.workdir}}/production.tfplan"
 
       - name: "Post PR comment"
-        uses: "borchero/terraform-plan-comment@872735c9f574898bcb14478f8d5503dc2bb6895c"
+        uses: "borchero/terraform-plan-comment@3399d8dbae8b05185e815e02361ede2949cd99c4"
         with:
           token: "${{ github.token }}"
           planfile: "planfile"
