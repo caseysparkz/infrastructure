@@ -39,7 +39,7 @@ jobs:
           terraform_version: "${{ env.TF_VER }}"
 
       - name: "Initialize Terraform"
-        run: "terraform init --upgrade --backend=false"
+        run: "terraform init --upgrade --backend=false || terraform providers && exit 1"
 
       - name: "Validate Terraform configs."
         run: "terraform validate"
@@ -167,7 +167,7 @@ jobs:
           terraform_version: "${{ env.TF_VER }}"
 
       - name: "Initialize Terraform."
-        run: "terraform init --upgrade --backend=false"
+        run: "terraform init --upgrade --backend=false || terraform providers && exit 1"
 
       - name: "Create Terraform plan"
         run: "terraform plan --var-file=production.tfvars --out=planfile"
@@ -220,7 +220,7 @@ jobs:
 #         terraform_version: "${{ env.TF_VER }}"
 
 #     - name: "Initialize Terraform."
-#       run: "terraform init --upgrade --backend=false"
+#       run: "terraform init --upgrade --backend=false || terraform providers && exit 1"
 
 #     - name: "Retrieve Terraform plan"
 #       uses: "actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684"
