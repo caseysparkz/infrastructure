@@ -39,7 +39,7 @@ jobs:
           terraform_version: "${{ env.TF_VER }}"
 
       - name: "Initialize Terraform"
-        run: "terraform init -backend=false"
+        run: "terraform init --upgrade --backend=false"
 
       - name: "Validate Terraform configs."
         run: "terraform validate"
