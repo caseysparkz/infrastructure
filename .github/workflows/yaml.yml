@@ -25,4 +25,4 @@ jobs:
           yamllint_file_or_dir: "./"
           yamllint_strict: true
           yamllint_comment: true
-          yamllint_config_filepath: ".github/workflows/yamllint.conf"
+          yamllint_config_filepath: ".github/workflows/yamllint.yml"
