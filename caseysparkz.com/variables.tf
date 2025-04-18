@@ -15,18 +15,6 @@ variable "aws_region" {
   }
 }
 
-variable "ecr_repository_names" {
-  type        = list(string)
-  description = "List of ECR repository names to create."
-  sensitive   = false
-  default     = []
-
-  validation {
-    condition     = alltrue([for v in var.ecr_repository_names : can(regex("^[a-zA-Z0-9_./]*$", v))])
-    error_message = "ECR repository name contains invalid characters [a-zA-Z0-9-_./]."
-  }
-}
-
 ## Cloudflare =================================================================
 variable "mx_servers" {
   type        = map(string)
@@ -61,19 +49,6 @@ variable "pka_records" {
   description = "Map of PKA handles and fingerprints for root domain."
   sensitive   = false
   default     = {}
-}
-
-## GitHub =====================================================================
-variable "github_owner" {
-  description = "GitHub account to manage."
-  type        = string
-  sensitive   = true
-}
-
-variable "github_repositories" {
-  description = "Map of GitHub repositories that should exist in the organization."
-  type        = map(map(string))
-  sensitive   = false
 }
 
 ## Misc. ======================================================================

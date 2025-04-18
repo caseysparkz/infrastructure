@@ -1,0 +1,29 @@
+###############################################################################
+# Variables
+#
+
+## AWS ========================================================================
+aws_region = "us-west-2"
+
+## Cloudflare =================================================================
+mx_servers = {
+  "mail.protonmail.ch"    = 10
+  "mailsec.protonmail.ch" = 20
+}
+dkim_records = {
+  "protonmail._domainkey"  = "protonmail.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
+  "protonmail2._domainkey" = "protonmail2.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
+  "protonmail3._domainkey" = "protonmail3.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
+}
+spf_senders = [
+  "include:_spf.protonmail.ch",
+  "mx",
+]
+txt_records = {
+  "protonmail-verification=af8861ffc1961e58bfc47af155f91c468923c49d" = "@"
+}
+pka_records   = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
+
+## Misc. ======================================================================
+root_domain     = "caseysparkz.com"
+ssh_pubkey_path = "~/.ssh/keys/hck.pub"

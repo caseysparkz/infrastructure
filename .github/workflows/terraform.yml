@@ -21,9 +21,10 @@ jobs:
     strategy:
       matrix:
         work_dir:
-          - "tfstate_backend"
-          - "modules"
-          - "caseyspar.kz"
+          - "caseyspar.kz/"
+          - "caseysparkz.com/"
+          - "modules/"
+          - "tfstate_backend/"
     defaults:
       run:
         working-directory: "${{ matrix.work_dir }}"
@@ -143,8 +144,9 @@ jobs:
     strategy:
       matrix:
         work_dir:
-          - "./caseyspar.kz"
-          - "./tfstate_backend"
+          - "caseyspar.kz/"
+          - "caseysparkz.com/"
+          - "tfstate_backend/"
     defaults:
       run:
         working-directory: "${{ matrix.work_dir }}"
@@ -196,8 +198,9 @@ jobs:
 #   strategy:
 #     matrix:
 #       work_dir:
-#         - "./caseyspar.kz"
-#         - "./tfstate_backend"
+#         - "caseyspar.kz/"
+#         - "caseysparkz.com/"
+#         - "tfstate_backend/"
 #   defaults:
 #     run:
 #       working-directory: "${{ matrix.work_dir }}"

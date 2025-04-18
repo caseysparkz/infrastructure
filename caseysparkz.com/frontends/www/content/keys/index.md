@@ -13,8 +13,8 @@ Handy!
 
 ```
 # To add my PGP key to your keyring, run:
-curl https://caseyspar.kz/keys/pgp | gpg --import
+curl https://caseysparkz.com/keys/pgp | gpg --import
 
 # To give me SSH access to your host (don't do this) run:
-curl https://caseyspar.kz/keys/ssh >> ~/.ssh/authorized_keys
+curl https://caseysparkz.com/keys/ssh >> ~/.ssh/authorized_keys
 ```

@@ -3,8 +3,8 @@
 # Description:  Hugo configuration
 ---
 # b6754cb7-a796-497d-bb3e-2eeb62ea7169
-baseURL: "https://www.caseyspar.kz"
-title: "caseyspar.kz"
+baseURL: "https://www.caseysparkz.com"
+title: "CaseySparkz"
 languageCode: "en-us"
 DefaultContentLanguage: "en"
 enableEmoji: false
