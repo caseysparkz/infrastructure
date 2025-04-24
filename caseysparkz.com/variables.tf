@@ -57,15 +57,3 @@ variable "root_domain" {
   description = "Root domain of Terraform infrastructure."
   sensitive   = false
 }
-
-variable "ssh_pubkey_path" {
-  type        = string
-  description = "Path of the administrator SSH public key."
-  sensitive   = false
-  default     = "~/.ssh/keys/id_rsa.pub"
-
-  validation {
-    condition     = fileexists(var.ssh_pubkey_path)
-    error_message = "SSH pubkey file does not exist: ${var.ssh_pubkey_path}."
-  }
-}
