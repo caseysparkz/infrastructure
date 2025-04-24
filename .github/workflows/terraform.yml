@@ -11,7 +11,7 @@ on:
     branches: ["main"]
     paths: ["**/*.tf"]
 env:
-  TF_VER: "1.11.2"                                                              # Increment to update terraform version
+  TF_VER: "1.11.4"                                                              # Increment to update terraform version
 jobs:
   terraform_validate:
     name: "Terraform Validate"
@@ -23,8 +23,13 @@ jobs:
         work_dir:
           - "caseyspar.kz/"
           - "caseysparkz.com/"
-          - "modules/"
           - "tfstate_backend/"
+          # Modules.                                                            Update with each addition.
+          - "modules/cloudflare_dns_zone/"
+          - "modules/ecr/"
+          - "modules/forward_zones/"
+          - "modules/hugo_static_site/"
+          - "modules/s3_artifacts/"
     defaults:
       run:
         working-directory: "${{ matrix.work_dir }}"

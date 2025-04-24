@@ -2,7 +2,7 @@
 version: "2"
 updates:
   - package-ecosystem: "docker"                                                 # docker
-    directory: "."
+    directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
@@ -15,7 +15,7 @@ updates:
       prefix: "chore(docker)"
 
   - package-ecosystem: "docker-compose"                                         # docker-compose
-    directory: "."
+    directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
@@ -28,7 +28,7 @@ updates:
       prefix: "chore(docker-compose)"
 
   - package-ecosystem: "github-actions"                                         # github-actions
-    directory: ".github/workflows"
+    directories: [".github/workflows"]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
@@ -41,7 +41,7 @@ updates:
       prefix: "chore(github-actions)"
 
   - package-ecosystem: "gitsubmodule"                                           # git submodule
-    directory: "."
+    directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
@@ -54,7 +54,7 @@ updates:
       prefix: "chore(gitsubmodule)"
 
   - package-ecosystem: "gomod"                                                  # Go modules
-    directory: "."
+    directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
@@ -67,7 +67,7 @@ updates:
       prefix: "chore(go-module)"
 
   - package-ecosystem: "npm"                                                    # NPM/Yarn
-    directory: "."
+    directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
@@ -80,7 +80,7 @@ updates:
       prefix: "chore(npm-yarn)"
 
   - package-ecosystem: "pip"                                                    # pip
-    directory: "."
+    directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
@@ -94,7 +94,7 @@ updates:
       prefix: "chore(python-pip)"
 
   - package-ecosystem: "terraform"                                              # terraform
-    directory: "."
+    directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
     target-branch: "main"
