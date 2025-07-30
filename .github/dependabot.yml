@@ -1,7 +1,7 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: "docker"                                                 # docker
+  - package-ecosystem: "docker"  # docker
     directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
@@ -14,7 +14,7 @@ updates:
     commit-message:
       prefix: "chore(docker)"
 
-  - package-ecosystem: "docker-compose"                                         # docker-compose
+  - package-ecosystem: "docker-compose"  # docker-compose
     directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
@@ -27,7 +27,7 @@ updates:
     commit-message:
       prefix: "chore(docker-compose)"
 
-  - package-ecosystem: "github-actions"                                         # github-actions
+  - package-ecosystem: "github-actions"  # github-actions
     directories: [".github/workflows"]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
@@ -40,7 +40,7 @@ updates:
     commit-message:
       prefix: "chore(github-actions)"
 
-  - package-ecosystem: "gitsubmodule"                                           # git submodule
+  - package-ecosystem: "gitsubmodule"  # git submodule
     directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
@@ -53,20 +53,7 @@ updates:
     commit-message:
       prefix: "chore(gitsubmodule)"
 
-  - package-ecosystem: "gomod"                                                  # Go modules
-    directories: ["."]
-    rebase-strategy: "auto"
-    reviewers: ["caseysparkz"]
-    target-branch: "main"
-    schedule:
-      interval: "weekly"
-      day: "friday"
-      time: "16:45"
-      timezone: "America/Los_Angeles"
-    commit-message:
-      prefix: "chore(go-module)"
-
-  - package-ecosystem: "npm"                                                    # NPM/Yarn
+  - package-ecosystem: "npm"  # NPM/Yarn
     directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
@@ -79,7 +66,7 @@ updates:
     commit-message:
       prefix: "chore(npm-yarn)"
 
-  - package-ecosystem: "pip"                                                    # pip
+  - package-ecosystem: "pip"  # pip
     directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]
@@ -93,7 +80,7 @@ updates:
     commit-message:
       prefix: "chore(python-pip)"
 
-  - package-ecosystem: "terraform"                                              # terraform
+  - package-ecosystem: "terraform"  # terraform
     directories: ["."]
     rebase-strategy: "auto"
     reviewers: ["caseysparkz"]

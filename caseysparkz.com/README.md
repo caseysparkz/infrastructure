@@ -1,7 +1,7 @@
-# www.caseysparkz.com
+# caseysparkz.com
 
 This directory contains complete Terraform configurations for my domain,
-([caseysparkz.com](https://caseysparkz.com)).
+([caseysparkz.com](https://www.caseysparkz.com)).
 
 Root domain configs (such as root DNS) are described in the Terraform files in
 this directory, and subdomain configs (such as for
