@@ -20,11 +20,10 @@ spf_senders = [
   "mx",
 ]
 txt_records = {
-  "did=did:plc:eop37ikcn6s33dedyhvejqv5" = "_atproto"
+  "did=did:plc:eop37ikcn6s33dedyhvejqv5"                                  = "_atproto"
   "keybase-site-verification=tlIvxzz3OeL0u3nDrGVYrXRlNX0o62Xm0daTHOfLTQI" = "@"
-  "protonmail-verification=af8861ffc1961e58bfc47af155f91c468923c49d" = "@"
 }
-pka_records   = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
+pka_records = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
 
 ## Misc. ======================================================================
-root_domain     = "caseysparkz.com"
+root_domain = "caseysparkz.com"

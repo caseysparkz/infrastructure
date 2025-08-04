@@ -7,6 +7,17 @@ locals {
     terraform = true
     domain    = var.root_domain
   }
+  dmarc_policy = { # Parsed to string
+    v     = "DMARC1"
+    p     = "reject"
+    sp    = "reject"
+    adkim = "s"
+    aspf  = "s"
+    fo    = 1
+    pct   = 5
+    rua   = "mailto:dmarc_rua@${var.root_domain}"
+    ruf   = "mailto:dmarc_ruf@${var.root_domain}"
+  }
 }
 
 ## Modules and Outputs ========================================================
@@ -67,4 +78,35 @@ output "www_aws_lambda_function_invoke_url" {
   description = "Invocation URL for the contact form Lambda function."
   value       = module.www.aws_lambda_function_invoke_url
   sensitive   = false
+}
+
+module "proton" {
+  source             = "../modules/proton_domain"
+  cloudflare_zone_id = local.cloudflare_zone_id
+  cloudflare_comment = local.cloudflare_comment
+  domain             = var.root_domain
+  txt_verification   = "protonmail-verification=af8861ffc1961e58bfc47af155f91c468923c49d"
+  spf_record         = "v=spf1 include:_spf.protonmail.ch -all"
+  dmarc_policy       = local.dmarc_policy
+  dkim_record = {
+    "protonmail._domainkey"  = "protonmail.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch."
+    "protonmail2._domainkey" = "protonmail2.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch."
+    "protonmail3._domainkey" = "protonmail3.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch."
+  }
+}
+
+module "proton_home" {
+  source             = "../modules/proton_domain"
+  cloudflare_zone_id = local.cloudflare_zone_id
+  cloudflare_comment = local.cloudflare_comment
+  domain             = "home.${var.root_domain}"
+  txt_verification   = "protonmail-verification=9b021e210af76144b6841abcc22762b764d6636b"
+  mx_record          = {}
+  spf_record         = "v=spf1 include:_spf.protonmail.ch -all"
+  dmarc_policy       = local.dmarc_policy
+  dkim_record = {
+    "protonmail._domainkey"  = "protonmail.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch."
+    "protonmail2._domainkey" = "protonmail2.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch."
+    "protonmail3._domainkey" = "protonmail3.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch."
+  }
 }
