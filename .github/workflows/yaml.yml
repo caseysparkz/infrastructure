@@ -7,20 +7,21 @@ on:
   pull_request:
     branches: ["main"]
     paths:
-      - "**/*.yml"
       - "**/*.yaml"
+      - "**/*.yml"
+      - ".github/workflows/yaml.yml"
 jobs:
   yamllint:
     name: "Yamllint"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
+        uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"  # v4.2.2
         with:
           fetch-depth: 0
 
       - name: "Yamllint"
-        uses: "karancode/yamllint-github-action@4052d365f09b8d34eb552c363d1141fd60e2aeb2"
+        uses: "karancode/yamllint-github-action@fdef6bc189425ecc84cc4543b2674566c0827053"  # v2.1.1
         with:
           yamllint_file_or_dir: "./"
           yamllint_strict: true

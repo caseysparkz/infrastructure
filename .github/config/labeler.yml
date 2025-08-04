@@ -27,11 +27,6 @@ codeowners:
 dependabot:
   - changed-files:
       - any-glob-to-any-file: ["./github/dependabot.yml"]
-docker:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "docker/**/*Dockerfile"
-          - "docker/**/*docker-compose.yml"
 documentation:
   - changed-files:
       - any-glob-to-any-file:
@@ -48,15 +43,9 @@ git:
 github:
   - changed-files:
       - any-glob-to-any-file: [".github/**"]
-intune:
-  - changed-files:
-      - any-glob-to-any-file: ["intune/**"]
 javascript:
   - changed-files:
       - any-glob-to-any-file: ["**/*.js"]
-powershell:
-  - changed-files:
-      - any-glob-to-any-file: ["**/*.ps1"]
 python:
   - changed-files:
       - any-glob-to-any-file: ["**/*.py"]
@@ -70,6 +59,8 @@ terraform:
   - changed-files:
       - any-glob-to-any-file:
           - "**/*.hcl"
+          - "**/*.hcl.json"
           - "**/*.tf"
-          - "**/*.tftpl"
-          - "terraform/**"
+          - "**/*.tf.json"
+          - "**/*.tftpl"  # test templates
+          - "**/*.tfvars"  # variables

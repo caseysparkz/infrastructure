@@ -1,0 +1,35 @@
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py311"
+exclude = []
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN1",     # flake8-annotations::missing-type-*
+    "COM812",   # flake8-commas::missing-trailing-comma
+    "FIX002",   # flake8-fixme::line-contains-todo
+    # We prefer double-quotes for multiline strings/docstrings.
+    #"Q001",     # flake8-quotes::bad-quotes-multiline-string
+    ]
+pydocstyle.convention = "google"
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+multiline-quotes = "double"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10  # `C901` when complexity > 10.
+
+#[tool.ruff.lint.per-file-ignores]
+#"test_*.py"=["INP001", "D100", "D103", "ANN201", "S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
