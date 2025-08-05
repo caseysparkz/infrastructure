@@ -7,17 +7,17 @@ locals {
     terraform = true
     domain    = var.root_domain
   }
-  dmarc_policy = { # Parsed to string
-    v     = "DMARC1"
-    p     = "reject"
-    sp    = "reject"
-    adkim = "s"
-    aspf  = "s"
-    fo    = 1
-    pct   = 5
-    rua   = "mailto:dmarc_rua@${var.root_domain}"
-    ruf   = "mailto:dmarc_ruf@${var.root_domain}"
-  }
+  dmarc_list = [ # Parsed to string
+    { key = "p", value = "reject" },
+    { key = "sp", value = "reject" },
+    { key = "adkim", value = "s" },
+    { key = "aspf", value = "s" },
+    { key = "fo", value = 1 },
+    { key = "pct", value = 5 },
+    { key = "rua", value = "mailto:dmarc_rua@${var.root_domain}" },
+    { key = "ruf", value = "mailto:dmarc_ruf@${var.root_domain}" },
+  ]
+  dmarc_policy = join(";", [for item in local.dmarc_list : "${item.key}=${item.value}"]) # Parse local.dmarc_list
 }
 
 ## Modules and Outputs ========================================================

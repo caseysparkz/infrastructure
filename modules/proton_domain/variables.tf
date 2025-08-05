@@ -54,11 +54,8 @@ variable "dkim_record" {
 }
 
 variable "dmarc_policy" {
-  type        = map(string)
-  description = "Map of DMARC policy for TXT record."
+  type        = string
+  description = "DMARC policy for TXT record, minus version key."
   sensitive   = false
-  default = {
-    "v" = "DMARC1"
-    "p" = "quarantine"
-  }
+  default     = "p=quarantine"
 }

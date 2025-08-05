@@ -52,7 +52,7 @@ resource "cloudflare_dns_record" "cname_dkim" { # DKIM
 resource "cloudflare_dns_record" "txt_dmarc" { # DMARC
   zone_id = var.cloudflare_zone_id
   name    = "_dmarc.${var.domain}"
-  content = join("; ", [for k, v in var.dmarc_policy : "${k}=${v}"])
+  content = "v=DMARC1;${var.dmarc_policy}"
   type    = "TXT"
   ttl     = 1
   proxied = false
