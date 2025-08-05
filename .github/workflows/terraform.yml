@@ -8,12 +8,17 @@ on:
     branches: ["main"]
     paths:
       - "**/*.tf"
+      - "**/*.tf.json"
+      - "**/*.tftest.hcl"
+      - "**/*.tftpl"
+      - "**/*.tfvars"
+      - "**/*.tfvars.json"
       - ".github/workflows/terraform.yml"
   push:
     branches: ["main"]
     paths:
       - "**/*.tf"
-      - ".github/workflows/terraform.yml"
+      - "**/*.tfvars"
 env:
   TF_VER: "1.12.2"  # Increment to update terraform version
 jobs:
