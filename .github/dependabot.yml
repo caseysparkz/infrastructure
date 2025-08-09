@@ -4,7 +4,6 @@ updates:
   - package-ecosystem: "github-actions"  # github-actions
     directories: [".github/workflows"]
     rebase-strategy: "auto"
-    reviewers: ["caseysparkz"]
     target-branch: "main"
     schedule:
       interval: "weekly"
@@ -17,7 +16,6 @@ updates:
   - package-ecosystem: "npm"  # NPM/Yarn
     directories: ["caseysparkz.com/frontends/www"]
     rebase-strategy: "auto"
-    reviewers: ["caseysparkz"]
     target-branch: "main"
     schedule:
       interval: "weekly"
