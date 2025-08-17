@@ -1,5 +1,5 @@
 ---
-version: '0.1'
+version: "0.1"
 resource_type_default_usage:
   aws_acmpca_certificate_authority:
     monthly_requests: 0
@@ -11,11 +11,11 @@ resource_type_default_usage:
   aws_api_gateway_rest_api:
     monthly_requests: 50
   aws_apigatewayv2_api:
-    monthly_requests: 50
-    request_size_kb: 128
-    monthly_messages: 100
-    message_size_kb: 8
-    monthly_connection_mins: 50
+    monthly_requests: 0
+    request_size_kb: 0
+    monthly_messages: 0
+    message_size_kb: 0
+    monthly_connection_mins: 0
   aws_backup_vault:
     monthly_efs_warm_restore_gb: 0
     monthly_efs_cold_restore_gb: 0
@@ -88,19 +88,19 @@ resource_type_default_usage:
   aws_cloudhsm_v2_hsm:
     monthly_hrs: 0
   aws_cloudtrail:
-    monthly_additional_management_events: 2500
-    monthly_data_events: 5000
-    monthly_insight_events: 5000
+    monthly_additional_management_events: 0
+    monthly_data_events: 0
+    monthly_insight_events: 0
   aws_cloudwatch_event_bus:
-    monthly_custom_events: 5000
+    monthly_custom_events: 0
     monthly_third_party_events: 0
-    monthly_archive_processing_gb: 1
-    archive_storage_gb: 1
-    monthly_schema_discovery_events: 5000
+    monthly_archive_processing_gb: 0
+    archive_storage_gb: 0
+    monthly_schema_discovery_events: 0
   aws_cloudwatch_log_group:
-    storage_gb: 166
-    monthly_data_ingested_gb: 10
-    monthly_data_scanned_gb: 1000
+    storage_gb: 0
+    monthly_data_ingested_gb: 0
+    monthly_data_scanned_gb: 0
   aws_codebuild_project:
     monthly_build_mins: 0
   aws_config_config_rule:
@@ -193,13 +193,13 @@ resource_type_default_usage:
     monthly_provisioned_efo_data_out_gb: 0
     monthly_provisioned_efo_consumer_hours: 0
   aws_lambda_function:
-    monthly_requests: 250
-    request_duration_ms: 25
+    monthly_requests: 0
+    request_duration_ms: 0
   aws_lambda_provisioned_concurrency_config:
     monthly_duration_hrs: 0
-    request_duration_ms: 10
-    monthly_requests: 50
-    memory_mb: 128
+    request_duration_ms: 0
+    monthly_requests: 0
+    memory_mb: 0
   aws_lb:
     new_connections: 0
     active_connections: 0
@@ -248,17 +248,17 @@ resource_type_default_usage:
   aws_route53_resolver_endpoint:
     monthly_queries: 0
   aws_s3_bucket_analytics_configuration:
-    monthly_monitored_objects: 200
+    monthly_monitored_objects: 10
   aws_s3_bucket_inventory:
-    monthly_listed_objects: 200
+    monthly_listed_objects: 10
   aws_s3_bucket:
-    object_tags: 200
+    object_tags: 0
     standard:
-      storage_gb: 250
-      monthly_tier_1_requests: 1000
-      monthly_tier_2_requests: 5000
-      monthly_select_data_scanned_gb: 250
-      monthly_select_data_returned_gb: 250
+      storage_gb: 1
+      monthly_tier_1_requests: 10
+      monthly_tier_2_requests: 0
+      monthly_select_data_scanned_gb: 1
+      monthly_select_data_returned_gb: 1
     intelligent_tiering:
       frequent_access_storage_gb: 0
       infrequent_access_storage_gb: 0
@@ -312,7 +312,7 @@ resource_type_default_usage:
       monthly_bulk_data_retrieval_gb: 0
       early_delete_gb: 0
   aws_secretsmanager_secret:
-    monthly_requests: 500
+    monthly_requests: 0
   aws_sfn_state_machine:
     monthly_transitions: 0
     monthly_requests: 0
@@ -332,7 +332,7 @@ resource_type_default_usage:
     monthly_requests: 0
     request_size_kb: 0
   aws_ssm_activation:
-    instances: 1
+    instances: 0
   aws_ssm_parameter:
     monthly_api_interactions: 0
     parameter_storage_hrs: 0
@@ -350,4 +350,3 @@ resource_type_default_usage:
     rule_group_rules: 0
     managed_rule_group_rules: 0
     monthly_requests: 0
-...

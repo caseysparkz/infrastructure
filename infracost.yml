@@ -1,0 +1,36 @@
+---
+version: "0.1"
+projects:
+  - name: "caseyspar.kz"
+    path: "caseyspar.kz"
+    terraform_var_files: &production_vars ["production.tfvars"]
+    skip_autodetect: true
+    usage_file: "caseyspar.kz/infracost_usage.yml"
+    terraform_workspace: "production"
+    dependency_paths:
+      - "caseyspar.kz/**"
+      - "caseyspar.kz/production.tfvars"
+      - "modules/ecr/**"
+
+  - name: "caseysparkz.com"
+    path: "caseysparkz.com"
+    terraform_var_files: *production_vars
+    skip_autodetect: true
+    usage_file: "caseysparkz.com/infracost_usage.yml"
+    terraform_workspace: "production"
+    dependency_paths:
+      - "caseysparkz.com/**"
+      - "caseysparkz.com/production.tfvars"
+      - "modules/hugo_static_site/**"
+      - "modules/proton_domain/**"
+      - "modules/s3_artifacts/**"
+
+  - name: "tfstate_backend"
+  - path: "tfstate_backend"
+    terraform_var_files: *production_vars
+    skip_autodetect: true
+    usage_file: "tfstate_backend/infracost_usage.yml"
+    terraform_workspace: "production"
+    dependency_paths:
+      - "tfstate_backend/**"
+      - "tfstate_backend/production.tfvars"
