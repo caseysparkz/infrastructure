@@ -127,7 +127,7 @@ jobs:
       - name: "Generate Infracost baseline estimate"
         run: >
           infracost breakdown                                                 \
-            --config-file .infracost.yml                                      \
+            --config-file infracost.yml                                       \
             --format json                                                     \
             --out-file /tmp/infracost_base.json"
 
@@ -139,7 +139,7 @@ jobs:
       - name: "Generate Infracost diff"
         run: >
           infracost diff                                                      \
-            --config-file .infracost.yml                                      \
+            --config-file infracost.yml                                       \
             --format json                                                     \
             --compare-to /tmp/infracost_base.json                             \
             --out-file /tmp/infracost_diff.json
