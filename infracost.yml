@@ -3,7 +3,7 @@ version: "0.1"
 projects:
   - name: "caseyspar.kz"
     path: "caseyspar.kz"
-    terraform_var_files: &production_vars ["production.tfvars"]
+    terraform_var_files: ["production.tfvars"]
     skip_autodetect: true
     usage_file: "caseyspar.kz/infracost_usage.yml"
     terraform_workspace: "production"
@@ -14,7 +14,7 @@ projects:
 
   - name: "caseysparkz.com"
     path: "caseysparkz.com"
-    terraform_var_files: *production_vars
+    terraform_var_files: ["production.tfvars"]
     skip_autodetect: true
     usage_file: "caseysparkz.com/infracost_usage.yml"
     terraform_workspace: "production"
@@ -26,8 +26,8 @@ projects:
       - "modules/s3_artifacts/**"
 
   - name: "tfstate_backend"
-  - path: "tfstate_backend"
-    terraform_var_files: *production_vars
+    path: "tfstate_backend"
+    terraform_var_files: ["production.tfvars"]
     skip_autodetect: true
     usage_file: "tfstate_backend/infracost_usage.yml"
     terraform_workspace: "production"
