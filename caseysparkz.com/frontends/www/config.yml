@@ -2,7 +2,7 @@
 # Date:         March 27, 2025
 # Description:  Hugo configuration
 ---
-# 71486e6d-3fa8-451d-9e7c-8713e0c38381
+# 6970bed8-3323-449f-8119-08e52c3237ea
 baseURL: "https://www.caseysparkz.com"
 title: "CaseySparkz"
 languageCode: "en-us"
@@ -113,7 +113,7 @@ menu:
 markup:
   goldmark:
     renderer:
-      unsafe: true                                                              # Allow external URLs
+      unsafe: true  # Allow external URLs
 taxonomies:
   category: "Categories"
   tag: "Tags"
@@ -124,7 +124,7 @@ privacy:
     disable: true
   instagram:
     disable: true
-  twitter:
+  x:
     disable: true
   vimeo:
     disable: true
