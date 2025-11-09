@@ -37,4 +37,4 @@ github_repositories = { #                                                       
 
 ## Misc. ======================================================================
 root_domain     = "caseyspar.kz"
-ssh_pubkey_path = "~/.ssh/keys/hck.pub"
+ssh_pubkey_path = "~/.ssh/keys/hcc.pub"

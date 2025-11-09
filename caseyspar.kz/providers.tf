@@ -23,10 +23,12 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.94.0"
     }
+    /*
     cloudflare = {
       source  = "cloudflare/cloudflare"
       version = "~> 5.1.0"
     }
+    */
     github = {
       source  = "integrations/github"
       version = "~> 6.5.0"
@@ -46,10 +48,6 @@ provider "aws" { #                                                              
   }
 }
 
-provider "cloudflare" { #                                                       Cloudflare
-  api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string
-}
-
 provider "github" { #                                                           GitHub
   token = var.github_token
   owner = var.github_owner
@@ -57,14 +55,6 @@ provider "github" { #                                                           
 
 ## Data =======================================================================
 data "aws_caller_identity" "current" {} #                                       AWS
-
-data "aws_secretsmanager_secret" "cloudflare_token" {
-  arn = "arn:aws:secretsmanager:${var.aws_region}:${local.aws_account_id}:secret:cloudflare/api_token"
-}
-
-data "aws_secretsmanager_secret_version" "cloudflare_token" {
-  secret_id = data.aws_secretsmanager_secret.cloudflare_token.id
-}
 
 data "aws_secretsmanager_secret" "github_token" {
   arn = "arn:aws:secretsmanager:${var.aws_region}:${local.aws_account_id}:secret:github/api_token"
