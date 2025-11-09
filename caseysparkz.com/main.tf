@@ -110,3 +110,22 @@ module "proton_home" {
     "protonmail3._domainkey" = "protonmail3.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch."
   }
 }
+
+module "ecr" { # -------------------------------------------------------------- ECR
+  source             = "../modules/ecr"
+  root_domain        = var.root_domain
+  docker_compose_dir = abspath("./docker_compose")
+  common_tags        = local.common_tags
+}
+
+output "ecr_registry_url" {
+  description = "URL of the deployed ECR registry."
+  value       = module.ecr.ecr_registry_url
+  sensitive   = false
+}
+
+output "ecr_registry_repository_urls" {
+  description = "List of URLs for the deployed ECR registry repositories."
+  value       = module.ecr.ecr_registry_repository_urls
+  sensitive   = false
+}

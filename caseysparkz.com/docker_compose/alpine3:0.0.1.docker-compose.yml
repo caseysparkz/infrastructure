@@ -41,7 +41,7 @@ services:
           && apk add --no-cache                                               \
             musl-locales=0.1.0-r1                                             \
             musl-locales-lang=0.1.0-r1                                        \
-            tzdata=2024b-r0                                                   \
+            tzdata=2025b-r0                                                   \
           && ln                                                               \
             -s                                                                \
             "/usr/share/zoneinfo/$${TZ}"                                      \

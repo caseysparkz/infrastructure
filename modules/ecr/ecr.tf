@@ -11,18 +11,18 @@ data "aws_ecr_authorization_token" "token" {} #                                 
 
 # Resources ===================================================================
 resource "aws_ecr_repository" "ecr" {
-  for_each             = toset([for f in fileset(var.docker_compose_dir, "*") : replace(f, "/:.*$/", "")])
+  for_each             = toset([for file in fileset(var.docker_compose_dir, "*") : replace(file, "/:.*$/", "")])
   name                 = each.key
   image_tag_mutability = "IMMUTABLE"
   force_delete         = true
   tags                 = local.common_tags
 
+  image_scanning_configuration { scan_on_push = true }
+
   encryption_configuration {
     encryption_type = "KMS"
     kms_key         = aws_kms_key.ecr.arn
   }
-
-  image_scanning_configuration { scan_on_push = true }
 }
 
 # Outputs =====================================================================
