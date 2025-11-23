@@ -1,15 +1,15 @@
-###############################################################################
+################################################################################
 # AWS Lambda
 #
 
-# Data ========================================================================
-data "archive_file" "lambda_contact_form" { #                                   Zipfile for Lambda artifact.
+# Data =========================================================================
+data "archive_file" "lambda_contact_form" { # Zipfile for Lambda artifact.
   type        = "zip"
   source_file = "${path.module}/lambda_contact_form.py"
   output_path = "/tmp/${var.root_domain}_contact_form.zip"
 }
 
-# Resources ===================================================================
+# Resources ====================================================================
 resource "aws_lambda_function" "contact_form" {
   depends_on       = [aws_s3_object.lambda_contact_form]
   description      = "Python function to send an email via AWS SES."
@@ -41,7 +41,7 @@ resource "aws_lambda_function_url" "contact_form" {
   }
 }
 
-# Outputs =====================================================================
+# Outputs ======================================================================
 output "aws_lambda_function_invoke_arn" {
   description = "Invocation URL for the Lambda function."
   value       = aws_lambda_function.contact_form.invoke_arn

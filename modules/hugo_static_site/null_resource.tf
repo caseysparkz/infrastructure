@@ -1,4 +1,4 @@
-###############################################################################
+################################################################################
 # Terraform Data, Null Resources, and Local Executions
 #
 # Notes:  There's a LOT of REAL janky shit and filesystem checks in this module
@@ -11,14 +11,14 @@
 #         Always remember to ask an adult for help when using scissors.
 
 locals {
-  build_hash = sha256(join(
+  build_hash = sha256(join( # Hash used to detect if any website pages change.
     "",
     [
       for file in setsubtract(fileset(var.hugo_dir, "*"), fileset("${var.hugo_dir}/public", "*")) :
       filesha1("${var.hugo_dir}/${file}")
     ]
   ))
-  node_modules_hash = sha256(join(
+  node_modules_hash = sha256(join( # Hash used to detect if Node dependencies change.
     "",
     [
       for file in setunion(fileset(var.hugo_dir, "node_modules/*"), fileset(var.hugo_dir, "package.json")) :
@@ -27,7 +27,7 @@ locals {
   ))
 }
 
-# Resources ===================================================================
+# Resources ====================================================================
 resource "local_file" "contact_form_js" {
   filename        = replace(var.js_contact_form_template_path, ".tftpl", "")
   file_permission = "0770"
@@ -47,14 +47,14 @@ resource "null_resource" "npm_install" {
 }
 
 resource "null_resource" "compile_pages" {
-  triggers = {
-    build_hash = local.build_hash
-    contact_js = local_file.contact_form_js.content_sha1
-  }
   depends_on = [
     local_file.contact_form_js,
     null_resource.npm_install,
   ]
+  triggers = {
+    build_hash = local.build_hash
+    contact_js = local_file.contact_form_js.content_sha1
+  }
 
   provisioner "local-exec" {
     command     = "hugo"
@@ -63,11 +63,11 @@ resource "null_resource" "compile_pages" {
 }
 
 resource "null_resource" "deploy_site" {
-  triggers = null_resource.compile_pages.triggers
   depends_on = [
     aws_s3_bucket.www_site,
     null_resource.compile_pages,
   ]
+  triggers = null_resource.compile_pages.triggers
 
   provisioner "local-exec" {
     command = "aws s3 sync --delete ${var.hugo_dir}/public/ s3://${aws_s3_bucket.www_site.id}/"

@@ -1,9 +1,8 @@
-###############################################################################
+################################################################################
 # Terraform and Providers
 #
-locals {}
 
-## Terraform ==================================================================
+# Terraform ====================================================================
 terraform {
   required_version = ">= 1.10.5, < 2.0.0"
 
@@ -19,8 +18,8 @@ terraform {
   }
 }
 
-## Providers ==================================================================
-provider "docker" { #                                                           Docker.
+# Providers ====================================================================
+provider "docker" {
   registry_auth {
     address  = local.ecr_authorization_token.proxy_endpoint
     username = local.ecr_authorization_token.user_name

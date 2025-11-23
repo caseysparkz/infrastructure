@@ -2,7 +2,7 @@
 # KMS
 #
 
-## Resources ==================================================================
+# Resources ====================================================================
 resource "aws_kms_key" "ecr" {
   description             = "Key used to encrypt ECR images."
   deletion_window_in_days = 30

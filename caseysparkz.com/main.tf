@@ -1,4 +1,4 @@
-###############################################################################
+################################################################################
 # Main
 #
 
@@ -20,8 +20,9 @@ locals {
   dmarc_policy = join(";", [for item in local.dmarc_list : "${item.key}=${item.value}"]) # Parse local.dmarc_list
 }
 
-## Modules and Outputs ========================================================
-module "artifacts" { # -------------------------------------------------------- S3: Artifacts
+# Modules and Outputs ==========================================================
+# S3: Artifacts ----------------------------------------------------------------
+module "artifacts" {
   source      = "../modules/s3_artifacts"
   root_domain = var.root_domain
   common_tags = local.common_tags
@@ -51,7 +52,8 @@ output "artifacts_kms_key_alias" {
   sensitive   = false
 }
 
-module "www" { # -------------------------------------------------------------- WWW
+# WWW --------------------------------------------------------------------------
+module "www" {
   source                        = "../modules/hugo_static_site"
   root_domain                   = var.root_domain
   subdomain                     = "www.${var.root_domain}"
@@ -111,7 +113,8 @@ module "proton_home" {
   }
 }
 
-module "ecr" { # -------------------------------------------------------------- ECR
+# ECR --------------------------------------------------------------------------
+module "ecr" {
   source             = "../modules/ecr"
   root_domain        = var.root_domain
   docker_compose_dir = abspath("./docker_compose")

@@ -1,9 +1,9 @@
-###############################################################################
+################################################################################
 # Main
 #
 locals {}
 
-# Resources ===================================================================
+# Resources ====================================================================
 resource "cloudflare_dns_record" "record" {
   count   = length(var.dns_records)
   zone_id = var.zone_id
@@ -15,7 +15,7 @@ resource "cloudflare_dns_record" "record" {
   comment = var.default_comment
 }
 
-# Outputs =====================================================================
+# Outputs ======================================================================
 output "records" {
   description = "Zone data for the new Cloudflare zone."
   value       = cloudflare_dns_record.record

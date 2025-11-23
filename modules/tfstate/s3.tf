@@ -1,8 +1,8 @@
-###############################################################################
+################################################################################
 # AWS S3
 #
 
-# Resources ===================================================================
+# Resources ====================================================================
 resource "aws_s3_bucket" "terraform_state" {
   bucket        = var.bucket_name
   force_destroy = false
@@ -40,7 +40,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" 
   }
 }
 
-# Outputs =====================================================================
+# Outputs ======================================================================
 output "aws_s3_bucket_name" {
   description = "FQDN of the S3 bucket (as expected by the Terraform backend config)."
   value       = aws_s3_bucket.terraform_state.id

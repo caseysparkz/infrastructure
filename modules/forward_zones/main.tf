@@ -1,4 +1,4 @@
-###############################################################################
+################################################################################
 # Main
 #
 locals {
@@ -8,7 +8,7 @@ locals {
   }
 }
 
-# Data ========================================================================
+# Data =========================================================================
 data "cloudflare_zones" "root_zone" { name = var.root_domain }
 
 data "cloudflare_zones" "forward_zones" {
@@ -16,7 +16,7 @@ data "cloudflare_zones" "forward_zones" {
   name     = each.key
 }
 
-# Resources ===================================================================
+# Resources ====================================================================
 resource "cloudflare_dns_record" "cname" {
   for_each = local.zone_map
   zone_id  = each.value
@@ -53,7 +53,7 @@ resource "cloudflare_page_rule" "forward_zones" {
   }
 }
 
-# Outputs =====================================================================
+# Outputs ======================================================================
 output "forward_zones" {
   description = "Zone data for the Cloudflare forward zones."
   value       = [for zone in data.cloudflare_zones.forward_zones : zone.result[0]]

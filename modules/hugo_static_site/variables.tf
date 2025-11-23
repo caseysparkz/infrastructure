@@ -1,8 +1,8 @@
-###############################################################################
+################################################################################
 # Variables.
 #
 
-# Lambda ======================================================================
+# Lambda =======================================================================
 variable "artifact_bucket_id" {
   description = "ID of the S3 bucket in which lambda functions are kept."
   type        = string
@@ -15,7 +15,7 @@ variable "js_contact_form_template_path" {
   sensitive   = false
 }
 
-# Misc. =======================================================================
+# Misc. ========================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."
   type        = string

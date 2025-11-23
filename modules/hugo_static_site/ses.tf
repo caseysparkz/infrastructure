@@ -1,13 +1,13 @@
-###############################################################################
+################################################################################
 # AWS SES
 #
 
-# Resources ===================================================================
+# Resources ====================================================================
 resource "aws_ses_domain_identity" "root_domain" { domain = var.root_domain }
 
 resource "aws_ses_domain_identity_verification" "root_domain" {
-  domain     = aws_ses_domain_identity.root_domain.id
   depends_on = [cloudflare_dns_record.ses_verification]
+  domain     = aws_ses_domain_identity.root_domain.id
 }
 
 resource "aws_ses_domain_dkim" "root_domain" { domain = aws_ses_domain_identity.root_domain.id }

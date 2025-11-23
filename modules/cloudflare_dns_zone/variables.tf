@@ -1,4 +1,4 @@
-###############################################################################
+################################################################################
 # Variables
 #
 
@@ -17,10 +17,12 @@ variable "dns_records" {
     condition     = alltrue([for record in var.dns_records : lookup(record, "name", "") != ""])
     error_message = "DNS record map object missing key 'name'."
   }
+
   validation {
     condition     = alltrue([for record in var.dns_records : lookup(record, "value", "") != ""])
     error_message = "DNS record map object missing key 'value'."
   }
+
   validation {
     condition     = alltrue([for record in var.dns_records : lookup(record, "type", "") != ""])
     error_message = "DNS record map object missing key 'type'."

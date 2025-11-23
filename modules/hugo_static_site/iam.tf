@@ -1,17 +1,16 @@
-###############################################################################
+################################################################################
 # AWS IAM
 #
+
 locals {
   aws_region     = data.aws_region.current.name
   aws_account_id = data.aws_caller_identity.current.account_id
 }
 
-# Data ========================================================================
-data "aws_kms_alias" "lambda" {
-  name = "alias/aws/lambda"
-}
+# Data =========================================================================
+data "aws_kms_alias" "lambda" { name = "alias/aws/lambda" }
 
-data "aws_iam_policy_document" "lambda_assume_role" {
+data "aws_iam_policy_document" "lambda_iam_role" {
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
@@ -23,7 +22,7 @@ data "aws_iam_policy_document" "lambda_assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "lambda_ses_sendemail" {
+data "aws_iam_policy_document" "lambda_iam_policy" {
   statement {
     effect = "Allow"
     actions = [
@@ -36,17 +35,13 @@ data "aws_iam_policy_document" "lambda_ses_sendemail" {
       aws_ses_email_identity.default_sender.arn
     ]
   }
-}
 
-data "aws_iam_policy_document" "lambda_kms_decrypt" {
   statement {
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
     resources = [data.aws_kms_alias.lambda.arn]
   }
-}
 
-data "aws_iam_policy_document" "lambda_logging" {
   statement {
     effect = "Allow"
     actions = [
@@ -59,44 +54,22 @@ data "aws_iam_policy_document" "lambda_logging" {
   }
 }
 
-# Resources ===================================================================
-# IAM role --------------------------------------------------------------------
+# Resources ====================================================================
+# IAM role ---------------------------------------------------------------------
 resource "aws_iam_role" "lambda_contact_form" {
-  name               = "${local.reverse_dns_subdomain_dir}-lambda_contact_form"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+  name               = "${local.reverse_dns_subdomain_dir}-lambda-contact-form-iam-role"
+  assume_role_policy = data.aws_iam_policy_document.lambda_iam_role.json
 }
 
-# Policies --------------------------------------------------------------------
-resource "aws_iam_policy" "lambda_ses_sendemail" {
-  name        = "${local.reverse_dns_subdomain_dir}-lambda-ses-sendemail"
-  description = "Policy for Lambda to send emails via AWS SES."
-  policy      = data.aws_iam_policy_document.lambda_ses_sendemail.json
+# Policies ---------------------------------------------------------------------
+resource "aws_iam_policy" "lambda_iam_policy" {
+  name        = "${local.reverse_dns_subdomain_dir}-lambda-contact-form-iam-policy"
+  description = "Policy for Lambda to send emails via AWS SES, decrypt S3 artifacts, and log."
+  policy      = data.aws_iam_policy_document.lambda_iam_policy.json
 }
 
-resource "aws_iam_policy" "lambda_kms_decrypt" {
-  name        = "${local.reverse_dns_subdomain_dir}-lambda_kms_decrypt"
-  description = "Policy for Lambda to use KMS keys with S3 artifacts bucket."
-  policy      = data.aws_iam_policy_document.lambda_kms_decrypt.json
-}
-
-resource "aws_iam_policy" "lambda_logging" {
-  name        = "${local.reverse_dns_subdomain_dir}-contact-lambda_logging"
-  description = "IAM policy for logging from a Lambda function."
-  policy      = data.aws_iam_policy_document.lambda_logging.json
-}
-
-# Policy attachments ----------------------------------------------------------
-resource "aws_iam_role_policy_attachment" "lambda_ses_sendemail" {
+# Policy attachments -----------------------------------------------------------
+resource "aws_iam_role_policy_attachment" "lambda_iam_policy" {
   role       = aws_iam_role.lambda_contact_form.name
-  policy_arn = aws_iam_policy.lambda_ses_sendemail.arn
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_kms_decrypt" {
-  role       = aws_iam_role.lambda_contact_form.name
-  policy_arn = aws_iam_policy.lambda_kms_decrypt.arn
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_logging" {
-  role       = aws_iam_role.lambda_contact_form.name
-  policy_arn = aws_iam_policy.lambda_logging.arn
+  policy_arn = aws_iam_policy.lambda_iam_policy.arn
 }

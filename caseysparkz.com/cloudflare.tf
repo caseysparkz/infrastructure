@@ -1,8 +1,8 @@
-###############################################################################
+################################################################################
 # Cloudflare
 #
 
-## Locals =====================================================================
+# Locals =======================================================================
 locals {
   cloudflare_comment = "Terraform managed."
   cloudflare_zone_id = data.cloudflare_zones.root_domain.result[0].id
@@ -17,10 +17,10 @@ locals {
   }
 }
 
-## Data =======================================================================
-data "cloudflare_zones" "root_domain" { name = var.root_domain } #              Root zone
+# Data =========================================================================
+data "cloudflare_zones" "root_domain" { name = var.root_domain }
 
-## Resources ==================================================================
+# Resources ====================================================================
 resource "cloudflare_zone_setting" "root_zone" {
   for_each   = local.cloudflare_zone_settings
   zone_id    = local.cloudflare_zone_id
@@ -28,7 +28,7 @@ resource "cloudflare_zone_setting" "root_zone" {
   value      = each.value
 }
 
-resource "cloudflare_dns_record" "txt" { #                                      TXT records
+resource "cloudflare_dns_record" "txt" {
   for_each = var.txt_records
   zone_id  = local.cloudflare_zone_id
   name     = each.value
@@ -39,7 +39,7 @@ resource "cloudflare_dns_record" "txt" { #                                      
   comment  = local.cloudflare_comment
 }
 
-resource "cloudflare_dns_record" "pka" { #                                      PKA records
+resource "cloudflare_dns_record" "pka" {
   for_each = var.pka_records
   zone_id  = local.cloudflare_zone_id
   name     = "${each.key}._pka"

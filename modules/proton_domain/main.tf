@@ -1,11 +1,11 @@
-###############################################################################
+################################################################################
 # Main
 #
 # Author:       Casey Sparks
 # Date:         August 04, 2025
 # Description:  Create the requisite Cloudflare DNS records.
 
-## Resources ==================================================================
+# Resources ====================================================================
 resource "cloudflare_dns_record" "txt_verify" { # Verify
   zone_id = var.cloudflare_zone_id
   name    = var.domain
