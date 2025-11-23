@@ -20,4 +20,5 @@ variable "bucket_name" {
   description = "Name of the AWS bucket to create."
   type        = string
   sensitive   = false
+  default     = "com.caseysparkz.tfstate"
 }

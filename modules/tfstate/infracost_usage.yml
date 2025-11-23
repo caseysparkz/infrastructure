@@ -1,0 +1,46 @@
+---
+version: "0.1"
+resource_type_default_usage:
+  aws_cloudtrail:
+    monthly_additional_management_events: 0
+    monthly_data_events: 0
+    monthly_insight_events: 0
+  aws_cloudwatch_event_bus:
+    monthly_custom_events: 0
+    monthly_third_party_events: 0
+    monthly_archive_processing_gb: 0
+    archive_storage_gb: 0
+    monthly_schema_discovery_events: 0
+  aws_cloudwatch_log_group:
+    storage_gb: 0
+    monthly_data_ingested_gb: 0
+    monthly_data_scanned_gb: 0
+  aws_kinesisanalyticsv2_application:
+    kinesis_processing_units: 0
+    durable_application_backup_gb: 0
+  aws_kinesisanalyticsv2_application_snapshot:
+    durable_application_backup_gb: 0
+  aws_kinesis_stream:
+    monthly_on_demand_data_in_gb: 0
+    monthly_on_demand_data_out_gb: 0
+    monthly_on_demand_efo_data_out_gb: 0
+    monthly_on_demand_extended_retention_gb: 0
+    monthly_on_demand_long_term_retention_gb: 0
+    monthly_provisioned_put_units: 0
+    monthly_provisioned_extended_retention_gb: 0
+    monthly_provisioned_long_term_retention_gb: 0
+    monthly_provisioned_long_term_retrieval_gb: 0
+    monthly_provisioned_efo_data_out_gb: 0
+    monthly_provisioned_efo_consumer_hours: 0
+  aws_s3_bucket_analytics_configuration:
+    monthly_monitored_objects: 10
+  aws_s3_bucket_inventory:
+    monthly_listed_objects: 10
+  aws_s3_bucket:
+    object_tags: 100
+    standard:
+      storage_gb: 1
+      monthly_tier_1_requests: 10
+      monthly_tier_2_requests: 10
+      monthly_select_data_scanned_gb: 2
+      monthly_select_data_returned_gb: 2

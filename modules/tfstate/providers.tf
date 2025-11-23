@@ -7,7 +7,7 @@ terraform {
 
   backend "s3" {
     region       = "us-west-2"
-    bucket       = "caseyspar.kz-tfstate"
+    bucket       = "com.caseysparkz.tfstate"
     key          = "tfstate.tfstate"
     encrypt      = true
     use_lockfile = true
@@ -27,7 +27,7 @@ provider "aws" {
   default_tags {
     tags = {
       terraform   = true
-      application = "tfstate"
+      application = "terraform"
     }
   }
 }

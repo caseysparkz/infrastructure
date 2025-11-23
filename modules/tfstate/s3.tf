@@ -6,7 +6,7 @@
 resource "aws_s3_bucket" "terraform_state" {
   bucket        = var.bucket_name
   force_destroy = false
-  tags          = merge({ service = "s3" }, local.common_tags)
+  tags          = { service = "s3" }
 }
 
 resource "aws_s3_bucket_ownership_controls" "terraform_state" {
