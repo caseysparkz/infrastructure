@@ -13,9 +13,3 @@ variable "docker_compose_dir" {
   type        = string
   sensitive   = false
 }
-
-variable "common_tags" {
-  description = "Common tags to apply to all resources."
-  type        = map(string)
-  sensitive   = false
-}

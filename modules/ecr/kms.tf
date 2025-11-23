@@ -6,7 +6,6 @@
 resource "aws_kms_key" "ecr" {
   description             = "Key used to encrypt ECR images."
   deletion_window_in_days = 30
-  tags                    = local.common_tags
 }
 
 resource "aws_kms_alias" "ecr" {

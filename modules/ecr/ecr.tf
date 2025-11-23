@@ -16,7 +16,6 @@ resource "aws_ecr_repository" "ecr" {
   name                 = each.key
   image_tag_mutability = "IMMUTABLE"
   force_delete         = true
-  tags                 = local.common_tags
 
   image_scanning_configuration { scan_on_push = true }
 

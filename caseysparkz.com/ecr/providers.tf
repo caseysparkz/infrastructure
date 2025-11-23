@@ -1,0 +1,36 @@
+################################################################################
+# Terraform and Providers
+#
+
+# Terraform ====================================================================
+terraform {
+  required_version = ">= 1.10.5, < 2.0.0"
+
+  backend "s3" {
+    bucket       = "com.caseysparkz.tfstate"
+    key          = "ecr.caseysparkz.com.tfstate"
+    region       = "us-west-2"
+    use_lockfile = true
+    encrypt      = true
+  }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.94.0"
+    }
+  }
+}
+
+# Providers ====================================================================
+provider "aws" {
+  region = var.aws_region
+
+  default_tags {
+    tags = {
+      terraform = true
+      domain    = var.root_domain
+      service   = "ecr"
+    }
+  }
+}
