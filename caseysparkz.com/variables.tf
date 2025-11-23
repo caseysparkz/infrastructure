@@ -1,8 +1,8 @@
-###############################################################################
+################################################################################
 # Variables
 #
 
-## AWS ========================================================================
+# AWS ==========================================================================
 variable "aws_region" {
   type        = string
   description = "AWS region to deploy to."
@@ -15,7 +15,7 @@ variable "aws_region" {
   }
 }
 
-## Cloudflare =================================================================
+# Cloudflare ===================================================================
 variable "mx_servers" {
   type        = map(string)
   description = "MX servers for root domain. Syntax: {server: priority}."
@@ -51,9 +51,10 @@ variable "pka_records" {
   default     = {}
 }
 
-## Misc. ======================================================================
+# Misc. ========================================================================
 variable "root_domain" {
   type        = string
   description = "Root domain of Terraform infrastructure."
   sensitive   = false
+  default     = "caseysparkz.com"
 }

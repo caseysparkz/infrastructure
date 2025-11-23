@@ -10,8 +10,8 @@ locals {
 terraform {
   required_version = ">= 1.10.5, < 2.0.0"
 
-  backend "s3" { #                                                              ./modules/tfstate_backend
-    bucket       = "caseyspar.kz-tfstate"
+  backend "s3" { # ./modules/tfstate_backend
+    bucket       = "com.caseysparkz.tfstate"
     key          = "caseysparkz.com.tfstate"
     region       = "us-west-2"
     use_lockfile = true
