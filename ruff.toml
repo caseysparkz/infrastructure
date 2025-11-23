@@ -1,0 +1,39 @@
+target-version = "py311"
+line-length = 120
+indent-width = 4
+exclude = []
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[lint]
+pydocstyle.convention = "google"
+fixable = ["ALL"]
+unfixable = []
+select = ["ALL"]
+ignore = [
+    "ANN1",     # flake8-annotations::missing-type-*
+    "COM812",   # flake8-commas::missing-trailing-comma
+    "FIX002",   # flake8-fixme::line-contains-todo
+    #"Q001",     # flake8-quotes::bad-quotes-multiline-string
+]
+
+[lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+multiline-quotes = "double"
+
+[lint.mccabe]
+max-complexity = 10  # `C901` when complexity > 10.
+
+[lint.per-file-ignores]
+"test_*.py"=[
+    "INP001",
+    "D100",
+    "D103",
+    "ANN201",
+    "S101",
+]
