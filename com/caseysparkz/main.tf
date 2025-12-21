@@ -41,24 +41,7 @@ module "www" {
   aws_kms_key_arn               = aws_kms_key.this.arn
 }
 
-output "www_s3_bucket_endpoint" {
-  description = "Endpoint of the static site S3 bucket."
-  value       = module.www.aws_s3_bucket_endpoint
-  sensitive   = false
-}
-
-output "www_s3_bucket_id" {
-  description = "ID of the static site S3 bucket."
-  value       = module.www.aws_s3_bucket_id
-  sensitive   = false
-}
-
-output "www_aws_lambda_function_invoke_url" {
-  description = "Invocation URL for the contact form Lambda function."
-  value       = module.www.aws_lambda_function_invoke_url
-  sensitive   = false
-}
-
+# Proton: @ --------------------------------------------------------------------
 module "proton" {
   source             = "../../modules/proton_domain"
   cloudflare_zone_id = local.cloudflare_zone_id
@@ -74,6 +57,7 @@ module "proton" {
   }
 }
 
+# Proton: home. ----------------------------------------------------------------
 module "proton_home" {
   source             = "../../modules/proton_domain"
   cloudflare_zone_id = local.cloudflare_zone_id
