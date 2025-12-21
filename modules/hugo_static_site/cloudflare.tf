@@ -73,10 +73,10 @@ resource "cloudflare_dns_record" "subdomain_spf" { # SPF record
 }
 
 resource "cloudflare_dns_record" "dkim" { # DKIM record
-  count   = length(aws_ses_domain_dkim.root_domain.dkim_tokens)
+  count   = 3
   zone_id = local.cloudflare_zone_id
-  name    = "${element(aws_ses_domain_dkim.root_domain.dkim_tokens, count.index)}._domainkey.${var.root_domain}"
-  content = "${element(aws_ses_domain_dkim.root_domain.dkim_tokens, count.index)}.dkim.amazonses.com"
+  name    = "${aws_ses_domain_dkim.root_domain.dkim_tokens[count.index]}._domainkey"
+  content = "${aws_ses_domain_dkim.root_domain.dkim_tokens[count.index]}.dkim.amazonses.com"
   type    = "CNAME"
   ttl     = 1
   proxied = false
