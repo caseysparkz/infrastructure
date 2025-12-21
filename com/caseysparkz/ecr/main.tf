@@ -2,15 +2,24 @@
 # Main
 #
 
-locals {}
-
-# Modules and Outputs ==========================================================
-module "ecr" {
-  source             = "../../modules/ecr"
-  root_domain        = var.root_domain
-  docker_compose_dir = abspath("./docker_compose")
+locals {
+  common_tags = {
+    Terraform = true
+    Domain    = var.root_domain
+    Project   = "ecr"
+  }
 }
 
+
+# Modules ======================================================================
+module "ecr" {
+  source             = "../../../modules/ecr"
+  root_domain        = var.root_domain
+  docker_compose_dir = abspath("./docker_compose")
+  aws_kms_key_arn    = "de8cf575-e753-44b5-9331-fa1762775478"
+}
+
+# Outputs ======================================================================
 output "ecr_registry_url" {
   description = "URL of the deployed ECR registry."
   value       = module.ecr.ecr_registry_url

@@ -21,7 +21,7 @@ resource "aws_ecr_repository" "ecr" {
 
   encryption_configuration {
     encryption_type = "KMS"
-    kms_key         = aws_kms_key.ecr.arn
+    kms_key         = var.aws_kms_key_arn
   }
 }
 

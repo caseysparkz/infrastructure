@@ -4,8 +4,8 @@
 
 locals {
   common_tags = {
-    terraform = true
-    domain    = var.root_domain
+    Terraform = true
+    Domain    = var.root_domain
   }
   dmarc_list = [ # Parsed to string
     { key = "p", value = "reject" },
@@ -25,31 +25,7 @@ locals {
 module "artifacts" {
   source      = "../../modules/s3_artifacts"
   root_domain = var.root_domain
-  common_tags = local.common_tags
-}
-
-output "artifacts_s3_bucket_id" {
-  description = "Name of the S3 bucket used to hold artifacts."
-  value       = module.artifacts.s3_bucket_id
-  sensitive   = false
-}
-
-output "artifacts_kms_key_id" {
-  description = "KMS key used to encrypt artifacts."
-  value       = module.artifacts.kms_key_id
-  sensitive   = false
-}
-
-output "artifacts_kms_key_arn" {
-  description = "KMS key used to encrypt artifacts."
-  value       = module.artifacts.kms_key_arn
-  sensitive   = true
-}
-
-output "artifacts_kms_key_alias" {
-  description = "Alias of the KMS key used to encrypt artifacts."
-  value       = module.artifacts.kms_key_alias
-  sensitive   = false
+  kms_key_arn = aws_kms_key.this.arn
 }
 
 # WWW --------------------------------------------------------------------------
@@ -62,6 +38,7 @@ module "www" {
   hugo_dir                      = abspath("frontends/www")
   js_contact_form_template_path = abspath("frontends/www/static/js/contactForm.js.tftpl")
   common_tags                   = local.common_tags
+  aws_kms_key_arn               = aws_kms_key.this.arn
 }
 
 output "www_s3_bucket_endpoint" {

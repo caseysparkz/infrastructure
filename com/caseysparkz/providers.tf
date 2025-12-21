@@ -32,12 +32,7 @@ terraform {
 provider "aws" {
   region = var.aws_region
 
-  default_tags {
-    tags = {
-      terraform = true
-      domain    = var.root_domain
-    }
-  }
+  default_tags { tags = local.common_tags }
 }
 
 provider "cloudflare" { api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string }

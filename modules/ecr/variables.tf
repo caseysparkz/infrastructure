@@ -13,3 +13,9 @@ variable "docker_compose_dir" {
   type        = string
   sensitive   = false
 }
+
+variable "aws_kms_key_arn" {
+  description = "ID of the AWS KMS key used to encrypt ECR resources."
+  type        = string
+  sensitive   = false
+}

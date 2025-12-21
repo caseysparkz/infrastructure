@@ -24,13 +24,13 @@ terraform {
 
 # Providers ====================================================================
 provider "aws" {
-  region = var.aws_region
+  region = "us-west-2"
 
   default_tags {
     tags = {
-      terraform = true
-      domain    = var.root_domain
-      service   = "ecr"
+      Terraform = true
+      Domain    = var.root_domain
+      Project   = "ecr"
     }
   }
 }

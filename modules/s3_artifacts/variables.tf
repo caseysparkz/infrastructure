@@ -9,9 +9,8 @@ variable "root_domain" {
   sensitive   = false
 }
 
-variable "common_tags" {
-  description = "Map of common tags to apply to all Terraform resources."
-  type        = map(string)
+variable "kms_key_arn" {
+  description = "ID of the AWS KMS key used to encrypt S3 artifacts."
+  type        = string
   sensitive   = false
-  default     = { terraform = true }
 }

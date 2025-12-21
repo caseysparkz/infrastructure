@@ -15,6 +15,13 @@ variable "js_contact_form_template_path" {
   sensitive   = false
 }
 
+# KMS ==========================================================================
+variable "aws_kms_key_arn" {
+  description = "ARN of the AWS KMS key used to encrypt the Lambda function in S3."
+  type        = string
+  sensitive   = false
+}
+
 # Misc. ========================================================================
 variable "root_domain" {
   description = "Root domain of Terraform infrastructure."

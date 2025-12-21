@@ -8,8 +8,6 @@ locals {
 }
 
 # Data =========================================================================
-data "aws_kms_alias" "lambda" { name = "alias/aws/lambda" }
-
 data "aws_iam_policy_document" "lambda_iam_role" {
   statement {
     effect  = "Allow"
@@ -39,7 +37,7 @@ data "aws_iam_policy_document" "lambda_iam_policy" {
   statement {
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
-    resources = [data.aws_kms_alias.lambda.arn]
+    resources = [var.aws_kms_key_arn]
   }
 
   statement {
