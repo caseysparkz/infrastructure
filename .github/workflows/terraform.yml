@@ -30,9 +30,8 @@ jobs:
     strategy:
       matrix:
         work_dir:
-          - "caseyspar.kz/"
-          - "caseysparkz.com/"
-          - "tfstate_backend/"
+          - "com/caseysparkz/"
+          - "tfstate/"
           # Modules. Update with each addition.
           - "modules/cloudflare_dns_zone/"
           - "modules/ecr/"
@@ -163,9 +162,8 @@ jobs:
     strategy:
       matrix:
         work_dir:
-          - "caseyspar.kz/"
-          - "caseysparkz.com/"
-          - "tfstate_backend/"
+          - "com/caseysparkz/"
+          - "tfstate/"
     defaults:
       run:
         working-directory: "${{ matrix.work_dir }}"

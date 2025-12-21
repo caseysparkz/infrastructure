@@ -23,7 +23,7 @@ locals {
 # Modules and Outputs ==========================================================
 # S3: Artifacts ----------------------------------------------------------------
 module "artifacts" {
-  source      = "../modules/s3_artifacts"
+  source      = "../../modules/s3_artifacts"
   root_domain = var.root_domain
   common_tags = local.common_tags
 }
@@ -54,7 +54,7 @@ output "artifacts_kms_key_alias" {
 
 # WWW --------------------------------------------------------------------------
 module "www" {
-  source                        = "../modules/hugo_static_site"
+  source                        = "../../modules/hugo_static_site"
   root_domain                   = var.root_domain
   subdomain                     = "www.${var.root_domain}"
   artifact_bucket_id            = module.artifacts.s3_bucket_id
@@ -83,7 +83,7 @@ output "www_aws_lambda_function_invoke_url" {
 }
 
 module "proton" {
-  source             = "../modules/proton_domain"
+  source             = "../../modules/proton_domain"
   cloudflare_zone_id = local.cloudflare_zone_id
   cloudflare_comment = local.cloudflare_comment
   domain             = var.root_domain
@@ -98,7 +98,7 @@ module "proton" {
 }
 
 module "proton_home" {
-  source             = "../modules/proton_domain"
+  source             = "../../modules/proton_domain"
   cloudflare_zone_id = local.cloudflare_zone_id
   cloudflare_comment = local.cloudflare_comment
   domain             = "home.${var.root_domain}"

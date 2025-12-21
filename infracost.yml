@@ -2,7 +2,7 @@
 version: "0.1"
 projects:
   - name: "tfstate"
-    path: "./modules/tfstate"
+    path: "tfstate"
     skip_autodetect: false
     usage_file: "./modules/tfstate/infracost_usage.yml"
     terraform_workspace: "default"
@@ -10,13 +10,13 @@ projects:
     dependency_paths: []
 
   - name: "caseysparkz.com"
-    path: "caseysparkz.com"
+    path: "com/caseysparkz"
     skip_autodetect: false
     usage_file: "caseysparkz.com/infracost_usage.yml"
     terraform_workspace: "default"
     terraform_var_files: ["production.tfvars"]
     dependency_paths:
-      - "caseysparkz.com/**"
+      - "com/caseysparkz/**"
       - "modules/hugo_static_site/**"
       - "modules/proton_domain/**"
       - "modules/s3_artifacts/**"
