@@ -20,27 +20,7 @@ locals {
   dmarc_policy = join(";", [for item in local.dmarc_list : "${item.key}=${item.value}"]) # Parse local.dmarc_list
 }
 
-# Modules and Outputs ==========================================================
-# S3: Artifacts ----------------------------------------------------------------
-module "artifacts" {
-  source      = "../../modules/s3_artifacts"
-  root_domain = var.root_domain
-  kms_key_arn = aws_kms_key.this.arn
-}
-
-# WWW --------------------------------------------------------------------------
-module "www" {
-  source                        = "../../modules/hugo_static_site"
-  root_domain                   = var.root_domain
-  subdomain                     = "www.${var.root_domain}"
-  artifact_bucket_id            = module.artifacts.s3_bucket_id
-  site_title                    = var.root_domain
-  hugo_dir                      = abspath("frontends/www")
-  js_contact_form_template_path = abspath("frontends/www/static/js/contactForm.js.tftpl")
-  common_tags                   = local.common_tags
-  aws_kms_key_arn               = aws_kms_key.this.arn
-}
-
+# Modules ======================================================================
 # Proton: @ --------------------------------------------------------------------
 module "proton" {
   source             = "../../modules/proton_domain"

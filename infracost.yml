@@ -34,3 +34,11 @@ projects:
     usage_file: "com/caseysparkz/store/infracost_usage.yml"
     dependency_paths:
       - "com/caseysparkz/store/**"
+
+  - <<: *default
+    name: "www.caseysparkz.com"
+    path: "com/caseysparkz/www"
+    usage_file: "com/caseysparkz/www/infracost_usage.yml"
+    dependency_paths:
+      - "com/caseysparkz/www/**"
+      - "modules/hugo_static_site/**"
