@@ -23,8 +23,8 @@ module "www" {
   subdomain                     = "www.${var.root_domain}"
   artifact_bucket_id            = module.artifacts.s3_bucket_id
   site_title                    = var.root_domain
-  hugo_dir                      = abspath("frontends/www")
-  js_contact_form_template_path = abspath("frontends/www/static/js/contactForm.js.tftpl")
+  hugo_dir                      = abspath("frontend")
+  js_contact_form_template_path = abspath("frontend/static/js/contactForm.js.tftpl")
   common_tags                   = local.common_tags
   aws_kms_key_arn               = local.aws_kms_key_arn
 }
