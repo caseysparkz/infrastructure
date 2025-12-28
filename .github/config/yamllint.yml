@@ -30,3 +30,5 @@ rules:
     max: 120
     level: "warning"
     allow-non-breakable-inline-mappings: true
+ignore:
+  - "**/node_modules/"
