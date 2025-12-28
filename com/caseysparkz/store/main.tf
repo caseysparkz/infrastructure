@@ -1,0 +1,55 @@
+################################################################################
+# Main
+#
+
+locals {
+  common_tags = {
+    Terraform = true
+    Project   = "store"
+  }
+}
+
+# Resources ====================================================================
+resource "random_uuid" "this" {}
+
+resource "aws_s3_bucket" "this" {
+  bucket        = random_uuid.this.id
+  force_destroy = false
+}
+
+resource "aws_s3_bucket_ownership_controls" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  rule { object_ownership = "BucketOwnerPreferred" }
+}
+
+resource "aws_s3_bucket_acl" "this" {
+  depends_on = [aws_s3_bucket_ownership_controls.this]
+  bucket     = aws_s3_bucket.this.id
+  acl        = "private"
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.this.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_id
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+# Outputs ======================================================================
+output "s3_bucket_id" {
+  description = "ID of the S3 bucket."
+  value       = aws_s3_bucket.this.id
+}
