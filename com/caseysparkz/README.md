@@ -1,20 +1,33 @@
-# caseysparkz.com
+# `caseysparkz.com`
 
-This directory contains complete Terraform configurations for my domain,
-([caseysparkz.com](https://www.caseysparkz.com)).
+This directory, and its subdirectories, contain the complete Terraform
+configurations for my domain, ([caseysparkz.com](https://www.caseysparkz.com)).
 
-Root domain configs (such as root DNS) are described in the Terraform files in
-this directory, and subdomain configs (such as for
-[www.caseysparkz.com](https://www.caseysparkz.com)) are constructed as modules
-(and included within `./main.tf`).
+Root domain configurations (such as root DNS) are described in the Terraform
+files in this directory, while subdomain/service configurations (such as for
+ECR can be found in their respective subdirectories.
 
-## Requirements
+## Software Requirements and Recommendations
+
+### Required Software
+
+The following utilities are **required** to deploy these manifests in their
+entirety:
+
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+* [Docker](https://docs.docker.com/engine/install)
+* [Docker Compose](https://docs.docker.com/compose/install)
+* [Hugo](https://gohugo.io/installation/)
+* [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+
+### Recommended Software
+
+The following utilities are **recommended**:
+
+* [Infracost](https://www.infracost.io/docs/)
+
+## Access Requirements
 
 ### AWS
 
 ### Cloudflare
-
-A Cloudflare account and API key with the following scope:
-
-* Zone:...
-* Zone:...
