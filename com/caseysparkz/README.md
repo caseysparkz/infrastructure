@@ -15,16 +15,17 @@ The following utilities are **required** to deploy these manifests in their
 entirety:
 
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-* [Docker](https://docs.docker.com/engine/install)
 * [Docker Compose](https://docs.docker.com/compose/install)
-* [Hugo](https://gohugo.io/installation/)
+* [Docker](https://docs.docker.com/engine/install)
+* [Hugo](https://gohugo.io/installation)
 * [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
 ### Recommended Software
 
 The following utilities are **recommended**:
 
-* [Infracost](https://www.infracost.io/docs/)
+* [Infracost](https://www.infracost.io/docs)
+* [Ruff](https://docs.astral.sh/ruff/installation)
 
 ## Access Requirements
 
