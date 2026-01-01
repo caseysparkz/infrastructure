@@ -2,42 +2,42 @@
 version: "0.1"
 projects:
   - &default
-    name: "tfstate"
-    path: "tfstate"
+    name: "/tfstate/"
+    path: "./tfstate/"
     skip_autodetect: false
     terraform_workspace: "default"
-    usage_file: "tfstate/infracost_usage.yml"
+    usage_file: "./tfstate/infracost_usage.yml"
     terraform_var_files: []
     dependency_paths: []
 
   - <<: *default
-    name: "com/caseysparkz"
-    path: "com/caseysparkz"
-    usage_file: "com/caseysparkz/infracost_usage.yml"
-    terraform_var_files: ["production.tfvars"]
+    name: "/com/caseysparkz/"
+    path: "./com/caseysparkz/"
+    usage_file: "./com/caseysparkz/infracost_usage.yml"
+    terraform_var_files: ["./production.tfvars"]
     dependency_paths:
-      - "com/caseysparkz/**"
-      - "com/caseysparkz/production.tfvars"
-      - "modules/proton_domain/**"
+      - "./com/caseysparkz/**"
+      - "./com/caseysparkz/production.tfvars"
+      - "./modules/proton_domain/**"
 
   - <<: *default
-    name: "com/caseysparkz/ecr"
-    path: "com/caseysparkz/ecr"
-    usage_file: "com/caseysparkz/ecr/infracost_usage.yml"
+    name: "/com/caseysparkz/ecr/"
+    path: "./com/caseysparkz/ecr/"
+    usage_file: "./com/caseysparkz/ecr/infracost_usage.yml"
     dependency_paths:
-      - "com/caseysparkz/ecr/**"
-      - "modules/ecr/**"
+      - "./com/caseysparkz/ecr/**"
+      - "./modules/ecr/**"
 
   - <<: *default
-    name: "com/caseysparkz/store"
-    path: "com/caseysparkz/store"
-    usage_file: "com/caseysparkz/store/infracost_usage.yml"
+    name: "/com/caseysparkz/store/"
+    path: "./com/caseysparkz/store/"
+    usage_file: "./com/caseysparkz/store/infracost_usage.yml"
 
   - <<: *default
-    name: "com/caseysparkz/www"
-    path: "com/caseysparkz/www"
-    usage_file: "com/caseysparkz/www/infracost_usage.yml"
+    name: "/com/caseysparkz/www/"
+    path: "./com/caseysparkz/www/"
+    usage_file: "./com/caseysparkz/www/infracost_usage.yml"
     dependency_paths:
-      - "com/caseysparkz/www/**"
-      - "modules/hugo_static_site/**"
-      - "modules/s3_artifacts/**"
+      - "./com/caseysparkz/www/**"
+      - "./modules/hugo_static_site/**"
+      - "./modules/s3_artifacts/**"
