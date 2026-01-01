@@ -55,7 +55,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
 }
 
 # Outputs ======================================================================
-output "s3_bucket_id" {
-  description = "ID of the S3 bucket."
-  value       = aws_s3_bucket.this.id
+output "s3_bucket_url" {
+  description = "URL of the S3 bucket."
+  value       = aws_s3_bucket.this.bucket_regional_domain_name
 }
