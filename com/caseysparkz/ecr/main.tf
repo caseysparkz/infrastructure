@@ -3,13 +3,34 @@
 #
 
 locals {
+  environment = "prod"
+  project     = "caseysparkz"
+  application = "ecr"
+  namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    Terraform = true
+    ManagedBy = "terraform"
     Domain    = var.root_domain
-    Project   = "ecr"
+    Namespace = local.namespace
   }
 }
 
+# Resources ====================================================================
+resource "aws_resourcegroups_group" "this" {
+  name = "${local.namespace}-rg"
+
+  resource_query {
+    query = jsonencode({
+      ResourceTypeFilters = ["AWS::AllSupported"]
+      TagFilters = [
+        for key, value in local.common_tags :
+        {
+          Key    = key
+          Values = [value]
+        }
+      ]
+    })
+  }
+}
 
 # Modules ======================================================================
 module "ecr" {

@@ -3,17 +3,41 @@
 #
 
 locals {
+  environment = "prod"
+  project     = "tfstate"
+  application = "tfstate"
+  namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    Terraform   = true
-    Application = "terraform"
+    ManagedBy = "terraform"
+    Namespace = local.namespace
   }
 }
 
 # Resources ====================================================================
+resource "aws_resourcegroups_group" "this" {
+  name = "${local.namespace}-rg"
+
+  resource_query {
+    query = jsonencode({
+      ResourceTypeFilters = ["AWS::AllSupported"]
+      TagFilters = [
+        for key, value in local.common_tags :
+        {
+          Key    = key
+          Values = [value]
+        }
+      ]
+    })
+  }
+}
+
 resource "aws_kms_key" "terraform_state" {
   description             = "KMS key for terraform state S3 bucket objects."
   deletion_window_in_days = 30
-  tags                    = { service = "kms" }
+  tags = {
+    Name    = "${local.namespace}-kms-key"
+    Service = "kms"
+  }
 }
 
 resource "aws_kms_alias" "terraform_state" {
@@ -24,7 +48,10 @@ resource "aws_kms_alias" "terraform_state" {
 resource "aws_s3_bucket" "terraform_state" {
   bucket        = var.bucket_name
   force_destroy = false
-  tags          = { service = "s3" }
+  tags = {
+    Name    = "${local.namespace}-s3-state"
+    Service = "s3"
+  }
 }
 
 resource "aws_s3_bucket_ownership_controls" "terraform_state" {

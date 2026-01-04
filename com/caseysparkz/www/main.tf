@@ -3,14 +3,37 @@
 #
 
 locals {
+  environment = "prod"
+  project     = "caseysparkz"
+  application = "www"
+  namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    Terraform = true
+    ManagedBy = "terraform"
     Domain    = "www.${var.root_domain}"
+    Namespace = local.namespace
   }
   aws_kms_key_arn = "arn:aws:kms:${var.aws_region}:${local.aws_account_id}:key/${var.aws_kms_key_id}"
 }
 
-# Modules and Outputs ==========================================================
+# Resources ====================================================================
+resource "aws_resourcegroups_group" "this" {
+  name = "${local.namespace}-rg"
+
+  resource_query {
+    query = jsonencode({
+      ResourceTypeFilters = ["AWS::AllSupported"]
+      TagFilters = [
+        for key, value in local.common_tags :
+        {
+          Key    = key
+          Values = [value]
+        }
+      ]
+    })
+  }
+}
+
+# Modules ======================================================================
 module "artifacts" {
   source      = "../../../modules/s3_artifacts"
   root_domain = var.root_domain

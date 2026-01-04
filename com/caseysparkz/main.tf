@@ -3,9 +3,15 @@
 #
 
 locals {
+  environment = "prod"
+  project     = "caseysparkz"
+  application = "root"
+  namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    Terraform = true
-    Domain    = var.root_domain
+    ManagedBy   = "Terraform"
+    Application = local.application
+    Domain      = var.root_domain
+    Namespace   = local.namespace
   }
   dmarc_list = [ # Parsed to string
     { key = "p", value = "reject" },
@@ -35,6 +41,24 @@ locals {
 data "cloudflare_zones" "root_domain" { name = var.root_domain }
 
 # Resources ====================================================================
+# AWS::ResourceGroups ----------------------------------------------------------
+resource "aws_resourcegroups_group" "this" {
+  name = "${local.namespace}-rg"
+
+  resource_query {
+    query = jsonencode({
+      ResourceTypeFilters = ["AWS::AllSupported"]
+      TagFilters = [
+        for key, value in local.common_tags :
+        {
+          Key    = key
+          Values = [value]
+        }
+      ]
+    })
+  }
+}
+
 # AWS::KMS ---------------------------------------------------------------------
 resource "aws_kms_key" "this" {
   description             = "KMS key to encrypt domain artifacts/S3 bucket objects."
