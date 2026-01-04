@@ -1,7 +1,9 @@
 target-version = "py311"
 line-length = 120
 indent-width = 4
-exclude = []
+exclude = [
+    "**/node_modules/**/*.py",
+]
 
 [format]
 quote-style = "double"
