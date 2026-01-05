@@ -2,11 +2,6 @@
 # AWS IAM
 #
 
-locals {
-  aws_region     = data.aws_region.current.name
-  aws_account_id = data.aws_caller_identity.current.account_id
-}
-
 # Data =========================================================================
 data "aws_iam_policy_document" "lambda_iam_role" {
   statement {
