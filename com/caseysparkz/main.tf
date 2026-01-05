@@ -44,6 +44,7 @@ data "cloudflare_zones" "root_domain" { name = var.root_domain }
 # AWS::ResourceGroups ----------------------------------------------------------
 resource "aws_resourcegroups_group" "this" {
   name = "${local.namespace}-rg"
+  tags = { Name = "${local.namespace}-rg" }
 
   resource_query {
     query = jsonencode({
@@ -63,7 +64,7 @@ resource "aws_resourcegroups_group" "this" {
 resource "aws_kms_key" "this" {
   description             = "KMS key to encrypt domain artifacts/S3 bucket objects."
   deletion_window_in_days = 30
-  tags                    = { Service = "kms" }
+  tags                    = { Name = "${local.namespace}-kms-key" }
 }
 
 # Cloudflare -------------------------------------------------------------------

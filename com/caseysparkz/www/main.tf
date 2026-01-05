@@ -18,6 +18,7 @@ locals {
 # Resources ====================================================================
 resource "aws_resourcegroups_group" "this" {
   name = "${local.namespace}-rg"
+  tags = { Name = "${local.namespace}-rg" }
 
   resource_query {
     query = jsonencode({

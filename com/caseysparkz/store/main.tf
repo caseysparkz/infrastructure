@@ -19,6 +19,7 @@ resource "random_uuid" "this" {}
 
 resource "aws_resourcegroups_group" "this" {
   name = "${local.namespace}-rg"
+  tags = { Name = "${local.namespace}-rg" }
 
   resource_query {
     query = jsonencode({
@@ -37,6 +38,7 @@ resource "aws_resourcegroups_group" "this" {
 resource "aws_s3_bucket" "this" {
   bucket        = random_uuid.this.id
   force_destroy = false
+  tags          = { Name = "${local.namespace}-s3-bucket" }
 }
 
 resource "aws_s3_bucket_ownership_controls" "this" {

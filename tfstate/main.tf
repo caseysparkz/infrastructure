@@ -16,6 +16,7 @@ locals {
 # Resources ====================================================================
 resource "aws_resourcegroups_group" "this" {
   name = "${local.namespace}-rg"
+  tags = { Name = "${local.namespace}-rg" }
 
   resource_query {
     query = jsonencode({
@@ -34,10 +35,7 @@ resource "aws_resourcegroups_group" "this" {
 resource "aws_kms_key" "terraform_state" {
   description             = "KMS key for terraform state S3 bucket objects."
   deletion_window_in_days = 30
-  tags = {
-    Name    = "${local.namespace}-kms-key"
-    Service = "kms"
-  }
+  tags                    = { Name = "${local.namespace}-kms-key" }
 }
 
 resource "aws_kms_alias" "terraform_state" {
