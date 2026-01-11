@@ -16,7 +16,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = ">= 5.1.0, < 6.0.0"
+      version = ">= 5.15.0, < 6.0.0"
     }
     local = {
       source  = "hashicorp/local"
