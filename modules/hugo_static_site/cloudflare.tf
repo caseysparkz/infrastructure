@@ -54,7 +54,7 @@ resource "cloudflare_dns_record" "ses_verification" { # Verify domain ownership
 resource "cloudflare_dns_record" "subdomain_mx" { # SES MX record
   zone_id  = local.cloudflare_zone_id
   name     = var.subdomain
-  content  = "feedback-smtp.${data.aws_region.current.name}.amazonses.com"
+  content  = "feedback-smtp.${data.aws_region.current.region}.amazonses.com"
   type     = "MX"
   ttl      = 1
   priority = 10
