@@ -17,15 +17,18 @@ on:
       - "**/*.tftpl"
       - "**/*.tfvars"
       - "**/*.tfvars.json"
+      - "**/tfvars/**"
       - ".github/workflows/terraform.yml"
   push:
     branches: ["main"]
     paths:
       - "**/*.tf"
       - "**/*.tf.json"
+      - "**/*.tftest.hcl"
       - "**/*.tftpl"
       - "**/*.tfvars"
       - "**/*.tfvars.json"
+      - "**/tfvars/**"
 env:
   TF_VER: "1.14.3"  # Increment to update terraform version
 jobs:
@@ -69,7 +72,7 @@ jobs:
       - name: "terraform validate"
         run: "terraform validate"
 
-  infracost_update_pr:
+  infracost_breakdown:
     name: "Add Infracost breakdown to pull request"
     if: "github.event_name == 'pull_request'"
     runs-on: "ubuntu-latest"
@@ -78,7 +81,7 @@ jobs:
       contents: "read"
       pull-requests: "write"
     steps:
-      - name: "Checkout"
+      - name: "git checkout"
         uses: "actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8"  # v6.0.1
         with:
           fetch-depth: 0
@@ -90,19 +93,19 @@ jobs:
           api-key: "${{ secrets.INFRACOST_API_KEY }}"
           github-token: "${{ github.token }}"
 
-      - name: "Generate Infracost baseline estimate"
+      - name: "infracost breakdown (baseline)"
         run: >
           infracost breakdown
             --config-file infracost.yml
             --format json
             --out-file /tmp/infracost_base.json"
 
-      - name: "Checkout pull request branch"
+      - name: "git checkout (pr branch)"
         uses: "actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8"  # v6.0.1
         with:
           fetch-depth: 0
 
-      - name: "Generate Infracost diff"
+      - name: "infracost diff"
         run: >
           infracost diff
             --config-file infracost.yml
@@ -110,7 +113,7 @@ jobs:
             --compare-to /tmp/infracost_base.json
             --out-file /tmp/infracost_diff.json
 
-      - name: "Post Infracost diff to pull request"
+      - name: "infracost comment"
         run: >
           infracost comment github
             --path /tmp/infracost_diff.json
@@ -138,12 +141,12 @@ jobs:
       run:
         working-directory: "${{ matrix.work_dir }}"
     steps:
-      - name: "Checkout"
+      - name: "git checkout"
         uses: "actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8"  # v6.0.1
         with:
           fetch-depth: 1
 
-      - name: "Log in to AWS CLI"
+      - name: "aws configure"
         uses: "aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708"  # v5.1.1
         with:
           aws-access-key-id: "${{ secrets.AWS_ACCESS_KEY_ID}}"
@@ -155,10 +158,10 @@ jobs:
         with:
           terraform_version: "${{ env.TF_VER }}"
 
-      - name: "Initialize Terraform."
-        run: "terraform init --upgrade --backend false"
+      - name: "terraform init"
+        run: "terraform init --upgrade"
 
-      - name: "Create Terraform plan"
+      - name: "teraform plan"
         run: "terraform plan --var-file production.tfvars --out planfile"
 
       - name: "Cache Terraform plan"
@@ -167,7 +170,7 @@ jobs:
           path: "/tmp/production.tfplan"
           key: "${{ matrix.workdir}}/production.tfplan"
 
-      - name: "Post PR comment"
+      - name: "gh pr comment"
         uses: "borchero/terraform-plan-comment@5461c89b054077416f3220bac9089c6093483020"  # v2.6.0
         with:
           token: "${{ github.token }}"
