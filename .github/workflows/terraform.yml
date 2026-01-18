@@ -42,6 +42,7 @@ jobs:
         work_dir:
           - "./com/caseysparkz/"
           - "./com/caseysparkz/ecr/"
+          - "./com/caseysparkz/home/"
           - "./com/caseysparkz/store/"
           - "./com/caseysparkz/www/"
           - "./tfstate/"
@@ -134,6 +135,7 @@ jobs:
         work_dir:
           - "./com/caseysparkz/"
           - "./com/caseysparkz/ecr/"
+          - "./com/caseysparkz/home/"
           - "./com/caseysparkz/store/"
           - "./com/caseysparkz/www/"
           - "./tfstate/"
