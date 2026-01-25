@@ -1,0 +1,27 @@
+{
+  "name": "infrastructure",
+  "engineVersion": "v0.19.10",
+  "sdk": {
+    "source": "python"
+  },
+  "toolchains": [
+    {
+      "name": "jest",
+      "source": "github.com/dagger/jest@main",
+      "pin": "8d55a0693547dad012ed0c6cf9e099bbbc0a8d47"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "jest",
+      "source": "github.com/dagger/jest@main",
+      "pin": "8d55a0693547dad012ed0c6cf9e099bbbc0a8d47"
+    },
+    {
+      "name": "ruff",
+      "source": "github.com/dagger/dagger/modules/ruff@11d93c8340854da72e79c5a56445d511ebf82a5a",
+      "pin": "11d93c8340854da72e79c5a56445d511ebf82a5a"
+    }
+  ],
+  "source": ".dagger"
+}

@@ -9,6 +9,7 @@
 **.log
 **.out
 **build*
+**/.env
 
 # Python
 **/__pycache__/
@@ -70,7 +71,6 @@
 **/celerybeat-schedule
 **/celerybeat.pid
 **.sage.py
-**/.env
 **/.venv
 **/env/
 **/venv/
