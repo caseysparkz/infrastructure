@@ -49,13 +49,7 @@ resource "aws_resourcegroups_group" "this" {
   resource_query {
     query = jsonencode({
       ResourceTypeFilters = ["AWS::AllSupported"]
-      TagFilters = [
-        for key, value in local.common_tags :
-        {
-          Key    = key
-          Values = [value]
-        }
-      ]
+      TagFilters          = [for key, value in local.common_tags : { Key = key, Values = [value] }]
     })
   }
 }

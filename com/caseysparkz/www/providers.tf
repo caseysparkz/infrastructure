@@ -28,6 +28,17 @@ terraform {
   }
 }
 
+# Data and Ephemerals ==========================================================
+data "aws_caller_identity" "this" {}
+
+data "aws_secretsmanager_secret" "cloudflare_token" {
+  arn = "arn:aws:secretsmanager:${var.aws_region}:${local.aws_account_id}:secret:cloudflare/api_token"
+}
+
+ephemeral "aws_secretsmanager_secret_version" "cloudflare_token" {
+  secret_id = data.aws_secretsmanager_secret.cloudflare_token.id
+}
+
 # Providers ====================================================================
 provider "aws" {
   region = var.aws_region
@@ -35,15 +46,6 @@ provider "aws" {
   default_tags { tags = local.common_tags }
 }
 
-provider "cloudflare" { api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string }
-
-# Data =========================================================================
-data "aws_caller_identity" "this" {}
-
-data "aws_secretsmanager_secret" "cloudflare_token" {
-  arn = "arn:aws:secretsmanager:${var.aws_region}:${local.aws_account_id}:secret:cloudflare/api_token"
-}
-
-data "aws_secretsmanager_secret_version" "cloudflare_token" {
-  secret_id = data.aws_secretsmanager_secret.cloudflare_token.id
+provider "cloudflare" {
+  api_token = ephemeral.aws_secretsmanager_secret_version.cloudflare_token.secret_string
 }
