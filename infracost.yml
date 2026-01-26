@@ -8,7 +8,7 @@ projects:
     terraform_workspace: "default"
     usage_file: "./tfstate/infracost_usage.yml"
     terraform_var_files: []
-    dependency_paths: []
+    dependency_paths: ["./tfstate/**"]
 
   - <<: *default
     name: "/com/caseysparkz/"
@@ -16,7 +16,7 @@ projects:
     usage_file: "./com/caseysparkz/infracost_usage.yml"
     terraform_var_files: ["./production.tfvars"]
     dependency_paths:
-      - "./com/caseysparkz/**"
+      - "./com/caseysparkz/*"
       - "./com/caseysparkz/production.tfvars"
       - "./modules/proton_domain/**"
 
@@ -29,9 +29,17 @@ projects:
       - "./modules/ecr/**"
 
   - <<: *default
+    name: "/com/caseysparkz/eks/"
+    path: "./com/caseysparkz/eks/"
+    usage_file: "./com/caseysparkz/eks/infracost_usage.yml"
+    terraform_var_files: ["./production.tfvars"]
+    dependency_paths: ["./com/caseysparkz/eks/**"]
+
+  - <<: *default
     name: "/com/caseysparkz/store/"
     path: "./com/caseysparkz/store/"
     usage_file: "./com/caseysparkz/store/infracost_usage.yml"
+    dependency_paths: ["./com/caseysparkz/store/**"]
 
   - <<: *default
     name: "/com/caseysparkz/www/"
