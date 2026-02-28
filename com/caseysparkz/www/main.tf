@@ -3,16 +3,19 @@
 #
 
 locals {
-  environment = "prod"
-  project     = "caseysparkz"
-  application = "www"
-  namespace   = "${local.environment}-${local.project}-${local.application}"
-  common_tags = {
-    ManagedBy = "terraform"
-    Domain    = "www.${var.root_domain}"
-    Namespace = local.namespace
-  }
+  environment     = "prod"
+  project         = "caseysparkz"
+  application     = "www"
+  namespace       = "${local.environment}-${local.project}-${local.application}"
   aws_kms_key_arn = "arn:aws:kms:${var.aws_region}:${local.aws_account_id}:key/${var.aws_kms_key_id}"
+  common_tags = {
+    Application = local.application
+    Domain      = "www.${var.root_domain}"
+    Environment = local.environment
+    ManagedBy   = "terraform"
+    Namespace   = local.namespace
+    Project     = local.project
+  }
 }
 
 # Resources ====================================================================

@@ -4,16 +4,16 @@
 
 # AWS ==========================================================================
 variable "aws_region" {
-  type        = string
   description = "AWS region to deploy to."
+  type        = string
   sensitive   = false
   default     = "us-west-2"
 }
 
 # Cloudflare ===================================================================
 variable "mx_servers" {
-  type        = map(string)
   description = "MX servers for root domain. Syntax: {server: priority}."
+  type        = map(string)
   sensitive   = false
   default = {
     "mail.protonmail.ch"    = 10
@@ -22,8 +22,8 @@ variable "mx_servers" {
 }
 
 variable "dkim_records" {
-  type        = map(string)
   description = "DKIM (CNAME) for root domain. Syntax: {host: pointer}."
+  type        = map(string)
   sensitive   = false
   default = {
     "protonmail._domainkey"  = "protonmail.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
@@ -33,8 +33,8 @@ variable "dkim_records" {
 }
 
 variable "spf_senders" {
-  type        = list(string)
   description = "List of allowed SPF senders, like: [\"include:_spf.example.com\", \"ip4:127.0.0.1\"]."
+  type        = list(string)
   sensitive   = false
   default = [
     "include:_spf.protonmail.ch",
@@ -43,8 +43,8 @@ variable "spf_senders" {
 }
 
 variable "txt_records" {
-  type        = map(string)
   description = "List of TXT records for domain."
+  type        = map(string)
   sensitive   = false
   default = {
     "did=did:plc:eop37ikcn6s33dedyhvejqv5"                                  = "_atproto"
@@ -53,16 +53,16 @@ variable "txt_records" {
 }
 
 variable "pka_records" {
-  type        = map(string)
   description = "Map of PKA handles and fingerprints for root domain."
+  type        = map(string)
   sensitive   = false
   default     = { himself = "133898B4C51BC39479E97F1B2027DEDFECE6A3D5" }
 }
 
 # Misc. ========================================================================
 variable "root_domain" {
-  type        = string
   description = "Root domain of Terraform infrastructure."
+  type        = string
   sensitive   = false
   default     = "caseysparkz.com"
 }

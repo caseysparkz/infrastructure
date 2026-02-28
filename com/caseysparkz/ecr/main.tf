@@ -10,9 +10,12 @@ locals {
   application    = "ecr"
   namespace      = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    ManagedBy = "terraform"
-    Domain    = var.root_domain
-    Namespace = local.namespace
+    Application = local.application
+    Domain      = "ecr.${var.root_domain}"
+    Environment = local.environment
+    ManagedBy   = "terraform"
+    Namespace   = local.namespace
+    Project     = local.project
   }
 }
 

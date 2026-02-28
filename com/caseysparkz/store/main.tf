@@ -8,9 +8,12 @@ locals {
   application = "store"
   namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    ManagedBy = "terraform"
-    Domain    = "caseysparkz.com"
-    Namespace = local.namespace
+    Application = local.application
+    Domain      = "${random_uuid.this.id}.caseysparkz.com"
+    Environment = local.environment
+    ManagedBy   = "terraform"
+    Namespace   = local.namespace
+    Project     = local.project
   }
 }
 

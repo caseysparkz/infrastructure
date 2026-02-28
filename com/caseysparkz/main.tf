@@ -8,10 +8,12 @@ locals {
   application = "root"
   namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    ManagedBy   = "Terraform"
     Application = local.application
     Domain      = var.root_domain
+    Environment = local.environment
+    ManagedBy   = "terraform"
     Namespace   = local.namespace
+    Project     = local.project
   }
   dmarc_list = [ # Parsed to string
     { key = "p", value = "reject" },

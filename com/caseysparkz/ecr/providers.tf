@@ -26,11 +26,5 @@ terraform {
 provider "aws" {
   region = "us-west-2"
 
-  default_tags {
-    tags = {
-      Terraform = true
-      Domain    = var.root_domain
-      Project   = "ecr"
-    }
-  }
+  default_tags { tags = local.common_tags }
 }
