@@ -35,9 +35,12 @@ resource "aws_lambda_function_url" "contact_form" {
 
   cors {
     allow_credentials = false
-    allow_origins     = ["*"]
-    allow_methods     = ["POST"]
-    allow_headers     = ["content-type"]
+    allow_origins = [
+      "https://${var.root_domain}",
+      "https://${var.subdomain}",
+    ]
+    allow_methods = ["POST"]
+    allow_headers = ["content-type"]
   }
 }
 
