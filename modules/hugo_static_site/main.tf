@@ -3,10 +3,10 @@
 #
 
 locals {
-  common_tags = merge(var.common_tags, { service = var.subdomain })
+  common_tags = merge(var.common_tags, { Service = var.subdomain })
   email_headers = {
-    default_recipient = "form@${var.root_domain}"
-    default_sender    = "form@${var.subdomain}"
+    default_recipient = "contact@${var.root_domain}"
+    default_sender    = "contact@${var.subdomain}"
   }
   reverse_dns_subdomain_dir = join(".", reverse(split(".", var.subdomain)))
 }
