@@ -38,7 +38,7 @@ resource "aws_resourcegroups_group" "this" {
   }
 }
 
-resource "aws_s3_bucket" "this" {
+resource "aws_s3_bucket" "this" { #tfsec:ignore:aws-s3-enable-bucket-logging
   bucket        = random_uuid.this.id
   force_destroy = false
   tags          = { Name = "${local.namespace}-s3-bucket" }

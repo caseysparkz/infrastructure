@@ -8,7 +8,7 @@ locals {
 }
 
 # Data =========================================================================
-data "aws_ecr_authorization_token" "token" {} # ECR token
+data "aws_ecr_authorization_token" "token" {}
 
 # Resources ====================================================================
 resource "aws_ecr_repository" "ecr" {

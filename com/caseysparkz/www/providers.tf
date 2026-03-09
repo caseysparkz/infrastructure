@@ -35,7 +35,9 @@ provider "aws" {
   default_tags { tags = local.common_tags }
 }
 
-provider "cloudflare" { api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string }
+provider "cloudflare" {
+  api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string
+}
 
 # Data =========================================================================
 data "aws_caller_identity" "this" {}

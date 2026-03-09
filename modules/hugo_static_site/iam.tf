@@ -17,6 +17,7 @@ data "aws_iam_policy_document" "lambda_iam_role" {
 
 data "aws_iam_policy_document" "lambda_iam_policy" {
   statement {
+    sid    = "AllowSesSendEmail"
     effect = "Allow"
     actions = [
       "ses:SendEmail",
@@ -30,19 +31,20 @@ data "aws_iam_policy_document" "lambda_iam_policy" {
   }
 
   statement {
+    sid       = "AllowKmsDecrypt"
     effect    = "Allow"
     actions   = ["kms:Decrypt"]
     resources = [var.aws_kms_key_arn]
   }
 
   statement {
+    sid    = "AllowCreateLog"
     effect = "Allow"
     actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
     ]
-    #resources = ["${aws_cloudwatch_log_group.lambda_contact_form.arn}:*"]
     resources = ["arn:aws:logs:*:*:*"]
   }
 }
