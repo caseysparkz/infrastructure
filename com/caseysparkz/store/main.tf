@@ -18,19 +18,6 @@ locals {
 }
 
 # Data =========================================================================
-data "aws_iam_policy_document" "assume_role" {
-  statement {
-    sid     = "AllowIamUserAssumeRole"
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "AWS"
-      identifiers = [aws_iam_user.this.arn]
-    }
-  }
-}
-
 data "aws_iam_policy_document" "s3_read_write" {
   statement {
     sid       = "ListBucket"
@@ -45,6 +32,21 @@ data "aws_iam_policy_document" "s3_read_write" {
       "s3:DeleteObject",
     ]
     resources = ["${aws_s3_bucket.this.arn}/*"] #tfsec:ignore:aws-iam-no-policy-wildcards
+  }
+}
+
+data "aws_iam_policy_document" "enforce_group_mfa" {
+  statement { #tfsec:ignore:aws-iam-no-policy-wildcards
+    sid       = "AllowAllActionsIfMfaPresent"
+    effect    = "Allow"
+    actions   = ["*"]
+    resources = ["*"]
+
+    condition {
+      test     = "Bool"
+      variable = "aws:MultiFactorAuthPresent"
+      values   = ["true"]
+    }
   }
 }
 
@@ -119,21 +121,24 @@ resource "aws_iam_user" "this" {
   tags = { Name = "${local.namespace}-iam-user" }
 }
 
-resource "aws_iam_role" "this" {
-  name               = "${local.namespace}-iam-role"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
-  tags               = { Name = "${local.namespace}-iam-role" }
+resource "aws_iam_group" "this" { name = "${local.namespace}-iam-group" }
+
+resource "aws_iam_group_policy" "enforce_mfa" {
+  name   = "${local.namespace}-iam-group-policy-enforcemfa"
+  group  = aws_iam_group.this.name
+  policy = data.aws_iam_policy_document.enforce_group_mfa.json
 }
 
-resource "aws_iam_policy" "this" {
-  name   = "${local.namespace}-iam-policy"
+resource "aws_iam_group_policy" "s3_readwrite" {
+  name   = "${local.namespace}-iam-group-policy-s3readwrite"
+  group  = aws_iam_group.this.name
   policy = data.aws_iam_policy_document.s3_read_write.json
-  tags   = { Name = "${local.namespace}-iam-policy" }
 }
 
-resource "aws_iam_role_policy_attachment" "this" {
-  role       = aws_iam_role.this.name
-  policy_arn = aws_iam_policy.this.arn
+resource "aws_iam_group_membership" "this" {
+  name  = "${local.namespace}-iam-group-membership"
+  group = aws_iam_group.this.name
+  users = [aws_iam_user.this.name]
 }
 
 resource "aws_iam_access_key" "this" {
