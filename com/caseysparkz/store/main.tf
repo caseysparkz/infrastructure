@@ -17,6 +17,37 @@ locals {
   }
 }
 
+# Data =========================================================================
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    sid     = "AllowIamUserAssumeRole"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = [aws_iam_user.this.arn]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "s3_read_write" {
+  statement {
+    sid       = "ListBucket"
+    actions   = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.this.arn]
+  }
+
+  statement {
+    sid = "ReadWriteObjects"
+    actions = [
+      "s3:GetObject",
+      "s3:DeleteObject",
+    ]
+    resources = ["${aws_s3_bucket.this.arn}/*"] #tfsec:ignore:aws-iam-no-policy-wildcards
+  }
+}
+
 # Resources ====================================================================
 resource "random_uuid" "this" {}
 
@@ -38,6 +69,7 @@ resource "aws_resourcegroups_group" "this" {
   }
 }
 
+# S3 ---------------------------------------------------------------------------
 resource "aws_s3_bucket" "this" { #tfsec:ignore:aws-s3-enable-bucket-logging
   bucket        = random_uuid.this.id
   force_destroy = false
@@ -81,8 +113,48 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   }
 }
 
+# IAM --------------------------------------------------------------------------
+resource "aws_iam_user" "this" {
+  name = "${local.namespace}-iam-user"
+  tags = { Name = "${local.namespace}-iam-user" }
+}
+
+resource "aws_iam_role" "this" {
+  name               = "${local.namespace}-iam-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  tags               = { Name = "${local.namespace}-iam-role" }
+}
+
+resource "aws_iam_policy" "this" {
+  name   = "${local.namespace}-iam-policy"
+  policy = data.aws_iam_policy_document.s3_read_write.json
+  tags   = { Name = "${local.namespace}-iam-policy" }
+}
+
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.this.arn
+}
+
+resource "aws_iam_access_key" "this" {
+  user   = aws_iam_user.this.name
+  status = "Active"
+}
+
 # Outputs ======================================================================
-output "s3_bucket_url" {
+output "aws_s3_bucket_url" {
   description = "URL of the S3 bucket."
   value       = aws_s3_bucket.this.bucket_regional_domain_name
+}
+
+output "aws_access_key_id" {
+  description = "AWS access key ID and secret key for the S3 user."
+  value       = aws_iam_access_key.this.id
+  sensitive   = false
+}
+
+output "aws_secret_access_key" {
+  description = "AWS access key ID and secret key for the S3 user."
+  value       = aws_iam_access_key.this.secret
+  sensitive   = true
 }
