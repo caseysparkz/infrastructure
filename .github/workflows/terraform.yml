@@ -1,226 +1,341 @@
 # Author:       Casey Sparks
-# Date:         August 16, 2024
-# Description:  Run `terraform validate` against new terraform configs.
-# TODO:
-#               * `infracost breakdown`
-#               * `tf plan`
-#               * `tf apply`
+# Date:         March 19, 2025
+# Description:  Run Terraform operations to:
+#                 1. Enumerate directories with changed Terraform files.
+#                 2. Run tests against changed Terraform modules.
+#                 3. Validate the syntax of changed Terraform manifests.
+#                 4. Check the security posture of the changed Terraform
+#                     modules and manifests.
+#                 5. Generate a cost estimate of planned infrastructure changes
+#                     and post the estimate to the pull request.
+#                 6. Depending on if the event is a pull request or merge:
+#                   a. On pull request: Plan infrastructure changes and comment
+#                       the plan to the pull request.
+#                   b. On merge: Deploy infrastructure changes.
 ---
-name: "Terraform"
+name: "terraform"
 on:
-  pull_request:
-    branches: ["main"]
-    paths:
-      - "**/*.tf"
-      - "**/*.tf.json"
-      - "**/*.tftest.hcl"
-      - "**/*.tftpl"
-      - "**/*.tfvars"
-      - "**/*.tfvars.json"
-      - "**/tfvars/**"
-      - ".github/workflows/terraform.yml"
   push:
     branches: ["main"]
     paths:
-      - "**/*.tf"
-      - "**/*.tf.json"
-      - "**/*.tftest.hcl"
-      - "**/*.tftpl"
-      - "**/*.tfvars"
-      - "**/*.tfvars.json"
-      - "**/tfvars/**"
+      - "terraform/**/*.hcl"
+      - "terraform/**/*.hcl.json"
+      - "terraform/**/*.tf"
+      - "terraform/**/*.tf.json"
+      - "terraform/**/*.tfvars"
+      - "terraform/**/*.tfvars.json"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "terraform/**/*.hcl"
+      - "terraform/**/*.hcl.json"
+      - "terraform/**/*.tf"
+      - "terraform/**/*.tf.json"
+      - "terraform/**/*.tfvars"
+      - "terraform/**/*.tfvars.json"
 env:
-  TF_VER: "1.14.3"  # Increment to update terraform version
+  TERRAFORM_PLANFILE: "/tmp/out.tfplan"
+  TERRAFORM_VERSION: "1.14.4" # Increment to update Terraform
+  INFRACOST_CONFIG: "terraform/infracost.yml"
 jobs:
-  terraform_validate:
-    name: "Terraform Validate"
+  changed_terraform:
+    name: "Get changed Terraform directories"
     runs-on: "ubuntu-latest"
     permissions:
       contents: "read"
+    outputs:
+      manifest_dirs: "${{ steps.changed_manifests.outputs.tfmanifest_all_changed_files }}"
+      module_dirs: "${{ steps.changed_modules.outputs.tfmodule_all_changed_files }}"
+      all_dirs: "${{ steps.all_changed.outputs.tf_all_changed_dirs }}"
+      infracost_updated: "${{ steps.changed_manifests.outputs.infracost_any_changed }}"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
+        with:
+          fetch-depth: 2
+
+      - name: "Get changed Terraform manifests"
+        id: "changed_manifests"
+        uses: "tj-actions/changed-files@22103cc46bda19c2b464ffe86db46df6922fd323" # NOTAG
+        with:
+          files_yaml_from_source_file: ".github/config/changed_files.yml"
+          matrix: true
+          dir_names: true
+
+      - name: "Get changed Terraform modules"
+        id: "changed_modules"
+        uses: "tj-actions/changed-files@22103cc46bda19c2b464ffe86db46df6922fd323" # NOTAG
+        with:
+          files_yaml_from_source_file: ".github/config/changed_files.yml"
+          matrix: true
+          dir_names: true
+          dir_names_max_depth: 3 # evaluates to ["terraform/modules/x","terraform/modules/y","terraform/modules/z"]
+
+      - name: "Get all changed Terraform directories"
+        id: "all_changed"
+        run: |
+          ALL_DIRS="$(                                                                          \
+            echo                                                                                \
+              '${{ steps.changed_manifests.outputs.tfmanifest_all_changed_files }}'             \
+              '${{ steps.changed_modules.outputs.tfmodule_all_changed_files }}'                 \
+            | jq -s '.[0] + .[1]'                                                               \
+            | jq -r tostring                                                                    \
+          )"
+
+          echo "tf_all_changed_dirs=${ALL_DIRS}" >> "${GITHUB_OUTPUT}"
+
+      - name: "Debug outputs"
+        run: |
+          printf 'manifest_dirs: ${{ steps.changed_manifests.outputs.tfmanifest_all_changed_files }}\n'
+          printf 'module_dirs: ${{ steps.changed_modules.outputs.tfmodule_all_changed_files }}\n'
+          printf 'all_dirs: ${{ steps.all_changed.outputs.tf_all_changed_dirs }}\n'
+          printf 'infracost_updated: ${{ steps.changed_manifests.outputs.infracost_any_changed }}\n'
+
+  terraform_test:
+    name: "terraform test"
+    runs-on: "ubuntu-latest"
+    needs: ["changed_terraform"]
+    # Runs on pull request if Terraform modules changed.
+    if: "${{ github.event == 'pull_request' }}"
+    permissions:
+      contents: "read"
     strategy:
+      max-parallel: 4
       matrix:
-        work_dir:
-          - "./com/caseysparkz/"
-          - "./com/caseysparkz/ecr/"
-          - "./com/caseysparkz/store/"
-          - "./com/caseysparkz/www/"
-          - "./tfstate/"
-          # Modules. Update with each addition.
-          - "./modules/cloudflare_dns_zone/"
-          - "./modules/ecr/"
-          - "./modules/forward_zones/"
-          - "./modules/hugo_static_site/"
-          - "./modules/proton_domain/"
-          - "./modules/s3_artifacts/"
+        dir: "${{ fromJSON(needs.changed_terraform.outputs.module_dirs) }}"
     defaults:
       run:
-        working-directory: "${{ matrix.work_dir }}"
+        working-directory: "${{ matrix.dir }}"
     steps:
-      - name: "git checkout"
-        uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"  # v6.0.2
+      - name: "Checkout"
+        uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
-      - name: "Set up Terraform"
-        uses: "hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85"  # v4.0.0
+      - name: "Install Terraform"
+        uses: "hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85" # v4.0.0
         with:
-          terraform_version: "${{ env.TF_VER }}"
+          terraform_version: "${{ env.TERRAFORM_VERSION }}"
 
       - name: "terraform init"
-        run: "terraform init --upgrade --backend=false"
+        run: "terraform init --upgrade --backend=false" # Don't need backend for linting
+
+      - name: "terraform test"
+        run: "terraform test"
+
+  terraform_validate:
+    name: "terraform validate"
+    runs-on: "ubuntu-latest"
+    needs: ["changed_terraform"]
+    # * Always runs on pull request
+    # * Runs on push if Terraform manifests are changed
+    if: "${{ needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
+    permissions:
+      contents: "read"
+    strategy:
+      max-parallel: 4
+      matrix:
+        dir: "${{ fromJSON(needs.changed_terraform.outputs.all_dirs) }}"
+    defaults:
+      run:
+        working-directory: "${{ matrix.dir }}"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
+        with:
+          fetch-depth: 2
+
+      - name: "Install Terraform"
+        uses: "hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85" # v4.0.0
+        with:
+          terraform_version: "${{ env.TERRAFORM_VERSION }}"
+
+      - name: "terraform init"
+        run: "terraform init --upgrade --backend=false" # Don't need backend for linting
 
       - name: "terraform validate"
         run: "terraform validate"
 
-  infracost_breakdown:
-    name: "Add Infracost breakdown to pull request"
-    if: "github.event_name == 'pull_request'"
+  tfsec:
+    name: "tfsec"
     runs-on: "ubuntu-latest"
-    needs: ["terraform_validate"]
+    needs:
+      - "changed_terraform"
+      - "terraform_validate"
+    # * Always runs on pull request if any terraform changed
+    if: "${{ github.event == 'pull_request' }}"
+    permissions:
+      contents: "read"
+    strategy:
+      max-parallel: 4
+      matrix:
+        dir: "${{ fromJSON(needs.changed_terraform.outputs.all_dirs) }}"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
+        with:
+          fetch-depth: 2
+
+      - name: "tfsec"
+        uses: "aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6" # v1.0.3
+        with:
+          github_token: "${{ github.token }}"
+          working_directory: "${{ matrix.dir }}"
+
+  infracost_diff:
+    name: "infracost diff"
+    runs-on: "ubuntu-latest"
+    needs:
+      - "changed_terraform"
+      - "terraform_validate"
+    if: "${{ github.event_name == 'pull_request' && needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
     permissions:
       contents: "read"
       pull-requests: "write"
+    env:
+      COMMENT: "!!!WARNING!!! Terraform manifests updated, but Infracost files remain untouched."
     steps:
+      - name: "Find Existing Comment"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'false' }}"
+        uses: "peter-evans/find-comment@b30e6a3c0ed37e7c023ccd3f1db5c6c0b0c23aad" # v4.0.0
+        id: "find_comment"
+        with:
+          issue-number: "${{ github.event.pull_request.number || github.event.issue.number }}"
+          comment-author: "github-actions[bot]"
+          body-includes: "${{ env.COMMENT }}"
+
+      - name: "Post nag reminder"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'false' }}"
+        uses: "actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd" #v8.0.0
+        with:
+          script: |
+            const comment_id = '${{ steps.find_comment.outputs.comment-id }}';
+            const body = '${{ env.COMMENT }}';
+
+            if (comment_id) {
+              // Update the existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: comment_id,
+                body: body
+              });
+            } else {
+              // Create a new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+
       - name: "git checkout"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
         uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"  # v6.0.2
         with:
           fetch-depth: 0
           ref: "${{ github.event.pull_request.base.ref }}"
 
       - name: "Setup Infracost"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
         uses: "infracost/actions/setup@e9d6e6cd65e168e76b0de50ff9957d2fe8bb1832"  # v3.0.1
         with:
           api-key: "${{ secrets.INFRACOST_API_KEY }}"
           github-token: "${{ github.token }}"
 
       - name: "infracost breakdown (baseline)"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
         run: >
-          infracost breakdown
-            --config-file infracost.yml
-            --format json
-            --out-file /tmp/infracost_base.json"
+          infracost breakdown                                                 \
+            --config-file ${{ env.INFRACOST_CONFIG }}                         \
+            --format json                                                     \
+            --out-file /tmp/infracost_base.json
 
       - name: "git checkout (pr branch)"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
         uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"  # v6.0.2
         with:
           fetch-depth: 0
 
       - name: "infracost diff"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
         run: >
-          infracost diff
-            --config-file infracost.yml
-            --format json
-            --compare-to /tmp/infracost_base.json
+          infracost diff                                                      \
+            --config-file ${{ env.INFRACOST_CONFIG }}                         \
+            --format json                                                     \
+            --compare-to /tmp/infracost_base.json                             \
             --out-file /tmp/infracost_diff.json
 
       - name: "infracost comment"
+        if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
         run: >
-          infracost comment github
-            --path /tmp/infracost_diff.json
-            --repo ${{ github.repository }}
-            --pull-request ${{ github.event.pull_request.number }}
-            --github-token ${{ github.token }}
-            --behavior hide-and-new
+          infracost comment github                                            \
+            --path /tmp/infracost_diff.json                                   \
+            --repo ${{ github.repository }}                                   \
+            --pull-request ${{ github.event.pull_request.number }}            \
+            --github-token ${{ github.token }}                                \
+            --behavior update
 
-  terraform_plan:
-    name: "Terraform Plan"
-    if: "github.event_name == 'pull_request'"
+  terraform_plan_apply:
+    name: "terraform plan && terraform apply"
     runs-on: "ubuntu-latest"
-    needs: ["terraform_validate"]
+    # Runs on both PR+push if Terraform manifests change
+    if: "${{ needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
+    needs:
+      - "changed_terraform"
+      - "terraform_validate"
     permissions:
-      contents: "write"
+      contents: "read"
+      pull-requests: "write"
     strategy:
+      fail-fast: false
+      max-parallel: 4
       matrix:
-        work_dir:
-          - "./com/caseysparkz/"
-          - "./com/caseysparkz/ecr/"
-          - "./com/caseysparkz/store/"
-          - "./com/caseysparkz/www/"
-          - "./tfstate/"
+        dir: "${{ fromJSON(needs.changed_terraform.outputs.manifest_dirs) }}"
     defaults:
       run:
-        working-directory: "${{ matrix.work_dir }}"
+        working-directory: "${{ matrix.dir }}"
+    concurrency:
+      group: "${{ github.workflow-}}-${{ github.ref_name }}-terraformplanapply-${{ matrix.dir }}"
+      cancel-in-progress: false
     steps:
-      - name: "git checkout"
-        uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"  # v6.0.2
+      - name: "Checkout"
+        uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # v6.0.2
         with:
-          fetch-depth: 1
+          fetch-depth: 2
 
-      - name: "aws configure"
+      - name: "Install Terraform"
+        uses: "hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85" # v4.0.0
+        with:
+          terraform_version: "${{ env.TERRAFORM_VERSION }}"
+
+      - name: "aws sso login"
         uses: "aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7"  # v6.0.0
         with:
-          aws-access-key-id: "${{ secrets.AWS_ACCESS_KEY_ID}}"
-          aws-secret-access-key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-          aws-region: "${{ secrets.AWS_REGION }}"
-
-      - name: "Set up Terraform"
-        uses: "hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85"  # v4.0.0
-        with:
-          terraform_version: "${{ env.TF_VER }}"
+          aws-region: "us-west-2"
+          aws-access-key-id: "${{ secrets.AWS_KEY_DEV}}"
+          aws-secret-access-key: "${{ secrets.AWS_SECRET_DEV }}"
 
       - name: "terraform init"
         run: "terraform init --upgrade"
 
-      - name: "teraform plan"
-        run: "terraform plan --var-file production.tfvars --out planfile"
+      - name: "terraform plan"
+        run: "terraform plan -out=${TERRAFORM_PLANFILE}"
 
-      - name: "Cache Terraform plan"
-        uses: "actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306"  # v5.0.3
-        with:
-          path: "/tmp/production.tfplan"
-          key: "${{ matrix.workdir}}/production.tfplan"
-
-      - name: "gh pr comment"
-        uses: "borchero/terraform-plan-comment@d177dfb833ccfb6ef6022700796190dfe54830f1"  # v3.0.0
+      - name: "Post PR comment"
+        if: "${{ github.event_name == 'pull_request' }}"
+        uses: "borchero/terraform-plan-comment@9c18ac901b5d2b58e9cbd9d1480af36e28ffaf88"  # v2.6.1
         with:
           token: "${{ github.token }}"
-          planfile: "planfile"
+          planfile: "${{ env.TERRAFORM_PLANFILE }}"
+          terraform-cmd: "terraform"
+          working-directory: "${{ matrix.dir }}"
+          header: "Terraform Plan"
+          skip-comment: false
+          skip-empty: false
+          expand-comment: false
 
-# ========================= HOLD UNTIL READY FOR CD ===========================
-# terraform_plan needs to cache the planfile
-# terraform_apply needs to retrieve the planfile from cache and apply it
-# -----------------------------------------------------------------------------
-# terraform_apply:
-#   name: "Terraform Apply"
-#   if: "github.event_name == 'push'"
-#   runs-on: "ubuntu-latest"
-#   strategy:
-#     matrix:
-#       work_dir:
-#         - "./com/caseysparkz/"
-#         - "./com/caseysparkz/ecr/"
-#         - "./com/caseysparkz/store/"
-#         - "./com/caseysparkz/www/"
-#         - "./tfstate/"
-#   defaults:
-#     run:
-#       working-directory: "${{ matrix.work_dir }}"
-#   steps:
-#     - name: "Checkout"
-#       uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"  # v 6.0.2
-#       with:
-#         fetch-depth: 0
-
-#     - name: "Log in to AWS CLI"
-#       uses: "aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df"  # v4.3.1
-#       with:
-#         aws-access-key-id: "${{ secrets.AWS_ACCESS_KEY_ID}}"
-#         aws-secret-access-key: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-#         aws-region: "${{ secrets.AWS_REGION }}"
-
-#     - name: "Set up Terraform"
-#       uses: "hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85"  # v4.0.0
-#       with:
-#         terraform_version: "${{ env.TF_VER }}"
-
-#     - name: "Initialize Terraform."
-#       run: "terraform init --upgrade --backend false"
-
-#     - name: "Retrieve Terraform plan"
-#       uses: "actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684"  # v4.2.3
-#       with:
-#         path: "/tmp/production.tfplan"
-#         key: "${{ matrix.workdir}}/production.tfplan"
-
-#     - name: "Terraform apply"
-#       run: "terraform apply --var-file=production.tfvars --auto-approve /tmp/production.tfplan"
+      - name: "terraform apply"
+        if: "${{ github.event_name == 'push' }}"
+        run: "terraform apply --auto-approve ${TERRAFORM_PLANFILE}"
