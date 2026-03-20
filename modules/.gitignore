@@ -10,6 +10,7 @@
 **/*.tfstate
 **/*.tfstate.*
 **/.terraform
+**/.terraform.lock.hcl
 **/.terraformrc
 **/_override.tf
 **/_override.tf.json
