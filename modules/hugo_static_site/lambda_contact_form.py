@@ -17,7 +17,7 @@ LOG.addHandler(StreamHandler())
 LOG.setLevel(0)  # NOTSET
 
 
-def send_email(data: dict) -> dict:
+def send_email(data: dict[str, str]) -> dict[str, str]:
     """Send an email via AWS SES.
 
     Args:
@@ -47,10 +47,10 @@ def send_email(data: dict) -> dict:
 
     LOG.debug(ses_response)
 
-    return ses_response
+    return ses_response  # type: ignore[no-any-return]
 
 
-def lambda_handler(event: dict, context: dict | None = None) -> dict:
+def lambda_handler(event: dict[str, str], context: dict[str, str] | None = None) -> dict[str, object]:
     """Default function for Lambda functions.
 
     Args:
@@ -82,11 +82,13 @@ def lambda_handler(event: dict, context: dict | None = None) -> dict:
 if __name__ == "__main__":
     response_data = lambda_handler(
         event={
-            "body": {  # Test Lambda function.
-                "sender_email": "test@test.com",
-                "sender_name": "John Doe",
-                "message": "Test email body.",
-            }
+            "body": dumps(  # Test Lambda function.
+                {
+                    "sender_email": "test@test.com",
+                    "sender_name": "John Doe",
+                    "message": "Test email body.",
+                }
+            )
         }
     )
 
