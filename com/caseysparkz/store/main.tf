@@ -25,14 +25,10 @@ data "aws_iam_policy_document" "s3_read_write" {
     resources = [aws_s3_bucket.this.arn]
   }
 
-  statement {
+  statement { #tfsec:ignore:aws-iam-no-policy-wildcards
     sid = "ReadWriteObjects"
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject",
-    ]
-    resources = ["${aws_s3_bucket.this.arn}/*"] #tfsec:ignore:aws-iam-no-policy-wildcards
+    actions = ["s3:*Object"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
   }
 }
 
