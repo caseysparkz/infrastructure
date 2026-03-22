@@ -4,6 +4,8 @@
 **/.directory
 **/.Trash-*
 **/.nfs*
+**/.env
+!.env
 
 # Vim
 **/*.swp
@@ -91,7 +93,6 @@
 **/celerybeat-schedule
 **/celerybeat.pid
 **.sage.py
-**/.env
 **/.venv
 **/env/
 **/venv/
