@@ -17,6 +17,12 @@ data "aws_iam_policy_document" "s3_read_write" {
       "${aws_s3_bucket.this.arn}/*",
     ]
   }
+
+  statement {
+    sid       = "S3Kms"
+    actions   = ["kms:GenerateDataKey"]
+    resources = ["arn:aws:kms:${var.aws_region}:${data.aws_caller_identity.this.id}:key/${var.kms_key_id}"]
+  }
 }
 
 data "aws_iam_policy_document" "enforce_group_mfa" {
