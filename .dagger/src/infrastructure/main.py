@@ -3,7 +3,7 @@
 from typing import Annotated
 
 import dagger
-from dagger import DefaultPath, Doc, dag, function, object_type
+from dagger import DefaultPath, Doc, check, dag, function, object_type
 
 MNT = "/mnt"
 
@@ -123,4 +123,30 @@ class Infrastructure:
             .with_secret_variable("INFRACOST_API_KEY", infracost_api_key)
             .with_exec(["infracost", "breakdown", *infracost_args])
             .stdout()
+        )
+
+    @function
+    @check
+    async def lint_python(self) -> None:
+        """Run `ruff check .` against all Python files."""
+        await dag.container().from_("ghcr.io/astral-sh/ruff:0.15.7").with_exec(["ruff", "check", "."]).sync()
+
+    @function
+    @check
+    async def format_python(self) -> None:
+        """Run `ruff check .` against all Python files."""
+        await (
+            dag.container()
+            .from_("ghcr.io/astral-sh/ruff:0.15.7")
+            .with_exec(["uvx", "pip", "install", ".[test]"])
+            .with_exec(["ruff", "format", "--check", "."])
+            .sync()
+        )
+
+    @function
+    @check
+    async def format_terraform(self) -> str:
+        """Run `terraform apply` against a manifest or module."""
+        return await (
+            dag.container().from_("hashicorp/terraform:latest").with_exec(["terraform", "fmt", "--recursive"]).sync()
         )
