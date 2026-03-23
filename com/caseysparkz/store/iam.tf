@@ -4,7 +4,7 @@
 
 # Data =========================================================================
 data "aws_iam_policy_document" "s3_read_write" {
-  statement {
+  statement { #tfsec:ignore:aws-iam-no-policy-wildcards
     sid = "S3BucketReadWrite"
     actions = [
       "s3:ListBucket",
@@ -12,15 +12,21 @@ data "aws_iam_policy_document" "s3_read_write" {
       "s3:GetObject",
       "s3:PutObject",
     ]
-    resources = [ #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = [
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*",
     ]
   }
 
-  statement {
-    sid       = "S3Kms"
-    actions   = ["kms:GenerateDataKey"]
+  statement { #tfsec:ignore:aws-iam-no-policy-wildcards
+    sid = "S3Kms"
+    actions = [
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey",
+      "kms:ReEncrypt*",
+    ]
     resources = ["arn:aws:kms:${var.aws_region}:${data.aws_caller_identity.this.id}:key/${var.kms_key_id}"]
   }
 }
