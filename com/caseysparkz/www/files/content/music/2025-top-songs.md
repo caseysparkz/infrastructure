@@ -3,8 +3,6 @@ title: "Top Songs - 2025"
 date: "2026-01-01"
 draft: false
 language: "en"
-summary: ""
-description: ""
 summary: "2025's top tracks."
 description: "2025's top tracks."
 featured_image: "../assets/images/posts/music/2025-top-songs.jpeg"
