@@ -239,7 +239,7 @@ jobs:
 
       - name: "Setup Infracost"
         if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
-        uses: "infracost/actions/setup@9accc4137ae3f13ede9182e0afa2bed39a23c4c0"  # v4.0.0
+        uses: "infracost/actions/setup@d51fc54d23c9ad90f984b884257bd96dc2625067"  # v4.1.0
         with:
           api-key: "${{ secrets.INFRACOST_API_KEY }}"
           github-token: "${{ github.token }}"
