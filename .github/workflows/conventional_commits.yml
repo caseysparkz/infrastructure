@@ -18,6 +18,6 @@ jobs:
         uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd"  # v6.0.2
 
       - name: "Check conventional commit compliance"
-        uses: "webiny/action-conventional-commits@b34f00be3f9b4cb0a64eec37b96bcacd5c8a2166"  # NOTAG
+        uses: "webiny/action-conventional-commits@1dc97face8fcf4db15ad186d34a1e44fdc5f0eb3"  # NOTAG
         with:
           GITHUB_TOKEN: "${{ github.token }}"
