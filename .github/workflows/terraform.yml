@@ -56,7 +56,7 @@ jobs:
 
       - name: "Get changed Terraform manifests"
         id: "changed_manifests"
-        uses: "tj-actions/changed-files@22103cc46bda19c2b464ffe86db46df6922fd323" # NOTAG
+        uses: "tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96" # NOTAG
         with:
           files_yaml_from_source_file: ".github/config/changed_files.yml"
           matrix: true
@@ -64,7 +64,7 @@ jobs:
 
       - name: "Get changed Terraform modules"
         id: "changed_modules"
-        uses: "tj-actions/changed-files@22103cc46bda19c2b464ffe86db46df6922fd323" # NOTAG
+        uses: "tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96" # NOTAG
         with:
           files_yaml_from_source_file: ".github/config/changed_files.yml"
           matrix: true
