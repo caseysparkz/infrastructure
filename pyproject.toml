@@ -14,7 +14,7 @@ dev = [
     #"dagger_infrastructure @ file:///Users/caseysparks/Documents/git/caseysparkz/infrastructure/.dagger",
 ]
 test = [
-    "mypy==1.*",
+    "mypy==2.*",
     "pytest==9.*",
     "ruff==0.*",
 ]
