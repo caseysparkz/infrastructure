@@ -1,14 +1,18 @@
 # Author:       Casey Sparks
 # Date:         November 15, 2023
-# Description:  Lint Python files with Ruff.
+# Description:  Validate Python code
 ---
-name: "Validate Python code"
+name: "Python"
 on:
   pull_request:
     branches: ["main"]
     paths:
-      - "**/*.py"
-      - ".github/workflows/python.yml"
+      - "**/*.py"                       # Any Python file.
+      - "**/pyproject.toml"             # Any Python project file.
+      - ".github/actions/*python*"      # Any action referencing Python.
+      - ".github/workflows/python.yml"  # This workflow file.
+env:
+  PYTHON_VERSION: "3.14"
 jobs:
   ruff:
     name: "ruff"
@@ -21,12 +25,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "ruff check ."
-        uses: "astral-sh/ruff-action@0ce1b0bf8b818ef400413f810f8a11cdbda0034b"  # v4.0.0
+      - name: "Setup venv"
+        uses: "./.github/actions/setup-python-venv"
         with:
-          args: "check ."
+          python-version: "${{ env.PYTHON_VERSION }}"
+          package: ".[test]"
+
+      - name: "ruff check ."
+        run: "ruff check ."
 
       - name: "ruff format --check ."
-        uses: "astral-sh/ruff-action@0ce1b0bf8b818ef400413f810f8a11cdbda0034b"  # v4.0.0
-        with:
-          args: "format --check ."
+        run: "ruff format --check ."
