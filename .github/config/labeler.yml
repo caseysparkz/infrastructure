@@ -63,10 +63,10 @@ github:
 javascript:
   - changed-files:
       - any-glob-to-any-file:
-        - "**/*.js"
-        - "**/*.jsx"
-        - "**/*.ts"
-        - "**/*.tsx"
+          - "**/*.js"
+          - "**/*.jsx"
+          - "**/*.ts"
+          - "**/*.tsx"
 python:
   - changed-files:
       - any-glob-to-any-file: ["**/*.py"]
