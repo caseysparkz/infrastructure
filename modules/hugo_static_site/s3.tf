@@ -32,6 +32,7 @@ resource "aws_s3_bucket_versioning" "www_site" {
   versioning_configuration { status = "Enabled" }
 }
 
+/*
 resource "aws_s3_bucket_server_side_encryption_configuration" "www_site" {
   bucket = aws_s3_bucket.www_site.id
 
@@ -42,6 +43,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "www_site" {
     }
   }
 }
+*/
 
 resource "aws_s3_bucket_website_configuration" "www_site" {
   bucket = aws_s3_bucket.www_site.id
@@ -83,31 +85,6 @@ resource "aws_s3_bucket" "web_root" { #tfsec:ignore:aws-s3-enable-bucket-logging
   bucket        = var.root_domain
   force_destroy = true
   tags          = { Name = var.root_domain }
-}
-
-resource "aws_s3_bucket_public_access_block" "web_root" {
-  bucket                  = aws_s3_bucket.web_root.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_versioning" "web_root" {
-  bucket = aws_s3_bucket.web_root.id
-
-  versioning_configuration { status = "Enabled" }
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "web_root" {
-  bucket = aws_s3_bucket.web_root.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      kms_master_key_id = var.aws_kms_key_arn
-      sse_algorithm     = "aws:kms"
-    }
-  }
 }
 
 resource "aws_s3_bucket_website_configuration" "web_root" {
