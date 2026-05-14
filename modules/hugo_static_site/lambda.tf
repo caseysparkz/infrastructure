@@ -16,7 +16,7 @@ resource "aws_lambda_function" "contact_form" {
   function_name    = replace("${var.subdomain}-contact_form", ".", "-")
   s3_bucket        = var.artifact_bucket_id
   s3_key           = aws_s3_object.lambda_contact_form.key
-  runtime          = "python3.10"
+  runtime          = "python3.14"
   handler          = "lambda_contact_form.lambda_handler"
   source_code_hash = data.archive_file.lambda_contact_form.output_base64sha256
   role             = aws_iam_role.lambda_contact_form.arn
