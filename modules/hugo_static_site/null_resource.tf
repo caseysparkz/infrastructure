@@ -37,11 +37,11 @@ resource "local_file" "contact_form_js" {
   )
 }
 
-resource "null_resource" "npm_install" {
+resource "null_resource" "pnpm_install" {
   triggers = { build_hash = local.node_modules_hash }
 
   provisioner "local-exec" {
-    command     = "npm install"
+    command     = "pnpm install"
     working_dir = var.hugo_dir
   }
 }
@@ -49,7 +49,7 @@ resource "null_resource" "npm_install" {
 resource "null_resource" "compile_pages" {
   depends_on = [
     local_file.contact_form_js,
-    null_resource.npm_install,
+    null_resource.pnpm_install,
   ]
   triggers = {
     build_hash = local.build_hash
