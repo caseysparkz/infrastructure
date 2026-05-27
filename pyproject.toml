@@ -14,8 +14,13 @@ dev = [
     #"dagger_infrastructure @ file:///Users/caseysparks/Documents/git/caseysparkz/infrastructure/.dagger",
 ]
 test = [
+    "boto3-stubs==1.*",
+    "botocore-stubs==1.*",
+    "ipython==9.*",
+    "moto==5.*",
     "mypy==2.*",
     "pytest==9.*",
+    "pytest_cov==7.*",
     "ruff==0.*",
 ]
 
@@ -76,3 +81,21 @@ max-complexity = 10  # `C901` when complexity > 10.
     "ANN201",   # flake8-annotations::missing-return-type-undocumented-public-function
     "S101",     # flake8-bandit::assert
 ]
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+addopts = [
+    "-ra",
+    "-q",
+    "--cov=.",
+    "--cov-fail-under=95",
+    "--cov-report=term-missing",
+    "--pdbcls=IPython.terminal.debugger:TerminalPdb",
+]
+testpaths = ["."]
+
+[tool.coverage.run]
+omit = ["modules/hugo_static_site/*"]
+
+[tool.ipdb]
+context = 20
