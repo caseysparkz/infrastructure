@@ -57,7 +57,7 @@ resource "null_resource" "compile_pages" {
   }
 
   provisioner "local-exec" {
-    command     = "hugo"
+    command     = "pnpm run build"
     working_dir = var.hugo_dir
   }
 }

@@ -47,8 +47,8 @@ variable "hugo_dir" {
   sensitive   = false
 
   validation {
-    condition     = fileexists("${var.hugo_dir}/config.yml")
-    error_message = "${var.hugo_dir}/config.yml does not exist."
+    condition     = fileexists("${var.hugo_dir}/hugo.yml")
+    error_message = "${var.hugo_dir}/hugo.yml does not exist."
   }
 }
 
