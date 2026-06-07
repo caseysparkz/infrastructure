@@ -1,46 +1,22 @@
 {
-  "name": "TailBliss",
-  "version": "0.1.1",
-  "description": "Hugo + Alpine.js + TailwindCSS",
-  "main": "index.js",
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.0",
-    "@tailwindcss/typography": "^0.5.18",
+    "@tailwindcss/vite": "^4.3.0",
     "alpinejs": "^3.15.12",
     "autoprefixer": "^10.5.0",
-    "concurrently": "^10.0.3",
-    "postcss": "^8.5.15",
+    "postcss": "^8.5.14",
     "postcss-cli": "^11.0.1",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.0",
+    "vite": "^8.0.14"
   },
   "scripts": {
-    "start": "concurrently npm:watch:*",
-    "watch:tw": "tailwindcss -i ./assets/css/main.css -o ./assets/css/style.css --watch",
-    "watch:hugo": "hugo server",
-    "build": "hugo --minify",
+    "dev": "pnpm run build:css:dev && hugo server --disableFastRender --noHTTPCache --disableBrowserError",
+    "css:watch": "vite build --mode development --watch",
+    "hugo:watch": "hugo server --disableFastRender --noHTTPCache --disableBrowserError",
+    "build:css": "vite build --mode production",
+    "build:css:dev": "vite build --mode development --no-watch",
+    "build": "pnpm run build:css && hugo --minify --gc --cleanDestinationDir",
+    "rebuild": "find static/css/ -name 'main.*.css' -delete 2>/dev/null || true && pnpm run build:css:dev",
     "test": "hugo"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nusserstudios/tailbliss.git"
-  },
-  "keywords": [
-    "hugo",
-    "tailwind",
-    "tailwindcss",
-    "alpinejs",
-    "minimal",
-    "responsive",
-    "light mode",
-    "dark mode",
-    "hugo blog",
-    "categories",
-    "tags"
-  ],
-  "author": "NusserStudios",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/nusserstudios/tailbliss/issues"
-  },
-  "homepage": "https://github.com/nusserstudios/tailbliss"
+  }
 }

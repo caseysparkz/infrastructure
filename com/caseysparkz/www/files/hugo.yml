@@ -5,7 +5,7 @@
 # 6970bed8-3323-449f-8119-08e52c3237ea
 baseURL: "https://www.caseysparkz.com"
 title: "CaseySparkz"
-languageCode: "en-us"
+locale: "en-us"
 DefaultContentLanguage: "en"
 enableEmoji: false
 enableGitInfo: true
@@ -135,3 +135,6 @@ module:
     extended: true
     min: "0.125.7"
 staticDir: ["static"]
+security:
+  node:
+    disable: false
