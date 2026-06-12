@@ -15,10 +15,10 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10"  # v6.0.3
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: "Get commit message tags"
-        id: "commit_msgs"
+        id: "commit_log"
         run: |
           readarray -t COMMIT_TAGS < <(                                                                             \
             git log origin/${{ github.event.pull_request.base.ref }}..HEAD --pretty='%s'                            \
@@ -27,8 +27,9 @@ jobs:
             | sort                                                                                                  \
             | uniq                                                                                                  \
           )
+          LABELS="$(jq -c -n '$ARGS.positional' --args "${COMMIT_TAGS[@]}" | tr '"' "'")"
 
-          echo "labels=$(jq -c -n '$ARGS.positional' --args "${COMMIT_TAGS[@]}")" >> "${GITHUB_OUTPUT}"
+          echo "label_set=${LABELS}" >> "${GITHUB_OUTPUT}"
 
       - name: "Label pull request"
         uses: "actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3" #v9.0.0
@@ -38,7 +39,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ${{ steps.commit_msgs.outputs.labels }}
+              labels: ${{ steps.commit_log.outputs.label_set }}
             })
 
       - name: "Auto-label"
