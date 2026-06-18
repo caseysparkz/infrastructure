@@ -1,4 +1,6 @@
 # Build files
+static/css/.vite/**
+static/css/main.*
 static/js/contactForm.js
 
 # Hugo
