@@ -35,7 +35,7 @@ on:
       - "terraform/**/*.tfvars.json"
 env:
   TERRAFORM_PLANFILE: "/tmp/out.tfplan"
-  TERRAFORM_VERSION: "1.14.4" # Increment to update Terraform
+  TERRAFORM_VERSION: "1.15.6" # Increment to update Terraform
   INFRACOST_CONFIG: "terraform/infracost.yml"
 jobs:
   changed_terraform:
