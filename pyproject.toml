@@ -15,6 +15,7 @@ dev = [
 ]
 test = [
     "mypy==2.*",
+    "pip-audit==2.10.1",
     "pytest==9.*",
     "ruff==0.*",
 ]
