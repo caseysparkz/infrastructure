@@ -4,20 +4,25 @@ version = "0.1.0"
 requires-python = ">=3.13"
 authors = [{ name = "CaseySparkz", email = "contact@caseysparkz.com" }]
 dependencies = [
-    "boto3==1.*",
+    "boto3==1.42.73",
+    "types-boto3[ses]",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "ipython==9.*",
-    "ruff==0.*",
-    #"dagger_infrastructure @ file:///Users/caseysparks/Documents/git/caseysparkz/infrastructure/.dagger",
+    "ipython==9.11.0",
+    "ruff==0.15.7",
 ]
 test = [
-    "mypy==2.*",
+    "boto3-stubs==1.43.29",
+    "botocore-stubs==1.43.14",
+    "ipython==9.11.0",
+    "moto==5.2.2",
+    "mypy==2.1.0",
     "pip-audit==2.10.1",
-    "pytest==9.*",
-    "ruff==0.*",
+    "pytest-cov==7.1.0",
+    "pytest==9.0.2",
+    "ruff==0.15.7",
 ]
 
 [tool.setuptools.packages.find]
@@ -71,9 +76,34 @@ multiline-quotes = "double"
 max-complexity = 10  # `C901` when complexity > 10.
 
 [tool.ruff.lint.per-file-ignores]
-"test_*.py"=[
-    "INP001",   # flake8-no-pip420::implicit-namespace-package
-    "D1",       # pydocstyle::undocumented-*
+"**/test_*.py"=[
     "ANN201",   # flake8-annotations::missing-return-type-undocumented-public-function
+    "D1",       # pydocstyle::undocumented-*
+    "INP001",   # flake8-no-pip420::implicit-namespace-package
+    "PLR2004",  # pylint::magic-value-comparison
     "S101",     # flake8-bandit::assert
 ]
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+addopts = [
+    "--cov=.",
+    "--cov-fail-under=95",
+    "--cov-report=term-missing",
+    "--pdbcls=IPython.terminal.debugger:TerminalPdb",
+]
+testpaths = ["."]
+
+[tool.coverage.run]
+omit = [
+    "**/test_*.py",
+    "**/tests/**/*.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "LOG\\.",
+]
+
+[tool.ipdb]
+context = 20

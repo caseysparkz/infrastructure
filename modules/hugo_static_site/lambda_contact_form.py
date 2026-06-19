@@ -10,14 +10,15 @@ from os import getenv
 from textwrap import dedent
 
 from boto3 import client
+from types_boto3_ses import type_defs
 
-LOG = getLogger()
+LOG = getLogger(__name__)
 
 LOG.addHandler(StreamHandler())
-LOG.setLevel(0)  # NOTSET
+LOG.setLevel(10)  # DEBUG
 
 
-def send_email(data: dict[str, str]) -> dict[str, str]:
+def send_email(data: dict[str, str]) -> type_defs.SendEmailResponseTypeDef:
     """Send an email via AWS SES.
 
     Args:
@@ -26,19 +27,21 @@ def send_email(data: dict[str, str]) -> dict[str, str]:
     Returns:
                 The SES client response.
     """
-    ses_client = client("ses")  # Instantiate SES client.
-    ses_response = ses_client.send_email(  # Send email.
-        Source=getenv("DEFAULT_SENDER"),
-        Destination={"ToAddresses": [getenv("DEFAULT_RECIPIENT")]},
+    ses_response = client("ses", region_name=getenv("AWS_REGION", "us-west-2")).send_email(
+        Source=str(getenv("DEFAULT_SENDER")),
+        Destination={"ToAddresses": [str(getenv("DEFAULT_RECIPIENT"))]},
         Message={
-            "Subject": {"Charset": "UTF-8", "Data": "Contact Form Response"},
+            "Subject": {
+                "Charset": "UTF-8",
+                "Data": "Contact Form Response",
+            },
             "Body": {
                 "Text": {
                     "Charset": "UTF-8",
                     "Data": dedent(f"""
-                    From: {data["senderName"]}
-                    Email: {data["senderEmail"]}
-                    Content: {data["message"]}
+                        From: {data["senderName"]}
+                        Email: {data["senderEmail"]}
+                        Content: {data["message"]}
                     """).strip("\n"),
                 }
             },
@@ -77,19 +80,3 @@ def lambda_handler(event: dict[str, str], context: dict[str, str] | None = None)
     LOG.debug(lambda_response)
 
     return lambda_response
-
-
-if __name__ == "__main__":
-    response_data = lambda_handler(
-        event={
-            "body": dumps(  # Test Lambda function.
-                {
-                    "sender_email": "test@test.com",
-                    "sender_name": "John Doe",
-                    "message": "Test email body.",
-                }
-            )
-        }
-    )
-
-    LOG.info(response_data)
