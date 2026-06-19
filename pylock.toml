@@ -1,0 +1,141 @@
+lock-version = "1.0"
+created-by = "pip"
+
+[[packages]]
+name = "boto3"
+version = "1.42.73"
+
+[[packages.wheels]]
+name = "boto3-1.42.73-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/aa/05/1fcf03d90abaa3d0b42a6bfd10231dd709493ecbacf794aa2eea5eae6841/boto3-1.42.73-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "1f81b79b873f130eeab14bb556417a7c66d38f3396b7f2fe3b958b3f9094f455"
+
+[[packages]]
+name = "botocore"
+version = "1.42.97"
+
+[[packages.wheels]]
+name = "botocore-1.42.97-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/e3/d2/8e025ba1a4e257879af72d06913272311af79673d82fa2581a351b924317/botocore-1.42.97-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "77d2c8ce1bc592d3fbd7c01c35836f4a5b0cac2ca03ccdf6ffc60faa16b5fadc"
+
+[[packages]]
+name = "botocore-stubs"
+version = "1.43.14"
+
+[[packages.wheels]]
+name = "botocore_stubs-1.43.14-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/89/ca/f017727b11895908c5dedc829cf2ec35e0c4b2a26ba875db325fef2cefdf/botocore_stubs-1.43.14-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "fb98f1475c92fd718644e786b5c543a20f1b1f610e89e0a7191c3f1f429c75aa"
+
+[[packages]]
+name = "infrastructure"
+
+[packages.directory]
+path = "."
+editable = true
+
+[[packages]]
+name = "jmespath"
+version = "1.1.0"
+
+[[packages.wheels]]
+name = "jmespath-1.1.0-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "a5663118de4908c91729bea0acadca56526eb2698e83de10cd116ae0f4e97c64"
+
+[[packages]]
+name = "python-dateutil"
+version = "2.9.0.post0"
+
+[[packages.wheels]]
+name = "python_dateutil-2.9.0.post0-py2.py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"
+
+[[packages]]
+name = "s3transfer"
+version = "0.16.1"
+
+[[packages.wheels]]
+name = "s3transfer-0.16.1-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/03/19/90d7d4ed51932c022d53f1d02d564b62d10e272692a1f9b76425c1ad2a02/s3transfer-0.16.1-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "61bcd00ccb83b21a0fe7e91a553fff9729d46c83b4e0106e7c314a733891f7c2"
+
+[[packages]]
+name = "six"
+version = "1.17.0"
+
+[[packages.wheels]]
+name = "six-1.17.0-py2.py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+
+[[packages]]
+name = "types-awscrt"
+version = "0.34.1"
+
+[[packages.wheels]]
+name = "types_awscrt-0.34.1-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/e4/b1/214b12162b452ed6acd230065e6c587cde6b96871e3ce6d653f40888f8df/types_awscrt-0.34.1-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "20c752b6031544d8f694803c35174aee129f1be5ddf886ae46d22f7ffd9b7d75"
+
+[[packages]]
+name = "types-boto3"
+version = "1.43.33"
+
+[[packages.wheels]]
+name = "types_boto3-1.43.33-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/b7/fc/715e4ff167463431215c1f471e3e94de57798038c0bf075ca8b6464be788/types_boto3-1.43.33-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "e09423cbd95458b73c11453161dc9d6ed2978363235cb4c961bf747283427713"
+
+[[packages]]
+name = "types-boto3-ses"
+version = "1.43.0"
+
+[[packages.wheels]]
+name = "types_boto3_ses-1.43.0-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/b3/35/71f4985960be78295e8c8d7620453e22798829aebf52defdc94da8b7c752/types_boto3_ses-1.43.0-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "47a071dd104af08fbc5e39c91f4d02d032613011d9bb7e352956de9661b6972a"
+
+[[packages]]
+name = "types-s3transfer"
+version = "0.16.0"
+
+[[packages.wheels]]
+name = "types_s3transfer-0.16.0-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/98/27/e88220fe6274eccd3bdf95d9382918716d312f6f6cef6a46332d1ee2feff/types_s3transfer-0.16.0-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "1c0cd111ecf6e21437cb410f5cddb631bfb2263b77ad973e79b9c6d0cb24e0ef"
+
+[[packages]]
+name = "urllib3"
+version = "2.7.0"
+
+[[packages.wheels]]
+name = "urllib3-2.7.0-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897"
