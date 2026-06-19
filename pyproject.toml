@@ -11,7 +11,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "ipython==9.11.0",
-    "ruff==0.15.7",
+    "ruff==0.15.18",
 ]
 test = [
     "boto3-stubs==1.43.29",
@@ -22,7 +22,7 @@ test = [
     "pip-audit==2.10.1",
     "pytest-cov==7.1.0",
     "pytest==9.0.3",
-    "ruff==0.15.7",
+    "ruff==0.15.18",
 ]
 
 [tool.setuptools.packages.find]
