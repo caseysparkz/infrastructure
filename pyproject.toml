@@ -10,13 +10,13 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "ipython==9.11.0",
+    "ipython==9.14.1",
     "ruff==0.15.18",
 ]
 test = [
     "boto3-stubs==1.43.29",
     "botocore-stubs==1.43.14",
-    "ipython==9.11.0",
+    "ipython==9.14.1",
     "moto==5.2.2",
     "mypy==2.1.0",
     "pip-audit==2.10.1",
