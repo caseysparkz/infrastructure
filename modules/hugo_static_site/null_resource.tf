@@ -47,7 +47,7 @@ resource "null_resource" "pnpm_selfupdate" {
 }
 
 resource "null_resource" "pnpm_install" {
-  depends_on = [null_resource.pnpm_upgrade]
+  depends_on = [null_resource.pnpm_selfupdate]
   triggers = { build_hash = local.node_modules_hash }
 
   provisioner "local-exec" {
