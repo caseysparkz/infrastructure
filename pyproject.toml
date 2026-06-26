@@ -4,7 +4,7 @@ version = "0.1.0"
 requires-python = ">=3.13"
 authors = [{ name = "CaseySparkz", email = "contact@caseysparkz.com" }]
 dependencies = [
-    "boto3==1.42.73",
+    "boto3==1.43.36",
     "types-boto3[ses]",
 ]
 
