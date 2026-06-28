@@ -33,6 +33,10 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 # Tools ========================================================================
+# Misc. -----------------------------------------------------------------------
+[tool.ipdb]
+context = 20
+
 # MyPy -------------------------------------------------------------------------
 [tool.mypy]
 strict = true
@@ -84,6 +88,7 @@ max-complexity = 10  # `C901` when complexity > 10.
     "S101",     # flake8-bandit::assert
 ]
 
+# PyTest -----------------------------------------------------------------------
 [tool.pytest.ini_options]
 minversion = "9.0"
 addopts = [
@@ -104,6 +109,3 @@ omit = [
 exclude_lines = [
     "LOG\\.",
 ]
-
-[tool.ipdb]
-context = 20
