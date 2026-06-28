@@ -1,9 +1,12 @@
 [project]
 name = "infrastructure"
-version = "0.1.0"
+description = "Global installer for the monorepo."
 requires-python = ">=3.13"
+version = "0.1.0"
+readme = { file = "README.md", content-type = "text=markdown" }
 authors = [{ name = "CaseySparkz", email = "contact@caseysparkz.com" }]
 dependencies = [
+    "infra_ansible @ file:./ansible",
     "boto3==1.43.36",
     "types-boto3[ses]",
 ]
@@ -29,83 +32,11 @@ test = [
 where = []
 
 [build-system]
-requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+requires-python = ">= 3.13"
+requires = ["setuptools"]
 
 # Tools ========================================================================
 # Misc. -----------------------------------------------------------------------
 [tool.ipdb]
 context = 20
-
-# MyPy -------------------------------------------------------------------------
-[tool.mypy]
-strict = true
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-ignore_missing_imports = true
-
-# Ruff -------------------------------------------------------------------------
-[tool.ruff]
-target-version = "py311"
-line-length = 120
-indent-width = 4
-exclude = [
-    "**/node_modules/**/*.py",
-]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-
-[tool.ruff.lint]
-pydocstyle.convention = "google"
-fixable = ["ALL"]
-unfixable = []
-select = ["ALL"]
-ignore = [
-    "ANN1",     # flake8-annotations::missing-type-*
-    "COM812",   # flake8-commas::missing-trailing-comma
-    "FIX002",   # flake8-fixme::line-contains-todo
-]
-
-[tool.ruff.lint.flake8-quotes]
-docstring-quotes = "double"
-inline-quotes = "double"
-multiline-quotes = "double"
-
-[tool.ruff.lint.mccabe]
-max-complexity = 10  # `C901` when complexity > 10.
-
-[tool.ruff.lint.per-file-ignores]
-"**/test_*.py"=[
-    "ANN201",   # flake8-annotations::missing-return-type-undocumented-public-function
-    "D1",       # pydocstyle::undocumented-*
-    "INP001",   # flake8-no-pip420::implicit-namespace-package
-    "PLR2004",  # pylint::magic-value-comparison
-    "S101",     # flake8-bandit::assert
-]
-
-# PyTest -----------------------------------------------------------------------
-[tool.pytest.ini_options]
-minversion = "9.0"
-addopts = [
-    "--cov=.",
-    "--cov-fail-under=95",
-    "--cov-report=term-missing",
-    "--pdbcls=IPython.terminal.debugger:TerminalPdb",
-]
-testpaths = ["."]
-
-[tool.coverage.run]
-omit = [
-    "**/test_*.py",
-    "**/tests/**/*.py",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "LOG\\.",
-]
