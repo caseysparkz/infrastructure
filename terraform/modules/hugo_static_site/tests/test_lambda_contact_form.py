@@ -16,19 +16,19 @@ from types_boto3_ses import SESClient
 
 from .. import lambda_contact_form  # noqa:TID252
 
+AWS_REGION = "us-west-2"
+DEFAULT_SENDER = "test@test.com"
+MESSAGE = "Test email body."
+SENDER_NAME = "John Doe"
 EVENT = {
     "body": dumps(
         {
-            "senderEmail": "test@test.com",
-            "senderName": "John Doe",
-            "message": "Test email body.",
+            "senderEmail": DEFAULT_SENDER,
+            "senderName": SENDER_NAME,
+            "message": MESSAGE,
         }
     )
 }
-DEFAULT_SENDER = "test@test.com"
-SENDER_NAME = "John Doe"
-MESSAGE = "Test email body."
-AWS_REGION = "us-west-2"
 
 
 @pytest.fixture(autouse=True)
