@@ -1,5 +1,5 @@
 ---
-- name: "Install system packages"
+- name: "Install system packages [apt]"
   become: true
   when: "ansible_facts.os_family == 'Debian'"
   tags: ["apt"]
@@ -8,3 +8,12 @@
     state: "present"
     update_cache: true
     cache_valid_time: 3600
+
+- name: "Install system packages [brew]"
+  become: true
+  when: "ansible_facts.os_family == 'Darwin'"
+  tags: ["brew"]
+  community.general.homebrew:
+    name: "{{ packages_homebrew }}"
+    state: "present"
+    update_homebrew: true

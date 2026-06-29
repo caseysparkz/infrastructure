@@ -2,8 +2,8 @@
 - name: "Install template directory"
   tags: ["git"]
   ansible.builtin.file:
-    src: "{{ git_symlink_src_dir}}/files/git_template"
-    dest: "{{ ansible_facts.env.HOME}}/.git_template"
+    src: "{{ git_symlink_src_dir }}/files/git_template"
+    dest: "{{ ansible_facts.env.HOME }}/.git_template"
     owner: "{{ ansible_facts.effective_user_id }}"
     group: "{{ ansible_facts.effective_group_id }}"
     state: "link"
