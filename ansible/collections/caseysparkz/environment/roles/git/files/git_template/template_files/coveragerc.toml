@@ -1,0 +1,16 @@
+[run]
+omit = [
+    "**/test_*.py",
+    "**/tests/**/*.py",
+]
+
+[report]
+fail_under = 95
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "LOG\\.",
+]
+
+[html]
+directory = ".coverage.html"

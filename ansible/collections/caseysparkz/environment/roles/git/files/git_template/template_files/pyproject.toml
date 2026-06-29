@@ -1,23 +1,35 @@
 [project]
 name = "{TODO}"
-version = "0.1.0"
+description = "{TODO}"
 requires-python = ">=3.14"
+version = "0.1.0"
+readme = { file = "README.md", content-type = "text=markdown" }
 authors = [{ name = "CaseySparkz", email = "contact@caseysparkz.com" }]
 dependencies = []
 
 [project.optional-dependencies]
-dev = [  # TODO: version
+dev = [
     "ipython",
     "ruff",
 ]
-test = [  # TODO: version
+test = [
+    "ipython",
     "mypy",
     "pip-audit",
-    "pytest",
     "pytest-cov",
+    "pytest",
     "ruff",
 ]
 
+[tool.setuptools.packages.find]
+where = []
+
 [build-system]
-requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+requires-python = ">= 3.13"
+requires = ["setuptools"]
+
+# Tools ========================================================================
+# Misc. -----------------------------------------------------------------------
+[tool.ipdb]
+context = 20
