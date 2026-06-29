@@ -1,0 +1,30 @@
+# Author:       Casey Sparks
+# Date:         November 08, 2024
+# Description:  Lint all shell scripts files with shellcheck.
+---
+name: "Validate shell code"
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "**/*.bash"
+      - "**/*.sh"
+      - ".github/workflows/shell.yml"
+jobs:
+  shellcheck:
+    name: "Shellcheck"
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: "read"
+    steps:
+      - name: "git checkout"
+        uses: "actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10"  # v6.0.3
+        with:
+          fetch-depth: 0
+
+      - name: "shellcheck"
+        uses: "ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38"  # v2.0.0
+        with:
+          severity: "warning"
+          check_together: "yes"
+          format: "tty"

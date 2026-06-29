@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         August 09, 2022
+# Description:
+"""Convert structured data between HTML, INI, JSON, XML, and YAML."""
+
+from argparse import ArgumentParser, Namespace
+from configparser import ConfigParser
+from io import TextIOWrapper
+from json import dumps as json_dumps
+from json import load as json_load
+from pathlib import Path
+from sys import exit as sys_exit
+from sys import stdout
+
+from dicttoxml import dicttoxml
+from pandas import json_normalize, read_csv
+from toml import dumps as toml_dumps
+from toml import load as toml_load
+from xmltodict import parse
+from yaml import dump as ydump
+from yaml import safe_load
+
+SUPPORTED_TYPES = {  # Supported outfile types.
+    "csv",
+    "ini",
+    "json",
+    "toml",
+    "xml",
+    "yml",
+}
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        argparse.Namespace instance of user arguments.
+    """
+    parser = ArgumentParser(description=__doc__)
+
+    parser.add_argument("infile", type=Path, help="File to read data from.")
+    parser.add_argument(  # --output-format
+        "--output-format",
+        "-o",
+        dest="format",
+        choices=SUPPORTED_TYPES,
+        default="yml",
+        type=str,
+        help="Data format to output.",
+    )
+    parser.add_argument(  # --write
+        "--write",
+        "-w",
+        dest="write",
+        action="store_true",
+        help="Write file to disk instead of stdout.",
+    )
+    parser.add_argument(  # --verbose
+        "--verbose",
+        "-v",
+        dest="log_level",
+        default=0,
+        action="count",
+        help="Specify logging verbosity. Default `CRITICAL`.",
+    )
+
+    arguments = parser.parse_args()
+    arguments.log_level = range(40, -1, -10)[min(arguments.log_level, 3)]
+
+    return arguments
+
+
+def ingest_data(infile: Path) -> dict:
+    """Ingests a YAML or JSON object from a file or STDIN.
+
+    Args:
+        infile:  The file to ingest data from. Instance of Path().
+
+    Returns:
+        Dictionary containing parsed data.
+    """
+    infile_suffix = infile.suffix.lower()
+
+    with Path(infile).open(encoding="utf-8") as data:
+        match infile_suffix:
+            case ".csv":
+                payload = read_csv(data, skip_blank_lines=True, encoding="utf-8", index_col=False).to_dict()
+
+            case ".html" | ".xml":
+                payload = parse(data.read())
+
+            case ".json":
+                payload = json_load(data)
+
+            case ".ini":
+                (config := ConfigParser()).read(infile)
+                payload = config._sections  # noqa: SLF001
+
+            case ".toml":
+                payload = toml_load(data)
+
+            case ".yaml" | ".yml":
+                payload = safe_load(data)
+
+            case _:
+                print("Unsupported filetype. Please check the extension and try again.")
+                sys_exit(1)
+
+    return payload
+
+
+def output_data(  # noqa: C901
+    payload: dict,
+    infile: Path,
+    out_format: str = "yaml",
+    write: bool = False,  # noqa: FBT001,FBT002
+) -> None:
+    """Formats and outputs a data object as JSON or YAML to a file or STDOUT.
+
+    Args:
+        payload:     The Python dict to format and output.
+        infile:      Path of the input file.
+        out_format:  Output format of the data. One of ['ini', 'json', 'xml', 'yaml']
+        write:       Boolean specifying whether data should be written to a file.
+    """
+
+    def _write_out(payload: dict, out_format: str, outfile: TextIOWrapper = stdout) -> None:
+        match out_format.lower():
+            case "csv":
+                json_normalize(payload).to_csv(outfile, index=False, encoding="utf-8")
+
+            case "html" | "xml":
+                outfile.write(dicttoxml(payload))
+
+            case "ini":
+                config = ConfigParser()
+                config._sections = payload  # noqa: SLF001
+                keys_nested = False
+
+                for key in payload:
+                    if iter(key):  # Keys are nested
+                        keys_nested = True
+
+                if keys_nested:
+                    if input("Proceed? [Y/n] ").lower().startswith("n"):
+                        sys_exit(0)
+
+                    config.write(outfile)
+
+            case "json":
+                outfile.write(json_dumps(payload, indent=2))
+
+            case "toml":
+                outfile.write(toml_dumps(payload))
+
+            case _:  # Default to YAML
+                outfile.write(ydump(payload))
+
+    if write:
+        with Path(infile.with_suffix(f".{out_format}")).open("w", encoding="utf-8") as outfile:
+            _write_out(payload, out_format, outfile)
+    else:
+        _write_out(payload, out_format, stdout)
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    output_data(
+        payload=ingest_data(args.infile),
+        infile=args.infile,
+        out_format=args.format,
+        write=args.write,
+    )

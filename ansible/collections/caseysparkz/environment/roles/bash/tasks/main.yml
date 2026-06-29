@@ -1,0 +1,58 @@
+---
+- name: "Set 'bash_symlink_src_dir'"
+  ansible.builtin.set_fact:
+    bash_symlink_src_dir: "{{ role_path | replace(collections_path, inventory_dir ~ '/collections') }}"
+
+- name: "Symlink ~/.bash directory"
+  tags: ["bash"]
+  ansible.builtin.file:
+    src: "{{ bash_symlink_src_dir }}/files/bash/"
+    dest: "{{ ansible_facts.env.HOME }}/.bash"
+    state: "link"
+    force: true
+
+- name: "Symlink ~/.profile"
+  tags: ["bash"]
+  ansible.builtin.file:
+    src: "{{ ansible_facts.env.HOME }}/.bash/profile"
+    dest: "{{ ansible_facts.env.HOME }}/.profile"
+    state: "link"
+    force: true
+
+- name: "Symlink ~/.bashrc"
+  tags: ["bash"]
+  ansible.builtin.file:
+    src: "{{ ansible_facts.env.HOME }}/.bash/bashrc"
+    dest: "{{ ansible_facts.env.HOME }}/.bashrc"
+    state: "link"
+    force: true
+
+- name: "Symlink ~/.bash_aliases"
+  tags: ["bash"]
+  ansible.builtin.file:
+    src: "{{ ansible_facts.env.HOME }}/.bash/bash_aliases"
+    dest: "{{ ansible_facts.env.HOME }}/.bash_aliases"
+    state: "link"
+    force: true
+
+- name: "Symlink ~/.bash_logout"
+  tags: ["bash"]
+  ansible.builtin.file:
+    src: "{{ ansible_facts.env.HOME }}/.bash/bash_logout"
+    dest: "{{ ansible_facts.env.HOME }}/.bash_logout"
+    state: "link"
+    force: true
+
+- name: "Stat ~/.bashrc.local"
+  tags: ["bash"]
+  register: "bash_bashrclocal"
+  ansible.builtin.stat:
+    path: &bashrclocal "{{ ansible_facts.env.HOME }}/.bashrc.local"
+
+- name: "Touch ~/.bashrc.local"
+  tags: ["bash"]
+  when: "not bash_bashrclocal.stat.exists"
+  ansible.builtin.file:
+    path: *bashrclocal
+    state: "touch"
+    mode: "0755"

@@ -1,0 +1,8 @@
+---
+- name: "Set up ~/"
+  tags: ["filesystem"]
+  loop: "{{ filesystem_paths }}"
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/{{ item }}"
+    state: "directory"
+    mode: "0700"

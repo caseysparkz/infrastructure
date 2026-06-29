@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         August 14, 2023
+# Description:
+"""You know what it do."""
+
+from random import randint
+from time import sleep
+
+from pyautogui import moveTo, size
+
+if not input("Press <ENTER> to start.\nPress any other key to abort. "):
+    screen_center = size().width / 2, size().height / 2
+
+    print("Move it, move it.")
+
+    while True:
+        try:
+            c = randint(0, 10)  # noqa: S311 - Not using PRNG for cryptography
+
+            sleep(3)
+            moveTo(*screen_center)  # Center the cursor
+            sleep(3)
+            moveTo(*(x + c for x in screen_center))  # Move cursor by random vector (0px to 10px)
+
+        except KeyboardInterrupt:
+            break
+
+print("\nExiting.")

@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         May 12, 2023
+# Description:
+"""Read QR codes from the screen."""
+
+from argparse import ArgumentParser, Namespace
+from logging import FileHandler, Formatter, StreamHandler, getLogger
+from pathlib import Path
+from tempfile import NamedTemporaryFile
+
+from cv2 import QRCodeDetector, imread
+from PIL import ImageGrab
+
+LOG = getLogger(__name__)
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        argparse.Namespace instance of user arguments.
+    """
+    parser = ArgumentParser(description=__doc__)
+
+    parser.add_argument(  # --logfile
+        "--logfile",
+        "-l",
+        dest="log_file",
+        type=Path,
+        default=None,
+        help="Absolute path to write the logfile to.",
+    )
+    parser.add_argument(  # --verbose
+        "--verbose",
+        "-v",
+        dest="log_level",
+        default=0,
+        action="count",
+        help="Specify logging verbosity. Default `WARNING`.",
+    )
+
+    arguments = parser.parse_args()
+    arguments.log_level = range(40, -1, -10)[min(arguments.log_level, 3)]
+
+    return arguments
+
+
+def configure_log(log_level: int = 30, log_file: Path | None = None) -> None:
+    """Enable logging and handle outputs.
+
+    Args:
+        log_level:   User-specified log level. Default NOTSET.
+        log_file:    User-specified path to write log file. Default None.
+    """
+    formatter = Formatter('{asctime} {threadName:12} {levelname:8}: "{message}"', style="{")
+    log_console = StreamHandler()
+
+    log_console.setFormatter(formatter)
+    LOG.addHandler(log_console)
+    LOG.setLevel(log_level)
+
+    if log_file:
+        log_file = FileHandler(log_file)
+
+        log_file.setFormatter(formatter)
+        LOG.addHandler(log_file)
+
+
+def screenshot() -> Path:
+    """Save the entire screen to a temporary PNG file and return the path.
+
+    Returns:
+        Path of the temporary PNG file.
+    """
+    with NamedTemporaryFile(mode="w+b", suffix=".png", dir=Path("/tmp"), delete=False) as temp_file:  # noqa: S108
+        ImageGrab.grab().save(temp_file.name, "PNG")
+        LOG.debug("Saved screenshot to %s.", temp_file.name)
+
+    return Path(temp_file.name)
+
+
+def read_qr_code_from_file(filename: Path | str) -> str:
+    """Read a QR code from an image.
+
+    Args:
+        filename:    Path to file.
+
+    Returns:
+        Value from QR code.
+    """
+    LOG.debug("Reading QR code from %s.", filename)
+
+    value, _, _ = QRCodeDetector().detectAndDecode(imread(str(filename)))
+
+    if value:
+        LOG.info("QR data found: %s", value)
+    else:
+        LOG.warning(value := "No QR data found")
+
+    return value
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    configure_log(args.log_level, args.log_file)
+    print(read_qr_code_from_file(Path(screenshot())))

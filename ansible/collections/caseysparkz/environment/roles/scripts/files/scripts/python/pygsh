@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         November 24, 2022
+# Description:
+"""A script to create PGP-encrypted scripts.
+
+Note that decrypted scripts get passed to a bash subshell, so all
+non-POSIX files **must** have a shebang in order to be properly
+interpreted by bash.
+
+To encrypt the resultant script to yourself:
+    * Optionally set $PGP_KEY_ID in your environment, or
+    * Set default-recipient to your uid in ~/.gnupg/gpg.conf
+"""
+
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
+
+from gnupg import GPG
+from psutil import AccessDenied, NoSuchProcess, process_iter
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        argparse.Namespace instance of user arguments.
+    """
+    parser = ArgumentParser(description=__doc__)
+
+    parser.add_argument("file", type=Path, nargs="+", help="Specify files to encrypt.")
+    parser.add_argument(  # --recipients
+        "--recipients",
+        "-r",
+        dest="recipients",
+        nargs="+",
+        default=[],
+        help="Specify who can decrypt the file.",
+    )
+    parser.add_argument(  # --verbose
+        "--verbose",
+        "-v",
+        dest="log_level",
+        default=0,
+        action="count",
+        help="Specify logging verbosity. Default `CRITICAL`.",
+    )
+
+    arguments = parser.parse_args()
+    arguments.log_level = range(40, -1, -10)[min(arguments.log_level, 3)]
+
+    return arguments
+
+
+def prechecks_pass(arguments: Namespace) -> bool:
+    """Check that inputs and processes are as expected.
+
+    Args:
+        arguments: User-specified cmdline arguments.
+
+    Returns:
+        Boolean indicating success.
+    """
+    for gpg_proc in ("gpg-agent", "gpgconf"):  # Check GPG agent is running
+        for proc in process_iter():
+            try:
+                if gpg_proc in proc.name():
+                    break
+
+            except (NoSuchProcess, AccessDenied):
+                return False
+
+    for file in arguments.file:  # Check input files exist
+        try:
+            file.resolve(strict=True)
+
+        except FileNotFoundError:
+            return False
+
+    return True
+
+
+def encrypt(file: Path, recipients: list) -> Path:
+    """Decrypt seed phrase and return its value.
+
+    Args:
+        file:        The path of the file to be encrypted.
+        recipients:  The recipient emails of the cipherfile.
+
+    Returns:
+                    Path of the resultant cipherfile.
+
+    Raises:
+        OSError:    If the file cannot be encrypted.
+    """
+    gpg = GPG(gpgbinary="/usr/bin/gpg2", use_agent=True, verbose=False)
+    outfile = file.with_suffix("")
+
+    try:
+        with Path(file).open("rb") as infile:
+            gpg.encrypt_file(
+                infile,
+                recipients=recipients,
+                armor=True,  # This will be a script, so output as ASCII text
+                always_trust=True,
+                output=outfile,
+            )
+
+    except OSError as err:
+        msg = f"Unhandled exception occured.\nEncryption failed for {file}."
+
+        raise OSError(msg) from err
+
+    return outfile
+
+
+def munge_cipherfile(cipherfile: Path) -> None:
+    """Add lines to cipherfile needed for shell interpretation.
+
+    Args:
+        cipherfile: The path of the file to be encrypted.
+    """
+    with Path(cipherfile).open("r", encoding="utf-8") as file:
+        script = "\n".join(
+            [
+                "#!/usr/bin/env python3",  # Cleartext header
+                "# -*- coding:utf-8 -*-",
+                "",
+                "from subprocess import PIPE, Popen, check_output",
+                "from gnupg import GPG",
+                "",
+                'CIPHERTEXT = """',
+                *file.readlines(),  # Ciphertext body
+                '"""',
+                "",
+                "",
+                "",
+                "def decrypt_and_pipe(ciphertext):",
+                '    gpg = GPG(gpgbinary="/usr/bin/gpg2", use_agent=True, verbose=False)',
+                "    cleartext = gpg.decrypt(ciphertext)",
+                "",
+                '    with Popen(("echo", str(cleartext)), stdout=PIPE, stderr=PIPE) as proc:',
+                '        return check_output(("python"), stdin=proc.stdout).decode("utf-8")',
+                "",
+                'if __name__ == "__main__":',
+                "    print(decrypt_and_pipe(CIPHERTEXT))",
+            ]
+        )
+
+    Path(cipherfile).write_text(script, encoding="utf-8")
+
+    cipherfile.chmod(0o755)  # Make executable
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    if prechecks_pass(args):
+        for clearfile in args.file:
+            munge_cipherfile(encrypt(clearfile, args.recipients))
+            print(f"{clearfile} encrypted.\nYou may now delete the original, if it still exists.")

@@ -1,0 +1,6 @@
+---
+- name: "Create ~/.ssh/{,keys/}"
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.ssh/keys"
+    state: "directory"
+    mode: "0700"

@@ -1,0 +1,253 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         May 13, 2022
+# Description:
+"""Monitor advertised SSIDs and (optionally) find matches."""
+
+from argparse import ArgumentParser, Namespace
+from datetime import datetime
+from logging import FileHandler, Formatter, StreamHandler, getLogger
+from os import system
+from pathlib import Path
+from re import compile as re_compile
+from shutil import which
+from subprocess import PIPE, CalledProcessError, Popen, run  # noqa:S404
+from time import sleep
+
+LOG = getLogger(__name__)
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        Argparse namespace.
+    """
+    parser = ArgumentParser(description=__doc__)
+    scan_type = parser.add_mutually_exclusive_group()
+
+    parser.add_argument(  # --interface
+        "--interface",
+        "-i",
+        dest="interface",
+        default=get_default_interface(),
+        help="Set the wireless interface to scan from.",
+    )
+    parser.add_argument(  # --interval.
+        "--interval",
+        "-n",
+        dest="interval",
+        type=int,
+        default=5,
+        help="Set the scan interval (seconds).",
+    )
+    scan_type.add_argument(  # --match
+        "--match",
+        "-m",
+        dest="ssids",
+        type=str,
+        nargs="*",
+        help="Specify the SSIDs to catch. Pass no SSIDs to run passively.",
+    )
+    parser.add_argument(  # --logfile
+        "--logfile",
+        "-l",
+        dest="log_file",
+        type=Path,
+        default=None,
+        help="Absolute path to write the logfile to. Default `None`.",
+    )
+    parser.add_argument(  # --verbose
+        "--verbose",
+        "-v",
+        dest="log_level",
+        default=0,
+        action="count",
+        help="Specify logging verbosity. Default `WARNING`.",
+    )
+
+    arguments = parser.parse_args()
+    arguments.log_level = range(40, -1, -10)[min(arguments.log_level, 3)]
+
+    return arguments
+
+
+def enable_log(log_level: int = 30, log_file: (Path, None) = None) -> None:
+    """Enable logging and handle outputs.
+
+    Args:
+        log_level:   User-specified log level. Default NOTSET.
+        log_file:    User-specified path to write log file. Default None.
+    """
+    formatter = Formatter('{asctime} {threadName:12} {levelname:8}: "{message}"', style="{")
+    log_console = StreamHandler()
+
+    log_console.setFormatter(formatter)
+    LOG.addHandler(log_console)
+    LOG.setLevel(log_level)
+
+    if log_file:
+        log_file = FileHandler(log_file)
+
+        log_file.setFormatter(formatter)
+        LOG.addHandler(log_file)
+
+
+def get_default_interface() -> str:
+    """Gets the name of the current WAN-connected interface.
+
+    Returns:
+                    Name of the default gateway interface.
+
+    Raises:
+        CalledProcessError: If calling `ip` returns a non-zero exit code.
+        OSError:            If the `ip` binary cannot be found on the system.
+    """
+    if ip_bin := which("ip"):
+        try:
+            sp = run([ip_bin, "route", "show"], capture_output=True, check=True)  # noqa:S603
+
+        except CalledProcessError as exc:
+            err_msg = f"Command failed with return code: {exc.returncode}"
+
+            LOG.fatal(err_msg)
+
+            raise CalledProcessError(msg=err_msg) from exc
+
+        else:
+            return sp.stdout.decode("utf-8").split()[4]
+
+    raise OSError(msg="ip binary not found on system.")
+
+
+def iwlist(interface: str = "wlan0") -> list:
+    """Scans for advertised SSIDs.
+
+    Args:
+        interface:   The network interface on which to run the scan.
+
+    Returns:
+        All advertised SSIDs found by `interface`.
+    """
+    cells = []  # List of SSIDs
+    cell_number_regex = re_compile(r"^Cell\s+(?P<cellnumber>.+)\s+-\s+Address:\s(?P<mac>.+)$")
+    regexps = [
+        re_compile(r"^ESSID:\"(?P<essid>.*)\"$"),
+        re_compile(r"^Protocol:(?P<protocol>.+)$"),
+        re_compile(r"^Mode:(?P<mode>.+)$"),
+        re_compile(r"^Frequency:(?P<frequency>[\d.]+) (?P<frequency_units>.+) \(Channel (?P<channel>\d+)\)$"),
+        re_compile(r"^Encryption key:(?P<encryption>.+)$"),
+        re_compile(
+            r"^Quality=(?P<signal_quality>\d+)/(?P<signal_total>\d+)\s+Signal level=(?P<signal_level_dBm>.+) d.+$"
+        ),
+        re_compile(r"^Signal level=(?P<signal_quality>\d+)/(?P<signal_total>\d+).*$"),
+    ]
+    wpa_regex = re_compile(r"IE:\ WPA\ Version\ 1$")
+    wpa2_regex = re_compile(r"IE:\ IEEE\ 802\.11i/WPA2\ Version\ 1$")
+
+    with Popen(["iwlist", interface, "scan"], stdout=PIPE, stderr=PIPE) as proc:  # noqa: S603,S607
+        lines = proc.stdout.read().decode("utf-8").split("\n")  # STDOUT.
+
+        LOG.error("STDERR: %s", proc.stderr.read().decode("utf-8"))
+        LOG.debug("STDOUT: %s", lines)
+
+    for line in lines:  # Iterate STDOUT and format to list.
+        s_line = line.strip()
+        cell_number = cell_number_regex.search(s_line)
+        wpa = wpa_regex.search(s_line)
+        wpa2 = wpa2_regex.search(s_line)
+
+        if cell_number:
+            LOG.debug("Found cell: %s", cell_number)
+            cells.append(cell_number.groupdict())
+
+        if wpa:
+            LOG.debug("Found WPA: %s", wpa)
+            cells[-1].update({"encryption": "WPA"})
+
+        if wpa2:
+            LOG.debug("Found WPA2: %s.", wpa2)
+            cells[-1].update({"encryption": "WPA2"})
+
+        for expression in regexps:
+            if result := expression.search(s_line):
+                LOG.debug("Found result: %s", result)
+
+                if "encryption" in result.groupdict():
+                    if result.groupdict()["encryption"] == "on":
+                        cells[-1].update({"encryption": "wep"})
+
+                    else:
+                        cells[-1].update({"encryption": "off"})
+
+                else:
+                    cells[-1].update(result.groupdict())
+                    LOG.debug("Cells:\n%s", cells)
+
+    return cells
+
+
+def display_ssids(interface: str, ssids: (list[str] | None), refresh_interval: int = 5) -> None:
+    """Display a list of discovered SSIDS to STDOUT.
+
+    Args:
+        interface:        The interface to scan on.
+        ssids:            SSIDS to look for.
+        refresh_interval: The interval to refresh the screen on.
+    """
+
+    def _print_dict(dictionary: dict) -> None:
+        """Ingest and pretty-print a dictionary to STDOUT.
+
+        Args:
+            dictionary:  The dictionary to print.
+        """
+        for key, value in dictionary.items():
+            print(f"{key} {value:>60}")
+
+    system("clear")  # noqa: S605,S607
+
+    now = datetime.now().strftime("%H:%M:%S")  # noqa: DTZ005
+    div = 51 * "-"  # For pretty formatting
+
+    for name in [ssid["essid"] for ssid in iwlist(interface)]:  # Grab SSIDs.
+        if name not in advertised:  # Add found SSID to set.
+            advertised.add(name)
+            timestamp["advertised"][name] = now
+
+        if ssids and name in ssids and name not in matched:
+            matched.add(name)
+            timestamp["matched"][name] = now
+
+    LOG.debug("Found: %s", advertised)
+    LOG.debug("Matched: %s", matched)
+    print(div.replace("-", "="), "\nStreetShark\n", print(div))
+
+    if ssids:  # Print matched SSIDs.
+        if len(matched) == 0:
+            print("No SSIDs matched yet.")
+
+        else:
+            _print_dict(timestamp["matched"])
+
+    elif len(advertised) == 0:  # Print found SSIDs.
+        print("No SSIDs found yet.")
+
+    else:
+        _print_dict(timestamp["advertised"])
+
+    print(div)  # Print footer.
+    sleep(refresh_interval)
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    enable_log(args.log_level, args.log_file)
+
+    advertised = matched = set()
+    timestamp = {"advertised": {}, "matched": {}}
+
+    while True:
+        display_ssids(args.interface, args.ssids, args.interval)

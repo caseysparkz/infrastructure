@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         February 08, 2023
+# Description:
+"""Generate a connection QR code for a wifi SSID."""
+
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
+from subprocess import run as sp_run  # noqa: S404
+
+from qrcode import QRCode
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        argparse.Namespace instance of user arguments.
+    """
+
+    def _read_nmconnections(ssid: str) -> str:
+        """Search NetworkManager connections for a file named <ssid>.nmconnection and return its connection information.
+
+        Args:
+            ssid:    The SSID to search for in the config file
+
+        Returns:
+            Connection info for the SSID.
+        """
+        config_dict = {}
+        config_list = (
+            sp_run(  # noqa: S603
+                [  # noqa: S607
+                    "sudo",
+                    "cat",
+                    str(next(Path("/etc/NetworkManager/system-connections/").glob(f"{ssid}.nmconnection"))),
+                ],
+                capture_output=True,
+                check=True,
+            )
+            .stdout.decode("utf-8")
+            .split("\n")
+        )
+
+        for item in config_list:
+            if "=" in item:
+                kv_pair = item.split("=")
+                config_dict[kv_pair[0]] = kv_pair[1]
+
+        return config_dict.get("psk"), str(config_dict.get("key-mgmt")).upper()[:3]
+
+    parser = ArgumentParser(description=__doc__)  # Instantiate argument parser.
+    output_mutex_group = parser.add_mutually_exclusive_group()
+
+    parser.add_argument("ssid", type=str, help="SSID of the wifi network.")
+    parser.add_argument(  # --passwd
+        "-p",
+        "--passwd",
+        type=str,
+        default="",
+        help="""
+            Password of the wifi network (pass an empty string for no password).
+            If no password is provided, `wifiqr` must be run as root in order to search
+            /etc/NetworkManager/system-connections/ for a file named <ssid>.nmconnection and read it's connection
+            information.
+            """,
+    )
+    parser.add_argument(  # --encryption
+        "-e",
+        "--encryption",
+        dest="encryption",
+        type=str,
+        default="WPA",
+        choices=["WPA", "WEP"],
+        help="Encryption used by the SSID (default WPA).",
+    )
+    output_mutex_group.add_argument(  # --string-only
+        "--string-only",
+        dest="string",
+        action="store_true",
+        default=False,
+        help="Output the QR wifi connection string and exit.",
+    )
+    output_mutex_group.add_argument(  # --output
+        "--output",
+        "-o",
+        dest="output",
+        type=Path,
+        help="Path to write the resultant PNG.",
+    )
+
+    arguments = parser.parse_args()
+
+    if not arguments.passwd:
+        arguments.passwd, arguments.encryption = _read_nmconnections(arguments.ssid)
+
+    return arguments
+
+
+def generate_qr(
+    ssid: str,
+    passwd: str = "",
+    encryption: str = "WPA",
+    output: (str, Path, None) = None,
+) -> None:
+    """Generate a QR and print to stdout or a PNG.
+
+    Args:
+        ssid:        The SSID of the wifi network.
+        passwd:      Password of the wifi network.
+        encryption:  Encryption used by the wifi network.
+        output:      Path to save the PNG to.
+    """
+    qr_code = QRCode()
+
+    qr_code.add_data(f"WIFI:T:{encryption};S:{ssid};P:{passwd};;")
+    qr_code.make()
+
+    if output:
+        img = qr_code.make_image(fill_color="black", back_color="white")
+
+        qr_code.print_tty()
+        img.save(output)
+
+    else:
+        qr_code.print_tty()
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    generate_qr(args.ssid, args.passwd, args.encryption, args.string, args.output)

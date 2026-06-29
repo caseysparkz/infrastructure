@@ -1,0 +1,40 @@
+# Author:       Casey Sparks
+# Date:         March 4, 2026
+# Description:  Configuration file for workflows using the <tj-actions/changed-files> action.
+---
+ansible:
+  - 'ansible/**/*.yaml'
+  - 'ansible/**/*.yml'
+github: ['.github']
+graphviz:
+  - '**/*.dot'
+  - '**/*.gv'
+infracost: ['terraform/**/infracost*.yml']
+markdown: ['**/*.md']
+python: ['**/*.py']
+jinja: ['**/*.j2']
+shell:
+  - '**/*.bash'
+  - '**/*.sh'
+  - './.githooks/*'
+tfmanifest:
+  - 'terraform/**/*.hcl'
+  - 'terraform/**/*.tf'
+  - 'terraform/**/*.tf.json'
+  - 'terraform/**/*.tftpl'
+  - 'terraform/**/*.tfvars'
+  - 'terraform/**/*.tfvars.json'
+  - 'terraform/**/tfvars/*'
+  - '!terraform/modules/**'
+tfmodule:
+  - 'terraform/modules/**/*.hcl'
+  - 'terraform/modules/**/*.json'
+  - 'terraform/modules/**/*.tf'
+  - 'terraform/modules/**/*.tftest.*'
+xml:
+  - '**/*.svg'
+  - '**/*.xml'
+yaml:
+  - '**/*.yaml'
+  - '**/*.yml'
+  - 'ansible/.ansible-lint'

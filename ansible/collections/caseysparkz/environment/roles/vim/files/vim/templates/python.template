@@ -1,0 +1,70 @@
+# Copyright (C) YEAR
+# Author:       Casey Sparks
+# Date:         DATE
+# Description:
+"""SCRIPT DOCSTRING."""
+
+from argparse import ArgumentParser, Namespace
+from logging import FileHandler, Formatter, StreamHandler, getLogger
+from pathlib import Path
+
+LOG = getLogger(__name__)
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        argparse.Namespace instance of user arguments.
+    """
+    parser = ArgumentParser(description=__doc__)
+
+    parser.add_argument(  # --logfile
+        "-l",
+        "--logfile",
+        dest="log_file",
+        default=None,
+        type=Path,
+        help="Absolute path to write the logfile to. Default `None`.",
+    )
+    parser.add_argument(  # --verbose
+        "-v",
+        "--verbose",
+        dest="log_level",
+        action="count",
+        default=0,
+        help="Specify logging verbosity. Default `WARNING`.",
+    )
+
+    arguments = parser.parse_args()
+    arguments.log_file = arguments.log_file.absolute()
+    arguments.log_level = range(30, -1, -10)[min(arguments.log_level, 3)]  # Infer log verbosity
+
+    return arguments
+
+
+def configure_log(log_level: int = 30, log_file: Path | str | None = None) -> None:
+    """Configure logger and log handles.
+
+    Args:
+        log_level:  User-specified log level. Default WARNING (30).
+        log_file:   User-specified path to write log file. Default None.
+    """
+    handle_stream = StreamHandler()
+    formatter = Formatter("{asctime} {threadName:12} {levelname:8}: {message}", style="{")
+
+    handle_stream.setFormatter(formatter)
+    LOG.setLevel(log_level)
+    LOG.addHandler(handle_stream)  # Log to screen
+
+    if log_file:
+        handle_file = FileHandler(Path(log_file))
+
+        handle_file.setFormatter(formatter)
+        LOG.addHandler(handle_file)  # Log to file
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    configure_log(args.log_level, args.log_file)

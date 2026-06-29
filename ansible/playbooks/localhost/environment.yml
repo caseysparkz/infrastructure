@@ -1,0 +1,8 @@
+---
+- name: "Run caseysparkz.environment.all"
+  gather_facts: true
+  ignore_errors: false
+  hosts: "localhost"
+  roles: ["caseysparkz.environment.all"]
+  vars:
+    collections_path: "{{ ansible_facts.env.HOME }}/.ansible/collections/ansible_collections"

@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: "Casey Sparks"
+  description: "Runs all performance roles."
+  issue_tracker_url: "https://github.com/caseysparkz/env/issues"
+  license: "GPL-2.0-or-later"
+  min_ansible_version: "2.17"
+  galaxy_tags:
+    - "linux"
+    - "performance"
+  platforms:
+    - name: "Debian"
+      versions: ["bookworm"]
+dependencies:
+  - role: "caseysparkz.performance.filesystem"
+  - role: "caseysparkz.performance.ioscheduler"

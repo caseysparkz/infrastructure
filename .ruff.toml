@@ -23,6 +23,7 @@ exclude = [
     ".vscode",                                                                   
     "__pypackages__",                                                            
     "_build",                                                                    
+    "ansible/collections/caseysparkz/environment/roles/vim/files/vim/pack/plugins/start/**",
     "ansible_collections",                                                       
     "buck-out",                                                                  
     "build",                                                                     

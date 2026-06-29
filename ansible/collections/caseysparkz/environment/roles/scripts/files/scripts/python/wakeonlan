@@ -1,0 +1,279 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         May 03, 2022
+# Description:
+"""Send a wake-on-LAN packet to the specified MAC/IP addresses."""
+
+from argparse import ArgumentParser, Namespace
+from logging import Formatter, StreamHandler, getLogger
+from pathlib import Path
+from pprint import pp
+from shutil import which
+from socket import AF_INET, SO_BROADCAST, SOCK_DGRAM, SOL_SOCKET, socket
+from subprocess import CalledProcessError, run  # noqa: S404
+from sys import exit as sys_exit
+from sys import stderr
+
+from yaml import safe_load
+
+LOG = getLogger(__name__)
+DEFAULT_CONFIG = Path.home() / ".config/wakeonlan.yml"
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        argparse.Namespace instance of user arguments.
+    """
+    parser = ArgumentParser(description=__doc__)
+
+    parser.add_argument(  # --interface
+        "--interface",
+        "-i",
+        dest="interface",
+        narguments=1,
+        default=Network.get_default_interface(),
+        help="Specify the broadcast IP address.",
+    )
+    parser.add_argument(  # --broadcast
+        "--broadcast",
+        "-b",
+        dest="broadcast",
+        narguments=1,
+        default="255.255.255.255",
+        help="Specify the broadcast IP address.",
+    )
+    parser.add_argument("--port", "-p", dest="port", narguments=1, default=9, help="Specify the port to use.")
+    parser.add_argument(  # --macs
+        "--macs",
+        "-M",
+        dest="macs",
+        narguments="+",
+        help="Specify a list of MAC addresses to send WoL packets to.",
+    )
+    parser.add_argument(  # --hosts
+        "--hosts",
+        "-H",
+        dest="hosts",
+        narguments="+",
+        help="Specify a list of known hosts to send WoL packets to.",
+    )
+    parser.add_argument("--info", action="store_true", dest="info", help="Print the default configuration and exit.")
+    parser.add_argument(  # --config
+        "--config",
+        "-c",
+        dest="config",
+        default=Path().home() / ".config/wakeonlan.yml",
+        type=Path(),
+        help="Path of the config file. Default ~/.config/wakeonlan.yml.",
+    )
+    parser.add_argument(  # --verbose
+        "--verbose",
+        "-v",
+        dest="log_level",
+        default=0,
+        action="count",
+        help="Specify logging verbosity. Default `CRITICAL`.",
+    )
+
+    arguments = parser.parse_args()
+    arguments.log_level = range(40, -1, -10)[min(arguments.log_level, 3)]
+
+    if arguments.info:  # Print application info and exit.
+        print_info(arguments)
+        sys_exit()
+
+    if not arguments.hosts and not arguments.macs:
+        parser.print_help(stderr)
+        sys_exit()
+
+    return arguments
+
+
+def enable_log(log_level: int = 30) -> None:
+    """Enable logging and handle outputs.
+
+    Args:
+        log_level:   User-specified log level. Default WARNING.
+    """
+    formatter = Formatter('{asctime} {threadName:12} {levelname:8}: "{message}"', style="{")
+    log_console = StreamHandler()
+
+    log_console.setFormatter(formatter)
+    LOG.addHandler(log_console)
+    LOG.setLevel(log_level)
+
+
+def print_info(arguments: Namespace) -> None:
+    """Print known hosts and configuration.
+
+    Args:
+        arguments: User-specified commandline arguments.
+    """
+    iface_table = [  # Interface information
+        ["Interface", arguments.interface],
+        ["Broadcast", arguments.broadcast],
+        ["Port", arguments.port],
+    ]
+    known_hosts = [[k, v] for k, v in file_checks(arguments.config_file).items()]  # Known hosts information
+
+    print("---------------------------------")
+    print("Interface Info")
+    print("---------------------------------")
+
+    for row in iface_table:
+        print(f"{row[0]}:".ljust(10) + f"{row[1]}".rjust(23))
+
+    print("\n---------------------------------")
+    print("Known Hosts\n---------------------------------")
+
+    for row in known_hosts:
+        print(f"{row[0]}:".ljust(10) + f"{row[1]}".rjust(21))
+
+
+def file_checks(config_file: Path = DEFAULT_CONFIG) -> list:
+    """Check for config directory/file, and create them if they do not exist.
+
+    Args:
+        config_file: Path of the YAML config file.
+
+    Returns:
+        List of known hosts.
+    """
+    if not config_file.exists():  # Create known hosts file.
+        LOG.debug("Creating config file at %s.", config_file)
+        config_file.touch(mode=0o644, exist_ok=True)
+
+    with config_file.open("r", encoding="utf-8") as file:
+        return safe_load(file.read())
+
+
+class Network:
+    """Static methods for network manipulation."""
+
+    @staticmethod
+    def get_mac_addresses(arguments: Namespace) -> list:
+        """Grok stdin and config files for the hosts to wake.
+
+        Args:
+            arguments: User-provided cmdline arguments.
+
+        Returns:
+            List of MAC addresses.
+        """
+        known_hosts = file_checks(arguments.config_file)
+        mac_addresses = []
+
+        if arguments.macs:
+            mac_addresses.append(arguments.macs)
+
+        if arguments.hosts:
+            for host in arguments.hosts:
+                try:
+                    mac_addresses.append(known_hosts[host])
+
+                except TypeError:
+                    LOG.critical("No known hosts.")
+
+        LOG.debug("MAC addresses: %s", pp(mac_addresses))
+
+        return mac_addresses
+
+    @staticmethod
+    def get_default_interface() -> str:
+        """Return the default network interface.
+
+        Returns:
+            Name of the default interface.
+
+        Raises:
+            CalledProcessError:
+            OSError:
+        """
+        if ip_bin := which("ip"):
+            try:
+                sp = run([ip_bin, "route", "show"], capture_output=True, check=True)  # noqa:S603
+
+            except CalledProcessError as exc:
+                err_msg = f"Command failed with return code: {exc.returncode}"
+
+                LOG.fatal(err_msg)
+
+                raise CalledProcessError(msg=err_msg) from exc
+
+            else:
+                return sp.stdout.decode("utf-8").split()[4]
+
+        raise OSError(msg="ip binary not found on system.")
+
+    @staticmethod
+    def magic_packet(mac_address: str) -> bytes:
+        """Create a magic packet used to wake a LAN device.
+
+        Args:
+            mac_address: The MAC address that should be parsed into a magic packet.
+
+        Returns:
+            The packet.
+
+        Raises:
+            ValueError: sometimes
+        """
+        LOG.debug("Checking validity of MAC address: %s", mac_address)
+
+        if len(mac_address) == 17:  # noqa: PLR2004
+            mac_address = mac_address.replace(mac_address[2], "")
+
+        elif len(mac_address) != 12:  # noqa: PLR2004
+            LOG.critical(msg := "Invalid MAC address: %s", mac_address)
+
+            raise ValueError(msg)
+
+        return bytes.fromhex("F" * 12 + mac_address * 16)
+
+    @staticmethod
+    def send_packet(
+        mac_addresses: list[str],
+        broadcast_ip: str,
+        port: int,
+        interface: str,
+    ) -> None:
+        """Send a network packet to a socket.
+
+        Args:
+            mac_addresses:   The MAC addresses to send the packet to.
+            broadcast_ip:    The broadcast IP of your subnet.
+            port:            The port to send the packet to.
+            interface:       The network interface to bind the socket to.
+        """
+        LOG.debug("Instantiating socket.")
+
+        with socket(AF_INET, SOCK_DGRAM) as sock:
+            LOG.debug("Binding to interface %s", interface)
+            sock.bind((interface, 0))
+            LOG.debug("Setting socket options.")
+            sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+            LOG.debug("Created %s socket.", sock.type.name)
+            LOG.debug("Connecting to socket.")
+            sock.connect((broadcast_ip, port))
+            LOG.debug("Connected.")
+
+            for addr in mac_addresses:
+                mac_address = addr.replace(addr[2], "") if len(addr) == 17 else addr  # noqa: PLR2004
+                sent = sock.send(bytes.fromhex("F" * 12 + mac_address * 16))
+
+                LOG.info("Sent: %s", sent)
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    enable_log(args.log_level)
+    Network.send_packet(
+        mac_addresses=Network.get_mac_addresses(args),
+        broadcast_ip=args.broadcast,
+        port=args.port,
+        interface=args.interface,
+    )

@@ -1,0 +1,51 @@
+# Author:       Casey Sparks
+# Date:         November 13, 2024
+# Description:  Label a pull request with the correct tags.
+---
+name: "Label Pull Request"
+on: ["pull_request"]
+jobs:
+  label:
+    name: "Label Rull Request"
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: "read"
+      pull-requests: "write"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10"  # v6.0.3
+        with:
+          fetch-depth: 0
+
+      - name: "Get commit message tags"
+        id: "commit_msgs"
+        run: |
+          readarray -t COMMIT_TAGS < <(                                                                             \
+            git log origin/${{ github.event.pull_request.base.ref }}..HEAD --pretty='%s'                            \
+            | grep -E '^(build|chore|ci|docs|feat|fix|perf|refactor|style|revert|test)[:(].*$'                      \
+            | sed 's/[:(].*$//g'                                                                                    \
+            | sort                                                                                                  \
+            | uniq                                                                                                  \
+          )
+
+          echo "labels=$(jq -c -n '$ARGS.positional' --args "${COMMIT_TAGS[@]}")" >> "${GITHUB_OUTPUT}"
+
+      - name: "Label pull request"
+        uses: "actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3" #v9.0.0
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ${{ steps.commit_msgs.outputs.labels }}
+            })
+
+      - name: "Auto-label"
+        uses: "actions/labeler@f27b608878404679385c85cfa523b85ccb86e213"  # v6.1.0
+        with:
+          repo-token: "${{ github.token }}"
+          configuration-path: ".github/config/labeler.yml"
+          sync-labels: false
+          dot: true
+          pr-number: "${{ github.event.pull_request.number }}"

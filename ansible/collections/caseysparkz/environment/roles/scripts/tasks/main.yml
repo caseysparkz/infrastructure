@@ -1,0 +1,17 @@
+---
+- name: "Set 'scripts_symlink_src_dir'"
+  ansible.builtin.set_fact:
+    scripts_symlink_src_dir: "{{ role_path | replace(collections_path, inventory_dir ~ '/collections') }}"
+
+- name: "Create ~/.local/lib"
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.local/lib/"
+    state: "directory"
+    mode: "0700"
+
+- name: "Symlink scripts directory"
+  ansible.builtin.file:
+    src: "{{ scripts_symlink_src_dir }}/files/scripts/"
+    dest: "{{ ansible_facts.env.HOME }}/.local/lib/scripts"
+    state: "link"
+    force: true

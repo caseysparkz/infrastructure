@@ -1,0 +1,17 @@
+---
+namespace: "caseysparkz"
+name: "performance"
+version: "2.0.1"
+readme: "README.md"
+authors: ["Casey Sparks <ansible@caseysparkz.com> (https://www.caseysparkz.com)"]
+description: "A collection of performance tweaks for Linux."
+license: ["GPL-2.0-or-later"]
+tags:
+  - "linux"
+  - "performance"
+dependencies: {}
+repository: &repo "https://github.com/caseysparkz/env"
+documentation: "https://github.com/caseysparkz/env/blob/collections/caseysparkz/performance/README.md"
+homepage: *repo
+issues: "https://github.com/caseysparkz/env/issues"
+build_ignore: []

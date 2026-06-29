@@ -1,0 +1,17 @@
+---
+- name: "Find pkexec binary"
+  register: "privilegeescalation_pkexecpath"
+  ansible.builtin.find:
+    patterns: "^pkexec$"
+    paths:
+      - "/bin"
+      - "/usr/bin"
+
+- name: "Disable pkexec"
+  become: true
+  loop: "{{ privilegeescalation_pkexecpath.files }}"
+  ansible.builtin.file:
+    dest: "{{ item.path }}"
+    owner: "root"
+    group: "root"
+    mode: "0700"

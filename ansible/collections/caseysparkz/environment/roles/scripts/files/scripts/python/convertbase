@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+# Copyright (C) 2025
+# Author:       Casey Sparks
+# Date:         December 22, 2023
+# Description:
+"""Convert a number to a different base system."""
+
+from argparse import ArgumentParser, Namespace
+from string import ascii_letters, digits
+
+
+def get_arguments() -> Namespace:
+    """Get cmdline arguments.
+
+    Returns:
+        argparse.Namespace instance of user arguments.
+    """
+    parser = ArgumentParser(description=__doc__)
+
+    parser.add_argument("integer", type=str, help="The integer to convert.")
+    parser.add_argument(  # --output-base
+        "--output-base",
+        "-o",
+        type=int,
+        default=2,
+        dest="output_base",
+        help="The base system to convert to.",
+    )
+    parser.add_argument(  # --input-base
+        "--input-base",
+        "-i",
+        type=int,
+        default=10,
+        dest="input_base",
+        help="The base system of :arg integer:.",
+    )
+
+    return parser.parse_args()
+
+
+def convert(integer: int | str, input_base: int = 10, output_base: int = 2) -> str:
+    """Convert an integer of an arbitrary base system to a different base system.
+
+    Args:
+        integer:        The integer to convert.
+        input_base:     The input base system.
+        output_base:    The output base system.
+
+    Returns:
+                        The converted integer string.
+
+    Raises:
+        ValueError:     If :arg integer: is invalid.
+    """
+    chars = digits + ascii_letters
+    digit_stack = []
+
+    try:
+        inter_decimal = int(str(integer), input_base)
+
+        if inter_decimal > 0:
+            sign = 1
+        elif inter_decimal < 0:
+            sign = -1
+        else:
+            return 0
+
+        inter_decimal *= sign  # Cast to positive integer
+
+        while inter_decimal:
+            digit_stack.append(chars[inter_decimal % output_base])
+
+            inter_decimal //= output_base
+
+        if sign < 0:  # Account for negative integers
+            digit_stack.append("-")
+
+        digit_stack.reverse()
+
+    except ValueError as exc:
+        msg = f"Invalid input: {integer}"
+
+        raise ValueError(msg) from exc
+
+    return "".join(digit_stack)
+
+
+if __name__ == "__main__":
+    args = get_arguments()
+
+    print(convert(args.integer, args.input_base, args.output_base))

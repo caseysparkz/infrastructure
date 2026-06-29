@@ -1,0 +1,91 @@
+" Global default config -------------------------------------------------------
+filetype indent on                      " Turn indent, filetype checking.
+filetype plugin on                      " Enable filetype plugins.
+syntax on                               " Turn on syntax highlighting.
+
+set title                               " Show the title.
+set colorcolumn=81,121                  " Set vertical columns marking line 80, line 121.
+set encoding=utf-8                      " Set encoding.
+set expandtab                           " Expand tabs to spaces.
+set fileformat=unix                     " Duh.
+set foldenable                          " Enable tab folding
+set foldmethod=indent                   " Set fold for indented lines.
+set hlsearch                            " Highlight search results.
+set incsearch                           " Start highlighting at search.
+set wrap linebreak nolist               " Don't break in the middle of a word.
+set lazyredraw                          " Don't rerender the screen.
+set number                              " Enable line numbers.
+set showmatch                           " Match brackets.
+set tabstop=4                           " The width of a TAB is set to 4.
+set softtabstop=4                       " Sets the number of columns for a TAB.
+set ruler                               " Enable the ruler.
+set shiftwidth=0                        " Indents will match tabstop.
+set shell=bash                          " Set external shell to bash.
+set spellfile=~/.vim/spell.utf-8.add    " Spelling/dictionary (but don't enable spellcheck).
+set completeopt=menu,menuone,preview
+
+let g:ale_python_ruff_use_global = 0
+let g:ale_fix_on_save = 1
+let g:ale_completion_enabled = 1
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
+let g:ale_linters={
+\   'docker': ['hadolint', 'trivy'],
+\   'go': ['gofmt'],
+\   'javascript': ['eslint'],
+\   'markdown': ['mdl', 'markdownlint'],
+\   'python': ['ruff', 'ruff_format'],
+\   'shell': ['shellcheck'],
+\   'terraform': ['tflint', 'trivy'],
+\   'yaml': ['yamllint --config-data ~/.config/yamllint.yml'],
+\   }
+let g:ale_fixers={
+\   'go': ['gofmt'],
+\   'python': ['ruff', 'ruff_format'],
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   }
+
+call ale#linter#Define('terraform', {
+\   'name': 'trivy',
+\   'executable': 'trivy',
+\   'command': 'trivy config %t',
+\   'output_stream': 'stdout',
+\   'callback': 'AleTrivyCallback',
+\})
+
+function! AleTrivyCallback(buffer, lines) abort
+    let l:output = join(a:lines, '')
+
+    if empty(l:output)
+        return []
+    endif
+
+    try
+        let l:decoded = json_decode(l:output)
+    catch
+        return []
+    endtry
+
+    let l:loclist = []
+
+    " Check if Results array exists in Trivy JSON response
+    if has_key(l:decoded, 'Results')
+        for l:result in l:decoded.Results
+            if has_key(l:result, 'Misconfigurations')
+                for l:issue in l:result.Misconfigurations
+                    let l:loc = {
+                    \   'bufnr': a:buffer,
+                    \   'lnum': get(l:issue, 'PrimaryURL', 0) ? l:issue.CauseMetadata.StartLine : 1,
+                    \   'col': 1,
+                    \   'text': l:issue.Title . ' - ' . l:issue.Description,
+                    \   'type': l:issue.Severity ==# 'CRITICAL' || l:issue.Severity ==# 'HIGH' ? 'E' : 'W',
+                    \   'nr': 0,
+                    \}
+                    call add(l:loclist, l:loc)
+                endfor
+            endif
+        endfor
+    endif
+
+    return l:loclist
+endfunction

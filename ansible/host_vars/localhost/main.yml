@@ -1,0 +1,2 @@
+---
+ansible_become_password: "{{ vault_become_pass }}"
