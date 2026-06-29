@@ -28,7 +28,7 @@ export GH="git@github.com"
 export SCRIPTS="${HOME}/.local/lib/scripts"
 export PYSCRIPTS="${HOME}/.local/lib/scripts/python"
 export SHSCRIPTS="${HOME}/.local/lib/scripts/sh"
-export TMPDIR="${HOME}/tmp"
+export TMPDIR="${HOME}/.tmp"
 export VARS="${HOME}/.bash/vars.sh"
 export SECRETS="${HOME}/.bash/secrets/1.asc"
 
