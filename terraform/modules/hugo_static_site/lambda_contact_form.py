@@ -4,13 +4,19 @@
 # Description:
 """Python Lambda function for website contact page."""
 
+from __future__ import annotations
+
 from json import dumps, loads
 from logging import StreamHandler, getLogger
 from os import getenv
+from sys import modules
 from textwrap import dedent
+from typing import TYPE_CHECKING
 
 from boto3 import client
-from types_boto3_ses import type_defs
+
+if TYPE_CHECKING or "pytest" in modules:
+    from types_boto3_ses import type_defs
 
 LOG = getLogger(__name__)
 
