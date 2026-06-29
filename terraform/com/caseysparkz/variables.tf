@@ -21,17 +21,6 @@ variable "mx_servers" {
   }
 }
 
-variable "dkim_records" {
-  description = "DKIM (CNAME) for root domain. Syntax: {host: pointer}."
-  type        = map(string)
-  sensitive   = false
-  default = {
-    "protonmail._domainkey"  = "protonmail.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
-    "protonmail2._domainkey" = "protonmail2.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
-    "protonmail3._domainkey" = "protonmail3.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
-  }
-}
-
 variable "spf_senders" {
   description = "List of allowed SPF senders, like: [\"include:_spf.example.com\", \"ip4:127.0.0.1\"]."
   type        = list(string)

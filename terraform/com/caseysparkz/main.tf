@@ -107,12 +107,11 @@ module "proton" {
   cloudflare_comment = local.cloudflare_comment
   domain             = var.root_domain
   txt_verification   = "protonmail-verification=af8861ffc1961e58bfc47af155f91c468923c49d"
-  spf_record         = "v=spf1 include:_spf.protonmail.ch -all"
   dmarc_policy       = local.dmarc_policy
   dkim_record = {
-    "protonmail._domainkey"  = "protonmail.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch."
-    "protonmail2._domainkey" = "protonmail2.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch."
-    "protonmail3._domainkey" = "protonmail3.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch."
+    "protonmail._domainkey"  = "protonmail.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
+    "protonmail2._domainkey" = "protonmail2.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
+    "protonmail3._domainkey" = "protonmail3.domainkey.d56wvdqzbgjl657p6p37duzymskqqisyreca5lrft72j35tshomoq.domains.proton.ch"
   }
 }
 
@@ -127,9 +126,9 @@ module "proton_home" {
   spf_record         = "v=spf1 include:_spf.protonmail.ch -all"
   dmarc_policy       = local.dmarc_policy
   dkim_record = {
-    "protonmail._domainkey"  = "protonmail.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch."
-    "protonmail2._domainkey" = "protonmail2.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch."
-    "protonmail3._domainkey" = "protonmail3.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch."
+    "protonmail._domainkey"  = "protonmail.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch"
+    "protonmail2._domainkey" = "protonmail2.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch"
+    "protonmail3._domainkey" = "protonmail3.domainkey.d4gc64isfcsi5uij7rmm2nggww7zvww7zvmtyw5guqxefeghia2wq.domains.proton.ch"
   }
 }
 
