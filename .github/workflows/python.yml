@@ -1,18 +1,22 @@
 # Author:       Casey Sparks
 # Date:         November 15, 2023
-# Description:  Validate Python code
+# Description:  Validate Python code.
 ---
 name: "Python"
 on:
   pull_request:
     branches: ["main"]
     paths:
-      - "**/*.py"                       # Any Python file.
-      - "**/pyproject.toml"             # Any Python project file.
-      - ".github/actions/*python*"      # Any action referencing Python.
-      - ".github/workflows/python.yml"  # This workflow file.
+      - "**/*.py"                       # Any Python file
+      - "**/pyproject.toml"             # Any Python project file
+      - "./.coveragerc.toml"            # Coverage config
+      - "./.mypy.ini"                   # MyPy config
+      - "./.ruff.toml"                  # Ruff config
+      - "./.pytest.toml"                # PyTest config
+      - ".github/actions/*python*/**"   # Any action referencing Python
+      - ".github/workflows/python.yml"  # This workflow file
 env:
-  PYTHON_VERSION: "3.13"
+  PYTHON_VERSION: "3.14"
 jobs:
   mypy:
     name: "mypy"
@@ -33,6 +37,7 @@ jobs:
 
       - name: "mypy ."
         run: "mypy ."
+
   pytest:
     name: "pytest"
     runs-on: "ubuntu-latest"
@@ -52,6 +57,7 @@ jobs:
 
       - name: "pytest"
         run: "pytest"
+
   ruff:
     name: "ruff"
     runs-on: "ubuntu-latest"
