@@ -21,20 +21,8 @@ locals {
 data "aws_caller_identity" "this" {}
 
 # Resources ====================================================================
-resource "aws_resourcegroups_group" "this" {
-  name = "${local.namespace}-rg"
-  tags = { Name = "${local.namespace}-rg" }
-
-  resource_query {
-    query = jsonencode({
-      ResourceTypeFilters = ["AWS::AllSupported"]
-      TagFilters = [
-        for key, value in local.common_tags :
-        {
-          Key    = key
-          Values = [value]
-        }
-      ]
-    })
-  }
+module "aws_resourcegroups_group" {
+  source              = "../../../modules/aws_resourcegroup_by_tagset"
+  resource_group_name = "${local.namespace}-rg"
+  common_tags         = local.common_tags
 }

@@ -43,25 +43,6 @@ locals {
 data "cloudflare_zones" "root_domain" { name = var.root_domain }
 
 # Resources ====================================================================
-# AWS::ResourceGroups ----------------------------------------------------------
-resource "aws_resourcegroups_group" "this" {
-  name = "${local.namespace}-rg"
-  tags = { Name = "${local.namespace}-rg" }
-
-  resource_query {
-    query = jsonencode({
-      ResourceTypeFilters = ["AWS::AllSupported"]
-      TagFilters = [
-        for key, value in local.common_tags :
-        {
-          Key    = key
-          Values = [value]
-        }
-      ]
-    })
-  }
-}
-
 # AWS::KMS ---------------------------------------------------------------------
 resource "aws_kms_key" "this" {
   description             = "KMS key to encrypt domain artifacts/S3 bucket objects."
@@ -100,6 +81,13 @@ resource "cloudflare_dns_record" "pka" {
 }
 
 # Modules ======================================================================
+# AWS::ResourceGroups ----------------------------------------------------------
+module "aws_resourcegroups_group" {
+  source              = "../../modules/aws_resourcegroup_by_tagset"
+  resource_group_name = "${local.namespace}-rg"
+  common_tags         = local.common_tags
+}
+
 # Proton: @ --------------------------------------------------------------------
 module "proton" {
   source             = "../../modules/proton_domain"
