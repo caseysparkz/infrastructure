@@ -4,10 +4,11 @@ description = "Ansible collections and playbooks for configuring Linux systems."
 requires-python = ">= 3.13"
 version = "1.0.0"
 readme = { file = "README.md", content-type = "text/markdown" }
-dependencies = [
-    "ansible-core==2.21.1",
-    "ansible-lint==26.4.0",
-]
+dependencies = ["ansible-core==2.21.1"]
+
+[project.optional-dependencies]
+test = ["ansible-lint==26.4.0"]
+all = ["infra_ansible[test]"]
 
 [tool.setuptools.packages.find]
 where = []
