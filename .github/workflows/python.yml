@@ -2,7 +2,7 @@
 # Date:         November 15, 2023
 # Description:  Validate Python code.
 ---
-name: "Python"
+name: "python"
 on:
   pull_request:
     branches: ["main"]
