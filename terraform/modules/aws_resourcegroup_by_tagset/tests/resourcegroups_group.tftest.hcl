@@ -6,7 +6,7 @@ test { parallel = true }
 
 # Variables ===================================================================
 variables {
-  resource_group_name = "test-resource-group"
+  resource_group_name        = "test-resource-group"
   resource_group_description = "Test resource group."
   common_tags = {
     tag1 = "one"

@@ -45,7 +45,7 @@ resource "aws_kms_alias" "this" {
 }
 
 resource "aws_s3_bucket" "this" {
-  bucket        = var.bucket_name  # trivy:ignore:AWS-0320
+  bucket        = var.bucket_name # trivy:ignore:AWS-0320
   force_destroy = false
   tags          = { Name = "${local.namespace}-s3-state" }
 }
