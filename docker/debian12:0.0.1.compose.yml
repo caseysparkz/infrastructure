@@ -1,0 +1,22 @@
+# Author:       Casey Sparks
+# Date:         July 31, 2024
+# Description:  Debian 12 image
+---
+services:
+  debian:
+    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/debian12:0.0.1"
+    build:
+      context: "."
+      dockerfile: "debian12.Dockerfile"
+      platforms: ["linux/amd64"]
+      network: "host"
+      labels:
+        com.caseysparkz.registry: "770088062852.dkr.ecr.us-west-2.amazonaws.com"
+        com.caseysparkz.name: "debian12"
+        com.caseysparkz.version: "0.0.1"
+        com.caseysparkz.os.name: "debian"
+        com.caseysparkz.os.version: "12"
+        com.caseysparkz.architecture: "amd64"
+        com.caseysparkz.description: "Base Debian 12 image."
+        com.caseysparkz.maintainer.author.name: "Casey Sparks"
+        com.caseysparkz.maintainer.author.email: "docker@caseysparkz.com"

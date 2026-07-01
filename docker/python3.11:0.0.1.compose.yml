@@ -1,0 +1,27 @@
+# Author:       Casey Sparks
+# Date:         July 31, 2024
+# Description:  Python 3.11.2 image
+---
+services:
+  python3:
+    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/python3.11:0.0.1"
+    build:
+      context: "."
+      dockerfile: "python3.11.Dockerfile"
+      platforms: ["linux/amd64"]
+      network: "host"
+      labels:
+        com.caseysparkz.registry: "770088062852.dkr.ecr.us-west-2.amazonaws.com"
+        com.caseysparkz.name: "python3.11"
+        com.caseysparkz.version: "0.0.1"
+        com.caseysparkz.os.name: "debian"
+        com.caseysparkz.os.version: "12"
+        com.caseysparkz.architecture: "amd64"
+        com.caseysparkz.description: "Base Python 3.11 image."
+        com.caseysparkz.maintainer.author.name: "Casey Sparks"
+        com.caseysparkz.maintainer.author.email: "docker@caseysparkz.com"
+        com.caseysparkz.app.name: "python"
+        com.caseysparkz.app.version: "3.11.2"
+        com.caseysparkz.app.version.major: 3
+        com.caseysparkz.app.version.minor: 11
+        com.caseysparkz.app.version.revision: 2

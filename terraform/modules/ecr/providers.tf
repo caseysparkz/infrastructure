@@ -20,6 +20,8 @@ terraform {
 
 # Providers ====================================================================
 provider "docker" {
+  host = var.docker_socket
+
   registry_auth {
     address  = local.ecr_authorization_token.proxy_endpoint
     username = local.ecr_authorization_token.user_name

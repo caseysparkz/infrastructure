@@ -35,8 +35,9 @@ module "aws_resourcegroups_group" {
 module "ecr" {
   source             = "../../../modules/ecr"
   root_domain        = var.root_domain
-  docker_compose_dir = abspath("./docker_compose")
+  docker_compose_dir = abspath("../../../../docker/")
   aws_kms_key_arn    = "arn:aws:kms:${local.aws_region}:${local.aws_account_id}:key/de8cf575-e753-44b5-9331-fa1762775478"
+  docker_socket      = var.docker_socket
 }
 
 # Outputs ======================================================================
