@@ -2,6 +2,15 @@
 
 This repository is a monorepo for all infrastructure in my personal domain.
 
+## Requirements
+
+* Terraform
+* Infracost
+* Docker
+* Hadolint
+* Python 3.14+
+  * Python dependencies installed via `pip install .[all]`
+
 ## Filesystem Hierarchy
 
 * Each domain contains its own directory in the top-level repository.
