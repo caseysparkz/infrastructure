@@ -78,14 +78,11 @@ resource "aws_iam_access_key" "this" {
 }
 
 # Outputs ======================================================================
-output "aws_access_key_id" {
+output "aws_iam_access_keys" {
   description = "AWS access key ID and secret key for the S3 user."
-  value       = aws_iam_access_key.this.id
-  sensitive   = false
-}
-
-output "aws_secret_access_key" {
-  description = "AWS access key ID and secret key for the S3 user."
-  value       = aws_iam_access_key.this.secret
   sensitive   = true
+  value = {
+    AWS_ACCESS_KEY_ID     = aws_iam_access_key.this.id
+    AWS_SECRET_ACCESS_KEY = aws_iam_access_key.this.secret
+  }
 }
