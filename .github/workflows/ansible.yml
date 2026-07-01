@@ -2,7 +2,7 @@
 # Date:         November 15, 2023
 # Description:  Run ansible-lint against Ansible configs on push and PR.
 ---
-name: "Validate Ansible code"
+name: "ansible"
 on:
   pull_request:
     branches: ["main"]
@@ -17,7 +17,7 @@ on:
       - "synchronize"
 jobs:
   ansible_lint:
-    name: "Ansible Lint"
+    name: "ansible-lint"
     runs-on: "ubuntu-latest"
     env:
       ANSIBLE_CACHE_KEY: "ansible-cache"
