@@ -8,25 +8,22 @@ authors = [{ name = "CaseySparkz", email = "contact@caseysparkz.com" }]
 dependencies = [
     "infra_ansible @ file:./ansible",
     "boto3==1.43.36",
-    "types-boto3[ses]",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "ipython==9.15.0",
-    "ruff==0.15.20",
-]
+dev = ["ipython==9.15.0"]
 test = [
     "infra_ansible[test]",
+
     "boto3-stubs==1.43.36",
     "botocore-stubs==1.43.14",
-    "ipython==9.15.0",
     "moto==5.2.2",
     "mypy==2.1.0",
     "pip-audit==2.10.1",
     "pytest-cov==7.1.0",
     "pytest==9.1.1",
     "ruff==0.15.20",
+    "types-boto3[ses]",
 ]
 all = [
     "infrastructure[dev]",
