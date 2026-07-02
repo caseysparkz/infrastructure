@@ -167,7 +167,7 @@ precommit_py(){
     # mypy
     if which -s mypy; then
         log INFO 'mypy'
-        mypy "${@}" || log CRITICAL 'mypy check failed'
+        mypy --config-file "${REPO_DIR}/.mypy.ini" "${@}" || log CRITICAL 'mypy check failed'
     else log CRITICAL 'mypy not installed'
     fi
 
