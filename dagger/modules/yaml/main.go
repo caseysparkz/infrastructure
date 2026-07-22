@@ -38,11 +38,5 @@ func (m *Yaml) Lint(
 	// +default="."
 	path string,
 ) (string, error) {
-	stdout, stderr := m.container().WithExec([]string{"yamllint", path}).Stdout(ctx)
-
-	if stderr != nil {
-		return "", stderr
-	} else {
-		return stdout, nil
-	}
+	return m.container().WithExec([]string{"yamllint", path}).Stdout(ctx)
 }

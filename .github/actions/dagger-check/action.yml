@@ -1,0 +1,42 @@
+---
+name: "dagger check"
+description: "Checkout branch, auth AWS, pull DAGGER_CLOUD_TOKEN, and run dagger check."
+inputs:
+  dagger-version:
+    description: "Version of Dagger to run."
+    type: "string"
+    required: false
+    default: "0.21.7"
+  filter:
+    description: "Filter for the dagger checks to run."
+    type: "string"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "export DAGGER_CLOUD_TOKEN=$(aws secretsmanager get-secret-value --secret-id dagger/api_token)"
+      uses: "aws-actions/aws-secretsmanager-get-secrets@2cb1a461cbd4865ac4299648312e4704c646cd53"  # v3.0.1
+      with:
+        secret-ids: "DAGGER_CLOUD_TOKEN, dagger/api_token"
+        name-transformation: "none"
+        parse-json-secrets: false
+        auto-select-family-attempt-timeout: 500
+
+    - name: "Cache: restore"
+      uses: "actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9"  # v6.1.0
+      with:
+        path: "/var/lib/dagger/"
+        key: "dagger-cache"
+
+    - name: "dagger check"
+      uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
+      with:
+        filter: "${{ inputs.filter }}"
+        version: "${{ inputs.dagger-version }}"
+        cloud-token: "${{ env.DAGGER_CLOUD_TOKEN }}"
+
+    - name: "Cache: save"
+      uses: "actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9"  # v6.1.0
+      with:
+        path: "/var/lib/dagger/"
+        key: "dagger-cache"

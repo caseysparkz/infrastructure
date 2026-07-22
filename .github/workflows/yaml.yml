@@ -1,6 +1,6 @@
 # Author:       Casey Sparks
 # Date:         June 06, 2024
-# Description:  Run yamllint against all YAML files in the repository.
+# Description:  Run dagger yamlchecks
 ---
 name: "yaml"
 on:
@@ -10,22 +10,26 @@ on:
       - "**/*.yaml"
       - "**/*.yml"
 jobs:
-  yamllint:
-    name: "yamllint"
+  dagger_check_yaml:
+    name: "dagger"
     runs-on: "ubuntu-latest"
     permissions:
       contents: "read"
-      pull-requests: "write"
+      id-token: "write"
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"  # v7.0.1
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
-      - name: "yamllint"
-        uses: "karancode/yamllint-github-action@4052d365f09b8d34eb552c363d1141fd60e2aeb2"  # v3.0.0
+      - name: "aws sso login"
+        uses: "aws-actions/configure-aws-credentials@517a711dbcd0e402f90c77e7e2f81e849156e31d"  # v6.2.2
         with:
-          yamllint_file_or_dir: "./"
-          yamllint_strict: true
-          yamllint_comment: true
-          yamllint_config_filepath: ".yamllint.yml"
+          aws-region: "${{ secrets.AWS_DEFAULT_REGION }}"
+          role-to-assume: "${{ secrets.AWS_ROLE_ARN }}"
+          role-session-name: "gha-${{ github.run_id }}"
+
+      - name: "dagger check yaml:*"
+        uses: "./.github/actions/dagger-check"
+        with:
+          filter: "yaml:*"
