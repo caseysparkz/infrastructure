@@ -50,7 +50,7 @@ jobs:
       infracost_updated: "${{ steps.changed_manifests.outputs.infracost_any_changed }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0" # v7.0.0
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
           fetch-depth: 2
 
@@ -108,7 +108,7 @@ jobs:
         working-directory: "${{ matrix.dir }}"
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0" # v7.0.0
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
           fetch-depth: 2
 
@@ -141,7 +141,7 @@ jobs:
         working-directory: "${{ matrix.dir }}"
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0" # v7.0.0
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
           fetch-depth: 2
 
@@ -171,7 +171,7 @@ jobs:
         dir: "${{ fromJSON(needs.changed_terraform.outputs.all_dirs) }}"
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0" # v7.0.0
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
           fetch-depth: 2
 
@@ -231,7 +231,7 @@ jobs:
 
       - name: "git checkout main"
         if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
-        uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0"  # v7.0.0
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"  # v7.0.1
         with:
           fetch-depth: 0
           ref: "${{ github.event.pull_request.base.ref }}"
@@ -253,7 +253,7 @@ jobs:
 
       - name: "git checkout HEAD"
         if: "${{ needs.changed_terraform.outputs.infracost_updated == 'true' }}"
-        uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0"  # v7.0.0
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"  # v7.0.1
         with:
           fetch-depth: 0
 
@@ -301,7 +301,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: "git checkout"
-        uses: "actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0" # v7.0.0
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
           fetch-depth: 2
 
