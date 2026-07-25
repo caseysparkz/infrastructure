@@ -24,6 +24,7 @@ export EDITOR="/usr/bin/vim"
 export ALIASES="${HOME}/.bash_aliases"
 export DO_NOT_TRACK=1
 export FUNCTIONS="${HOME}/.bash/functions"
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GH="git@github.com"
 export GOPATH="${HOME}/.local/share/go"
 export PYSCRIPTS="${HOME}/.local/lib/scripts/python"
