@@ -1,4 +1,4 @@
-# `caseysparkz/infrastructure`
+# `caseysparkz/monorepo`
 
 This repository is a monorepo for everything I write.
 
@@ -32,7 +32,7 @@ This repository is a monorepo for everything I write.
    * `pip-audit`
    * `pytest`
    * `pytest-cov`
-   * `ruff'
+   * `ruff`
 
 ## Filesystem Hierarchy
 
@@ -42,5 +42,5 @@ This repository is a monorepo for everything I write.
 
 ## Secrets Management
 
-With the exception of your AWS CLI credentials, all secrets should exist in AWS
+With the exception of AWS CLI credentials, all secrets should exist in AWS
 Secrets Manager and be called by code.
