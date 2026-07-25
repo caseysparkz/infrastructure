@@ -1,0 +1,127 @@
+---
+log:
+  quiet: false
+  level: "warn"
+  file: ""
+dev:
+  profile: ""
+config: ""
+output:
+  - "spdx-json=./spdx.json"
+  - "cyclonedx-json=./cdx.json"
+format:
+  pretty:
+  template:
+    path: ""
+    legacy: false
+  json:
+    legacy: false
+    pretty:
+  spdx-json:
+    pretty:
+  cyclonedx-json:
+    pretty:
+  cyclonedx-xml:
+    pretty:
+check-for-app-update: true
+default-catalogers: []
+select-catalogers: []
+package:
+  search-unindexed-archives: false
+  search-indexed-archives: true
+  exclude-binary-overlap-by-ownership: true
+license:
+  content: "all"
+  coverage: 75
+file:
+  metadata:
+    selection: "owned-by-package"
+    digests:
+      - "sha1"
+      - "sha256"
+  content:
+    skip-files-above-size: 256000
+    globs: []
+  executable:
+    globs: []
+scope: "squashed"
+parallelism: 0
+relationships:
+  package-file-ownership: true
+  package-file-ownership-overlap: true
+compliance:
+  missing-name: "drop"
+  missing-version: "stub"
+enrich: []
+cpp:
+  vcpkg-allow-git-clone:
+dotnet:
+  dep-packages-must-have-dll: false
+  dep-packages-must-claim-dll: true
+  propagate-dll-claims-to-parents: true
+  relax-dll-claims-when-bundling-detected: true
+  exclude-project-references: true
+golang:
+  search-local-mod-cache-licenses:
+  local-mod-cache-dir: "~go~pkg~mod"
+  search-local-vendor-licenses:
+  local-vendor-dir: ""
+  search-remote-licenses:
+  proxy: "https://proxy.golang.org,direct"
+  no-proxy: ""
+  main-module-version:
+    from-ld-flags: true
+    from-contents: false
+    from-build-settings: true
+  use-packages-lib:
+  capture-symbols: "none"
+java:
+  use-network:
+  use-maven-local-repository:
+  maven-local-repository-dir: "~.m2~repository"
+  maven-url: "https://repo1.maven.org/maven2"
+  max-parent-recursive-depth: 0
+  resolve-transitive-dependencies: false
+javascript:
+  search-remote-licenses:
+  npm-base-url: "https://registry.npmjs.org"
+  include-dev-dependencies:
+linux-kernel:
+  catalog-modules: true
+nix:
+  capture-owned-files: false
+python:
+  search-remote-licenses:
+  pypi-base-url: ""
+  guess-unpinned-requirements: false
+registry:
+  insecure-skip-tls-verify: false
+  insecure-use-http: false
+  auth: []
+  ca-cert: ""
+from: []
+platform: ""
+source:
+  name: ""
+  version: ""
+  supplier: ""
+  source: ""
+  base-path: ""
+  file:
+    digests:
+      - "SHA-256"
+  image:
+    default-pull-source: ""
+    max-layer-size: ""
+exclude: []
+unknowns:
+  remove-when-packages-defined: true
+  executables-without-packages: true
+  unexpanded-archives: true
+cache:
+  dir: "/.cache/syft"
+  ttl: "7d"
+show-hidden: false
+attest:
+  key: ""
+  password: ""

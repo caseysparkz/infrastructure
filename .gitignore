@@ -13,6 +13,10 @@
 # Prowler
 output/
 
+# Anchore Syft/Grype outputs
+cdx.json
+spdx.json
+
 # MacOS
 **/*.icloud
 **/.AppleDB
