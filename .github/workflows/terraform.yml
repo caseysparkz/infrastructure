@@ -18,21 +18,21 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "terraform/**/*.hcl"
-      - "terraform/**/*.hcl.json"
-      - "terraform/**/*.tf"
-      - "terraform/**/*.tf.json"
-      - "terraform/**/*.tfvars"
-      - "terraform/**/*.tfvars.json"
+      - "**/*.hcl"
+      - "**/*.hcl.json"
+      - "**/*.tf"
+      - "**/*.tf.json"
+      - "**/*.tfvars"
+      - "**/*.tfvars.json"
   pull_request:
     branches: ["main"]
     paths:
-      - "terraform/**/*.hcl"
-      - "terraform/**/*.hcl.json"
-      - "terraform/**/*.tf"
-      - "terraform/**/*.tf.json"
-      - "terraform/**/*.tfvars"
-      - "terraform/**/*.tfvars.json"
+      - "**/*.hcl"
+      - "**/*.hcl.json"
+      - "**/*.tf"
+      - "**/*.tf.json"
+      - "**/*.tfvars"
+      - "**/*.tfvars.json"
 env:
   TERRAFORM_PLANFILE: "/tmp/out.tfplan"
   TERRAFORM_VERSION: "1.15.6" # Increment to update Terraform
