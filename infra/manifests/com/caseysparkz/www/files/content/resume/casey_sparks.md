@@ -32,7 +32,7 @@ Certified Cloud Practitioner, _2022_
    services, maintaining IaC and deployment pipelines for the company’s core
    product.
 * Wrote and implemented policies SOC 2, moving the company from zero-policy to
-   SOC 2 observation window within six month window.
+   SOC 2 observation window within six months.
 
 ### Tau Motors
 
