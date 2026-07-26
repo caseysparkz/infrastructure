@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket       = "com.caseysparkz.tfstate"
-    key          = "ks/caseyspar.tfstate"
+    key          = "kz/caseyspar.tfstate"
     region       = "us-west-2"
     use_lockfile = true
     encrypt      = true
