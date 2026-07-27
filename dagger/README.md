@@ -1,0 +1,66 @@
+# Dagger
+
+I am currently in the process of migrating my CI platform to
+[Dagger](https://dagger.io).
+
+## Running Dagger in Kubernetes
+
+### Prerequisites
+
+* A running Kubernetes cluster with a preconfigured `kubectl` profile.
+* [Helm](https://helm.sh/docs/intro/install)
+
+### Setup
+
+1. Install the Dagger Engine DaemonSet on the Kubernetes cluster.
+
+```sh
+helm upgrade                                                                  \
+   --install                                                                  \
+   --namespace=dagger                                                         \
+   --create-namespace                                                         \
+   dagger                                                                     \
+   oci://registry.dagger.io/dagger-helm
+```
+
+2. Wait for the Dagger Engine to become ready.
+
+```sh
+kubectl wait                                                                  \
+   --for condition=Ready                                                      \
+   --timeout=60s pod                                                          \
+   --selector=name=dagger-dagger-helm-engine                                  \
+   --namespace=dagger
+```
+
+3. Get the Dagger Engine pod name.
+
+```sh
+DAG_POD="$(kubectl get pod                                                    \
+   --selector=name=dagger-dagger-helm-engine                                  \
+   --namespace=dagger                                                         \
+   --output=jsonpath='{.items[0].metadata.name}'                              \
+)"
+
+export DAGGER_ENGINE_POD_NAME
+```
+
+4. Set the `_EXPERIMENTAL_DAGGER_RUNNER_HOST` variable.
+
+```sh
+export _EXPERIMENTAL_DAGGER_RUNNER_HOST="kube-pod://${DAG_POD}?namespace=dagger"
+```
+
+5. Check for install success.
+
+```sh
+dagger query <<EOF
+{
+    container {
+        from(address:"alpine") {
+            withExec(args: ["uname", "-a"]) { stdout }
+        }
+    }
+}
+EOF
+```
