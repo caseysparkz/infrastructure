@@ -64,8 +64,9 @@ multiline-quotes = "double"
 max-complexity = 10  # `C901` when complexity > 10.
 
 [lint.per-file-ignores]
-"**/test_*.py"=[
+"**/test**.py" = [
     "ANN201",   # flake8-annotations::missing-return-type-undocumented-public-function
+    "CPY001",   # flake8-copyright::missing-copyright-notice
     "D1",       # pydocstyle::undocumented-*
     "INP001",   # flake8-no-pip420::implicit-namespace-package
     "PLR2004",  # pylint::magic-value-comparison
