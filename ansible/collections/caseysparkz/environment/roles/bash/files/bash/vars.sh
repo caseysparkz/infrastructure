@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 case "$(uname -s)" in
-    "Darwin"                                                                )
+    'Darwin'                                                                )
         export HOMEBREW_NO_ENV_HINTS=1
         #export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
         ;;
 
-    "Linux"                                                                 )
+    'Linux'                                                                 )
         export BROWSER='firefox'
-        export DOCKER_HOST="unix:///var/run/docker.sock"
-        export TERM="xterm-256color"
+        export DOCKER_HOST='unix:///var/run/docker.sock'
+        export TERM='xterm-256color'
         ;;
 esac
 
@@ -18,14 +18,14 @@ GPG_TTY="$(tty)"
 SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 
 # Application defaults
-export EDITOR="/usr/bin/vim"
+export EDITOR='/usr/bin/vim'
 
 # Misc.
 export ALIASES="${HOME}/.bash_aliases"
-export DO_NOT_TRACK=1
+export DO_NOT_TRACK='1'
 export FUNCTIONS="${HOME}/.bash/functions"
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-export GH="git@github.com"
+export GH='git@github.com'
 export GOPATH="${HOME}/.local/share/go"
 export PYSCRIPTS="${HOME}/.local/lib/scripts/python"
 export SCRIPTS="${HOME}/.local/lib/scripts"
@@ -38,7 +38,13 @@ export VARS="${HOME}/.bash/vars.sh"
 export ANSIBLE_DUPLICATE_YAML_DICT_KEY='ignore'
 
 # Dagger
+DAGGER_ENGINE_POD_NAME="$(kubectl get pod                                   \
+    --namespace=dagger                                                      \
+    --selector=name=dagger-dagger-helm-engine                               \
+    --output=jsonpath='{.items[0].metadata.name}'                           \
+)"
 export DAGGER_NO_NAG='1'
+export _EXPERIMENTAL_DAGGER_RUNNER_HOST="kube-pod://${DAGGER_ENGINE_POD_NAME}?namespace=dagger"
 
 ## Docker
 export DOCKER_BUILDKIT='1'
@@ -46,10 +52,10 @@ export DOCKER_DEFAULT_PLATFORM='linux/amd64'
 
 ## PGP
 export GPG_TTY
-export PGP_KEY_ID="0xF64015B97A016D10"
+export PGP_KEY_ID='0x2027DEDFECE6A3D5'
 
 ## Python
-export PYTHONBREAKPOINT="IPython.terminal.debugger.set_trace"
+export PYTHONBREAKPOINT='IPython.terminal.debugger.set_trace'
 
 ## SSH
 export SSH_AUTH_SOCK
@@ -57,8 +63,8 @@ export SSH_AUTH_SOCK
 ## Terraform
 #export TF_CLI_ARGS_test='-parallelism=30'
 export TF_CLI_CONFIG_FILE="${HOME}/.terraform.d/terraformrc"
-export TF_LOG="trace"
-export TF_LOG_PATH="./terraform.log"
+export TF_LOG='trace'
+export TF_LOG_PATH='./terraform.log'
 
 ## K8s
-export MINIKUBE_IN_STYLE=0
+export MINIKUBE_IN_STYLE='0'
