@@ -6,33 +6,34 @@ This repository is a monorepo for everything I write.
 
 ### Required Software and Languages
 
-* Dagger
-* Docker+Docker Compose
-* Go 1.24.4+
-* Python 3.14+. Dependencies installed via `pip install .` include:
+* [Dagger](https://dagger.io)
+    * [Go](https://go.dev/doc/install) 1.24.4+
+* [Docker](https://docs.docker.com/engine/install)
+   * Docker Compose
+* [Python](https://www.python.org/downloads) 3.14+. Dependencies installed via `pip install .` include:
    * `ansible`
    * `boto3`
-* Terraform
+* [Terraform](https://developer.hashicorp.com/terraform/install)
 
 ### Recommended Software
 
-* `gh`
-* `hadolint`
-* `infracost`
-* `mdl`
-* `mlc`
-* `shellcheck`
-* `tfschema`
-* `trivy`
-* `yamllint`
+* [gh](https://cli.github.com)
+* [hadolint](https://hadolint.com)
+* [infracost](https://www.infracost.io/docs)
+* [mdl](https://github.com/markdownlint/markdownlint)
+* [mlc](https://github.com/becheran/mlc)
+* [shellcheck](https://github.com/koalaman/shellcheck)
+* [tfschema](https://github.com/minamijoyo/tfschema)
+* [trivy](https://trivy.dev/docs/latest/getting-started/installation)
 * Python `[dev,test]` dependencies installed via `pip install .[all]` include:
    * `ansible-lint`
    * `ipython`
    * `mypy`
    * `pip-audit`
-   * `pytest`
    * `pytest-cov`
+   * `pytest`
    * `ruff`
+   * `yamllint`
 
 ## Filesystem Hierarchy
 
