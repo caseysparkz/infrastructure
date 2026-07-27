@@ -3,20 +3,19 @@
 # Date:         May 30, 2026
 # Description:  Retrieve the vault password from AWS SecretsManager.
 
-# Log in to AWS if needed
-if ! aws sts get-caller-identity --no-cli-pager | grep -q caseysparkz; then
-    aws sso login
+# Check if AWS CLI is installed
+if ! which aws > /dev/null 2>&1; then
+   printf 'AWS CLI not installed.' >&2
+   exit 1
 fi
 
+# Log in to AWS if needed
+if ! aws sts get-caller-identity --no-cli-pager | grep -q caseysparkz; then aws sso login; fi
+
 # Retreive secret
-if which aws > /dev/null 2>&1; then
-    aws secretsmanager get-secret-value                                     \
-        --region us-west-2                                                  \
-        --secret-id ansible/vault                                           \
-        --query SecretString                                                \
-        --output text                                                       \
-        --no-cli-pager                                                      \
-    || printf 'Could not retreive secret from AWS.' >&2
-else
-    printf 'AWS CLI not installed.' >&2
-fi
+aws secretsmanager get-secret-value                                         \
+    --region us-west-2                                                      \
+    --secret-id ansible/vault                                               \
+    --query SecretString                                                    \
+    --output text                                                           \
+    --no-cli-pager                                                          \
