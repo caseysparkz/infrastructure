@@ -47,36 +47,36 @@ sha256 = "ef28a70bd43115208441b53a045d1549e2f0ec6e3d08a9d142cbc41c1938e8d9"
 
 [[packages]]
 name = "boto3"
-version = "1.43.51"
+version = "1.43.56"
 
 [[packages.wheels]]
-name = "boto3-1.43.51-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/85/7e/86204db9235f08e051a83e039ec5af209211e3ac51ed3644c4350c150b72/boto3-1.43.51-py3-none-any.whl"
+name = "boto3-1.43.56-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/b8/57/3a960c9f581c00f2a591901b46e035ff79ab3956d16607f12306b3b8d483/boto3-1.43.56-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "a97057bb609fd38c80448db6a93db770786775dabd651401debf09816d4553d7"
+sha256 = "feb699d4ab241ef5c1b80bb58277be2aaad365cd4b672d7817e0bc59ee45131b"
 
 [[packages]]
 name = "boto3-stubs"
-version = "1.43.51"
+version = "1.43.56"
 
 [[packages.wheels]]
-name = "boto3_stubs-1.43.51-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/19/8e/f2266a4a4a480883500e4d31badc621524125a1124b8d7595a3b4d83227a/boto3_stubs-1.43.51-py3-none-any.whl"
+name = "boto3_stubs-1.43.56-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/a0/62/2ba9e5d2378be5b3e1cfc8b444ee9a1b5d826493feb15df15cf47eae5c69/boto3_stubs-1.43.56-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "dc01e52a142c023f59cad0a68cc5f149c5c64b2d9ca6af1b0cbb7e08f405de18"
+sha256 = "8d3529082b3330e8718986a6a05cc0cd8319f8fddd10104eb7624e1c94b20fd2"
 
 [[packages]]
 name = "botocore"
-version = "1.43.53"
+version = "1.43.56"
 
 [[packages.wheels]]
-name = "botocore-1.43.53-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/dc/e5/1b60e394f0fff97ee70dd16913382b7dffda85b98e639c0c9e8ff56cfaa7/botocore-1.43.53-py3-none-any.whl"
+name = "botocore-1.43.56-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/5c/cd/86fe9e659e9699f62f8dd5ecd8c6725474334b23cab8aa71d82b5f56f1a4/botocore-1.43.56-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "b7ee9a70d187e5348883c820990ccd9436ab14e2bd6622741fc96fe561e816b8"
+sha256 = "aafc741f1b10f6fd63253eaf6ea029680c1ff436d87e1b8969d62aefa0c76976"
 
 [[packages]]
 name = "botocore-stubs"
@@ -543,14 +543,14 @@ sha256 = "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"
 
 [[packages]]
 name = "prompt-toolkit"
-version = "3.0.52"
+version = "3.0.53"
 
 [[packages.wheels]]
-name = "prompt_toolkit-3.0.52-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/84/03/0d3ce49e2505ae70cf43bc5bb3033955d2fc9f932163e84dc0779cc47f48/prompt_toolkit-3.0.52-py3-none-any.whl"
+name = "prompt_toolkit-3.0.53-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/54/6f/84908cad2d6aa5144abcf7b42709fe4fdb459bc640ec7ac5786e7693dabc/prompt_toolkit-3.0.53-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "9aac639a3bbd33284347de5ad8d68ecc044b91a762dc39b7c21095fcd6a19955"
+sha256 = "01c0891d7f9237d5e339f7d3e42cdae80b7534abb1c7c0e3352efba6231492f2"
 
 [[packages]]
 name = "psutil"
@@ -719,25 +719,25 @@ sha256 = "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"
 
 [[packages]]
 name = "ruff"
-version = "0.15.22"
+version = "0.16.0"
 
 [[packages.wheels]]
-name = "ruff-0.15.22-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-url = "https://files.pythonhosted.org/packages/f6/f9/a0d4871d12fae702eb1f41b686caf05f1f8b124dc6db6f784f53d74918fa/ruff-0.15.22-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+name = "ruff-0.16.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+url = "https://files.pythonhosted.org/packages/91/66/6bd3cf90500653d55dc0ffc8507aa8300bd49d0214b2e8cb4d3fef2943ba/ruff-0.16.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 
 [packages.wheels.hashes]
-sha256 = "365523eb91d9224e1bcb03b022fbf0facb8f9e23792a2c53d9d4b3924bdbdebb"
+sha256 = "4f11a8d11010301d0a398a2fdef67691feca7294da6aef55e2150e8fa2cd520b"
 
 [[packages]]
 name = "s3transfer"
-version = "0.19.1"
+version = "0.19.2"
 
 [[packages.wheels]]
-name = "s3transfer-0.19.1-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/24/23/e84c64ad0e8bc59cd1b2ef98def848deff0ef3456c542afe74d51e9e8c85/s3transfer-0.19.1-py3-none-any.whl"
+name = "s3transfer-0.19.2-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/bc/e7/5c595c75e9f41a44f30e526eda465ea0b4eec93470e074e4a111b253f13a/s3transfer-0.19.2-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "d5fd7005ee39307455ad5f310b5ea67f4b1960d7fed5b3671ee50c249de675de"
+sha256 = "d8168eccca828cbb2cd573675333f3bddd254313a9c42494b84c76b539e8ba25"
 
 [[packages]]
 name = "six"
@@ -818,14 +818,14 @@ sha256 = "20c752b6031544d8f694803c35174aee129f1be5ddf886ae46d22f7ffd9b7d75"
 
 [[packages]]
 name = "types-boto3"
-version = "1.43.53"
+version = "1.43.56"
 
 [[packages.wheels]]
-name = "types_boto3-1.43.53-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/b6/86/cb3a9fbdc73157df56e0f8e5fa27b3e6d12f80d026eb50a00f3fac536d45/types_boto3-1.43.53-py3-none-any.whl"
+name = "types_boto3-1.43.56-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/f9/3e/873de3ead3d2ba1f679c0f03efbc677e13712d578a838c688f1c500b733b/types_boto3-1.43.56-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "ca388ee867db0fbe876c4b02f01d90c28c0f9761335048c2ae7d54ff49968651"
+sha256 = "a6ae7209b7d05e6028c0a20f3a5e1ff0b8b8db21ad94d7f55bf149f473f5ebf3"
 
 [[packages]]
 name = "types-boto3-ses"
