@@ -8,6 +8,10 @@
     {
       "name": "python",
       "source": "../python"
+    },
+    {
+      "name": "yaml",
+      "source": "../yaml"
     }
   ]
 }

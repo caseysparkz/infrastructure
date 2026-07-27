@@ -3,6 +3,8 @@
 # Description:  Run ansible-lint against Ansible configs on push and PR.
 ---
 name: "ansible"
+env:
+  DAGGER_VERSION: "0.21.7"
 on:
   pull_request:
     branches: ["main"]

@@ -9,6 +9,7 @@ import (
 )
 
 var mountPoint = "/mnt"
+var ansibleDir = "./ansible/"
 
 func New(
 	// AWS default region
@@ -71,7 +72,7 @@ func (m *Ansible) container() *dagger.Container {
 		WithSecretVariable("AWS_SESSION_TOKEN", m.AwsSessionToken).
 		// Set up Ansible
 		WithWorkdir(m.AnsibleDir).
-		WithExec([]string{"pip", "install", "--root-user-action=ignore", m.PipPackage})
+		WithExec([]string{"pip", "install", "--quiet", "--root-user-action=ignore", m.PipPackage})
 }
 
 // Runs ansible-lint
@@ -87,4 +88,10 @@ func (m *Ansible) Lint(ctx context.Context) (string, error) {
 	} else {
 		return stdout, nil
 	}
+}
+
+// Runs yamllint against the ansible/ directory
+// +check
+func (m *Ansible) Yamllint(ctx context.Context) (string, error) {
+	return dag.Yaml().Lint(ctx, dagger.YamlLintOpts{Path: ansibleDir})
 }
