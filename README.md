@@ -41,7 +41,24 @@ This repository is a monorepo for everything I write.
 * Each component (Docker images, k8s configurations, Ansible playbooks,
    Terraform configurations) has its own subdirectory under its relevant domain.
 
-## Secrets Management
+## Security
+
+### Secrets Management
 
 With the exception of AWS CLI credentials, all secrets should exist in AWS
 Secrets Manager and be called by code.
+
+### Prowler
+
+To exclude **known** false positives, add the tag 'Prowler=ignore' to a given
+resource.
+
+Run prowler scans against the AWS environment with:
+
+```sh
+prowler aws                                                                   \
+    --region "${AWS_REGION}"                                                  \
+    --profile "${AWS_PROFILE}"                                                \
+    --mutelist-file .prowler_mutelist.yml                                     \
+    --security-hub
+```

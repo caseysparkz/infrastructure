@@ -20,6 +20,7 @@ resource "aws_lambda_function" "contact_form" {
   handler          = "lambda_contact_form.lambda_handler"
   source_code_hash = data.archive_file.lambda_contact_form.output_base64sha256
   role             = aws_iam_role.lambda_contact_form.arn
+  tags             = { Prowler = "ignore" }
 
   tracing_config { mode = "Active" }
 

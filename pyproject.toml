@@ -29,6 +29,9 @@ dev = [
 
     "ipython==9.15.0",
 ]
+scan = [
+    "prowler==5.36.0", # AWS posture scanning
+]
 all = [
     "infrastructure[dev]",
     "infrastructure[test]",
