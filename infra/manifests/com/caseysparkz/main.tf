@@ -3,10 +3,11 @@
 #
 
 locals {
-  environment = "prod"
-  project     = "caseysparkz"
-  application = "root"
-  namespace   = "${local.environment}-${local.project}-${local.application}"
+  aws_account_id = data.aws_caller_identity.this.account_id
+  environment    = "prod"
+  project        = "caseysparkz"
+  application    = "root"
+  namespace      = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
     Application = local.application
     Domain      = var.root_domain
@@ -44,12 +45,60 @@ locals {
 # Data =========================================================================
 data "cloudflare_zones" "root_domain" { name = var.root_domain }
 
+data "aws_caller_identity" "this" {}
+
+data "aws_iam_policy_document" "aws_kms_key" {
+  statement {
+    sid       = "AllowCloudwatchUseKey"
+    effect    = "Allow"
+    resources = [aws_kms_key.this.arn]
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*",
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["logs.amazonaws.com"]
+    }
+
+    condition {
+      test     = "ArnLike"
+      variable = "kms:EncryptionContext:aws:logs:arn"
+      values   = ["arn:aws:logs:*:${local.aws_account_id}:*"]
+    }
+  }
+
+  statement {
+    sid       = "EnableIAMUserPermissions"
+    effect    = "Allow"
+    actions   = ["kms:*"]
+    resources = [aws_kms_key.this.arn]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${local.aws_account_id}:root"]
+    }
+  }
+}
+
+
 # Resources ====================================================================
 # AWS::KMS ---------------------------------------------------------------------
 resource "aws_kms_key" "this" {
   description             = "KMS key to encrypt domain artifacts/S3 bucket objects."
   deletion_window_in_days = 30
+  enable_key_rotation     = true
   tags                    = { Name = "${local.namespace}-kms-key" }
+}
+
+resource "aws_kms_key_policy" "this" {
+  key_id                             = aws_kms_key.this.id
+  bypass_policy_lockout_safety_check = false
+  policy                             = data.aws_iam_policy_document.aws_kms_key.json
 }
 
 # Cloudflare -------------------------------------------------------------------

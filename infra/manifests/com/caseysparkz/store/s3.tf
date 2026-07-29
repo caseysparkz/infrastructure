@@ -13,21 +13,32 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
       "${aws_s3_bucket.this.arn}/*",
     ]
 
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"
       values   = ["false"]
     }
   }
+
+  statement {
+    sid     = "DenyForeignAccess"
+    effect  = "Deny"
+    actions = ["s3:*"]
+    resources = [
+      aws_s3_bucket.this.arn,
+      "${aws_s3_bucket.this.arn}/*",
+    ]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalAccount"
+      values   = [data.aws_caller_identity.this.account_id]
+    }
+  }
 }
 
 # Resources ====================================================================
-resource "aws_s3_bucket" "this" { #tfsec:ignore:aws-s3-enable-bucket-logging
+resource "aws_s3_bucket" "this" { #trivy:ignore:AWS-0089
   bucket        = random_uuid.this.id
   force_destroy = false
   tags          = { Name = "${local.namespace}-s3-bucket" }

@@ -3,7 +3,7 @@
 #
 
 # Resources ====================================================================
-resource "aws_s3_bucket" "this" {
+resource "aws_s3_bucket" "this" { #trivy:ignore:AWS-0089
   bucket        = "${var.root_domain}-artifacts"
   force_destroy = false
 }

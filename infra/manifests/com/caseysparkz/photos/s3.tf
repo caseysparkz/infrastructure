@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
 }
 
 # Resources ====================================================================
-resource "aws_s3_bucket" "this" { #tfsec:ignore:aws-s3-enable-bucket-logging
+resource "aws_s3_bucket" "this" { #trivy:ignore:AWS-0089
   bucket        = "${var.bucket_name_prefix}.${data.terraform_remote_state.this.outputs.root_domain}"
   force_destroy = false
   tags          = { Name = "${local.namespace}-s3-bucket" }

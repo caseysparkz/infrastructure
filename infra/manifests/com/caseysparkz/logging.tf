@@ -5,7 +5,7 @@
 # Data =========================================================================
 
 # Resources ====================================================================
-resource "aws_s3_bucket" "logging" { #tfsec:ignore:aws-s3-enable-bucket-logging
+resource "aws_s3_bucket" "logging" { #trivy:ignore:AWS-0089
   bucket = "${local.namespace}-s3-bucket-logging"
   tags   = { Name = "${local.namespace}-s3-bucket-logging" }
 }
