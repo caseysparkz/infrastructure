@@ -4,7 +4,7 @@
 
 # Data =========================================================================
 data "aws_iam_policy_document" "s3_read_write" {
-  statement { #tfsec:ignore:aws-iam-no-policy-wildcards
+  statement { // Allow S3 read/write
     sid = "S3BucketReadWrite"
     actions = [
       "s3:ListBucket",
@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "s3_read_write" {
     ]
   }
 
-  statement { #tfsec:ignore:aws-iam-no-policy-wildcards
+  statement { // Allow KMS encrypt/decrypt
     sid = "S3Kms"
     actions = [
       "kms:Decrypt",
@@ -29,19 +29,17 @@ data "aws_iam_policy_document" "s3_read_write" {
     ]
     resources = [data.terraform_remote_state.this.outputs.aws_kms_key_arn]
   }
-}
 
-data "aws_iam_policy_document" "enforce_group_mfa" {
-  statement { #tfsec:ignore:aws-iam-no-policy-wildcards
-    sid       = "AllowAllActionsIfMfaPresent"
-    effect    = "Allow"
+  statement { // Deny all actions if accuont does not have MFA
+    sid       = "DenyAllActionsIfMfaNotPresent"
+    effect    = "Deny"
     actions   = ["*"]
     resources = ["*"]
 
     condition {
       test     = "Bool"
       variable = "aws:MultiFactorAuthPresent"
-      values   = ["true"]
+      values   = ["false"]
     }
   }
 }
@@ -53,12 +51,6 @@ resource "aws_iam_user" "this" {
 }
 
 resource "aws_iam_group" "this" { name = "${local.namespace}-iam-group" }
-
-resource "aws_iam_group_policy" "enforce_mfa" {
-  name   = "${local.namespace}-iam-group-policy-enforcemfa"
-  group  = aws_iam_group.this.name
-  policy = data.aws_iam_policy_document.enforce_group_mfa.json
-}
 
 resource "aws_iam_group_policy" "s3_readwrite" {
   name   = "${local.namespace}-iam-group-policy-s3readwrite"
