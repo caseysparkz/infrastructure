@@ -1,3 +1,3 @@
-# caseysparkz/tfmodules
+# `infra/modules`
 
 Where I keep my Terraform modules!
