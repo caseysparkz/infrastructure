@@ -3,20 +3,19 @@
 #
 
 locals {
-  ecr_admin_email         = "ecr_admin@${var.root_domain}"
-  ecr_authorization_token = data.aws_ecr_authorization_token.token
-  ecr_registry_url        = replace(local.ecr_authorization_token.proxy_endpoint, "https://", "")
-  ecr_repositories        = [for f in local.dockerfiles : replace(f, ".Dockerfile", "")]
-  docker_compose_files    = fileset("${var.docker_compose_dir}/", "*.compose.yml")
-  dockerfiles             = fileset("${var.docker_compose_dir}/", "*.Dockerfile")
+  ecr_registry_url     = replace(data.aws_ecr_authorization_token.this.proxy_endpoint, "https://", "")
+  docker_compose_files = fileset("${var.docker_compose_dir}/", "*.compose.yml")
 }
 
 # Data =========================================================================
-data "aws_ecr_authorization_token" "token" {}
+data "aws_ecr_authorization_token" "this" {}
 
 # Resources ====================================================================
 resource "aws_ecr_repository" "this" {
-  for_each             = toset(local.ecr_repositories)
+  for_each = toset([
+    for f in fileset("${var.docker_compose_dir}/", "*.Dockerfile") :
+    replace(f, ".Dockerfile", "")
+  ])
   name                 = each.key
   image_tag_mutability = "IMMUTABLE"
   force_delete         = true
@@ -58,7 +57,7 @@ resource "docker_registry_image" "this" { # Push images to ECR
 # Outputs ======================================================================
 output "ecr_registry_url" {
   description = "URL of the deployed ECR registry."
-  value       = replace(data.aws_ecr_authorization_token.token.proxy_endpoint, "https://", "")
+  value       = replace(data.aws_ecr_authorization_token.this.proxy_endpoint, "https://", "")
   sensitive   = false
 }
 

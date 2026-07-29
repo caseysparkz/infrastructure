@@ -23,8 +23,8 @@ provider "docker" {
   host = var.docker_socket
 
   registry_auth {
-    address  = local.ecr_authorization_token.proxy_endpoint
-    username = local.ecr_authorization_token.user_name
-    password = local.ecr_authorization_token.password
+    address  = data.aws_ecr_authorization_token.this.proxy_endpoint
+    username = data.aws_ecr_authorization_token.this.user_name
+    password = data.aws_ecr_authorization_token.this.password
   }
 }
