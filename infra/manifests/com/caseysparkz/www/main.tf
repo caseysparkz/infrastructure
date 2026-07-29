@@ -53,6 +53,5 @@ module "www" {
   site_title                    = data.terraform_remote_state.this.outputs.root_domain
   hugo_dir                      = abspath("files")
   js_contact_form_template_path = abspath("files/static/js/contactForm.js.tftpl")
-  common_tags                   = local.common_tags
   aws_kms_key_arn               = data.terraform_remote_state.this.outputs.aws_kms_key_arn
 }

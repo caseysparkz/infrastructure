@@ -3,7 +3,6 @@
 #
 
 locals {
-  common_tags = merge(var.common_tags, { Service = var.subdomain })
   email_headers = {
     default_recipient = "contact@${var.root_domain}"
     default_sender    = "contact@${var.subdomain}"
