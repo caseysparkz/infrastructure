@@ -6,18 +6,29 @@
 # Description:  x
 
 locals {
-  prefix = random_pet.prefix.id
+  environment = "" // TODO
+  project     = "" // TODO
+  application = "" // TODO
+  namespace   = "" // TODO
   common_tags = {
-    # TODO
-    terraform = true
+    Application = local.application
+    Environment = local.environment
+    ManagedBy   = "terraform"
+    Project     = local.project
+    Repo        = "github.com/caseysparkz/monorepo"
+    RepoPath    = "infra/manifests/<CHANGEME>" // TODO
   }
 }
 
 # Data =========================================================================
 
-# Resources ====================================================================
-resource "random_pet" "prefix" {
-  #keepers = []  # TODO
+# Modules ======================================================================
+module "aws_resourcegroups_group" {
+  source              = "<CHANGME>/../modules/aws_resourcegroup_by_tagset" // TODO
+  resource_group_name = "${local.namespace}-rg"
+  common_tags         = local.common_tags
 }
+
+# Resources ====================================================================
 
 # Outputs ======================================================================

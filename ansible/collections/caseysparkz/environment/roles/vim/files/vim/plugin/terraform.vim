@@ -14,7 +14,8 @@ autocmd BufNewFile main.tf
 
 autocmd BufNewFile providers.tf
     \ :%d                                                                   |
-    \ :0r ~/.vim/templates/terraform.d/providers.tf
+    \ :0r ~/.vim/templates/terraform.d/providers.tf                         |
+    \ :7s/\<SEMVER\>/\=substitute(system('terraform version --json | jq -r ".terraform_version"'), '\n', '', 'g')/
 
 autocmd BufNewFile variables.tf
     \ :%d                                                                   |
