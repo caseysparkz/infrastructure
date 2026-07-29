@@ -21,14 +21,15 @@ EXTENSIONS=(
 cd "${REPO_DIR}" || exit 1
 
 log(){
-    local LEVEL="${1:?}"    # Log level
-    local MSG="${2:?}"      # Log message
     local CLR='\033[0m'     # No color
     local GRN='\033[0;32m'  # Green
     local YLW='\033[0;33m'  # Yellow
     local RED='\033[0;31m'  # Red
     local OUT=1             # STDOUT
     local COLOR="${CLR}"    # Default log message color
+    local LEVEL="${1:?}"    # Log level
+    local MSG="${2:?}"      # Log message
+    local RC="${3:-1}"      # Return/exit code
 
     # ANSI color codes
     case "${LEVEL}" in
@@ -43,16 +44,18 @@ log(){
             OUT=2
             ;;
         "CRIT*|FATAL")
+            LEVEL='FATAL' # Override CRIT*
             COLOR="${RED}"
             OUT=2
             ;;
+        "*");; # Default shell color, stdout
     esac
 
     printf '%b%-10s %-80s%b\n' "${COLOR}" "${LEVEL}" "${MSG}" "${CLR}" >&"${OUT}"
 
     if [ "${LEVEL}" == 'FATAL' ]; then # Exit on fatal
-        log DEBUG 'Exiting.'
-        exit 1
+        log INFO 'Exiting.'
+        exit "${RC}"
     fi
 }
 
@@ -196,7 +199,7 @@ precommit_tf(){
             PARENT_DIR="$(dirname "${FILE}")"
 
             case "${PARENT_DIR}" in
-                *'/terraform/modules/'*) # Find module directories
+                *'/infra/modules/'*) # Find module directories
                     PARENT_DIR="${PARENT_DIR/'tests'*}"
 
                     if ! printf '%s\n' "${TF_MDLS[@]}" | grep -q --line-regexp --fixed-strings "${PARENT_DIR}"; then
@@ -217,7 +220,7 @@ precommit_tf(){
         log DEBUG 'Running Terraform pre-commit steps'
 
         log INFO 'terraform fmt --recursive'
-        terraform -chdir="${REPO_DIR}/terraform" fmt --recursive
+        terraform -chdir="${REPO_DIR}/infra" fmt --recursive
 
         # Validate manifests
         for MANIFEST in "${TF_MNFSTS[@]}"; do
