@@ -3,14 +3,14 @@
 #
 # Author:       Casey Sparks
 # Date:         July 28, 2026
-# Description:  Minimal security policies and org-wide security implementations
-#               for my AWS organization.
+# Description:  Minimal security configurations and organization policies.
 
 locals {
-  environment = "all"
-  project     = "aws"
-  application = "config"
-  namespace   = "${local.environment}-${local.project}-${local.application}"
+  aws_account_id = data.aws_caller_identity.this.account_id
+  environment    = "all"
+  project        = "aws"
+  application    = "config"
+  namespace      = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
     Application = local.application
     Environment = local.environment
@@ -23,8 +23,14 @@ locals {
 }
 
 # Data =========================================================================
+data "aws_caller_identity" "this" {}
 
 # Modules ======================================================================
+module "aws_resourcegroups_group" {
+  source              = "../../../modules/aws_resourcegroup_by_tagset"
+  resource_group_name = "${local.namespace}-rg"
+  common_tags         = local.common_tags
+}
 
 # Resources ====================================================================
 resource "aws_ebs_encryption_by_default" "this" {
@@ -34,5 +40,3 @@ resource "aws_ebs_encryption_by_default" "this" {
 resource "aws_ec2_instance_metadata_defaults" "this" {
   http_tokens = "required" // Require IMDSv2
 }
-
-# Outputs ======================================================================
