@@ -14,3 +14,15 @@ variable "kms_key_arn" {
   type        = string
   sensitive   = false
 }
+
+variable "s3_bucket_versioning_status" {
+  description = "S3 bucket versioning status ['Enabled'||'Disabled']."
+  type        = string
+  sensitive   = false
+  default     = "Enabled"
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.s3_bucket_versioning_status)
+    error_message = "Invalid option for var.s3_bucket_versioning_status."
+  }
+}
