@@ -38,16 +38,6 @@ export VARS="${HOME}/.bash/vars.sh"
 export ANSIBLE_DUPLICATE_YAML_DICT_KEY='ignore'
 
 # Dagger
-if kubectl cluster-info > /dev/null 2>&1; then
-    if kubectl get pod --namespace=dagger --selector=name=dagger-dagger-helm-engine > /dev/null 2>&1; then
-        DAGGER_ENGINE_POD_NAME="$(kubectl get pod                                   \
-            --namespace=dagger                                                      \
-            --selector=name=dagger-dagger-helm-engine                               \
-            --output=jsonpath='{.items[0].metadata.name}'                           \
-        )"
-        export _EXPERIMENTAL_DAGGER_RUNNER_HOST="kube-pod://${DAGGER_ENGINE_POD_NAME}?namespace=dagger"
-    fi
-fi
 export DAGGER_NO_NAG='1'
 
 ## Docker
