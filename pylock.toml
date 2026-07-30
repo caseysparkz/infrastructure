@@ -69,14 +69,14 @@ sha256 = "8d3529082b3330e8718986a6a05cc0cd8319f8fddd10104eb7624e1c94b20fd2"
 
 [[packages]]
 name = "botocore"
-version = "1.43.56"
+version = "1.43.59"
 
 [[packages.wheels]]
-name = "botocore-1.43.56-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/5c/cd/86fe9e659e9699f62f8dd5ecd8c6725474334b23cab8aa71d82b5f56f1a4/botocore-1.43.56-py3-none-any.whl"
+name = "botocore-1.43.59-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/f6/cd/62d749f824b25c152144665f7c5eb8b5ca8be967a87e0c63577b7d4501ae/botocore-1.43.59-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "aafc741f1b10f6fd63253eaf6ea029680c1ff436d87e1b8969d62aefa0c76976"
+sha256 = "21393c35d23b19d7ba95cc4156b59f4013f80696d667997e1abd9d4e29651708"
 
 [[packages]]
 name = "botocore-stubs"
@@ -201,14 +201,14 @@ sha256 = "760643d3452b4d777d295bb167ccc74c64a81df23fb5e08eff250c425a4b2017"
 
 [[packages]]
 name = "filelock"
-version = "3.32.0"
+version = "3.32.2"
 
 [[packages.wheels]]
-name = "filelock-3.32.0-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/06/79/b4c714bef36bc4ec2beeae1e0c124f0223888cd8c6feb1cdc56038116920/filelock-3.32.0-py3-none-any.whl"
+name = "filelock-3.32.2-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/c1/e8/72f8cef9fdfeffe06213fe8508039396ee48daa0e3259457ed766173bfd6/filelock-3.32.2-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "d396bea984af47333ef05e50eae7eff88c84256de6112aea0ec48a233c064fe3"
+sha256 = "87dd94cf281e586d135fa51132b8e3d9a598b316e90377a288663c9321036c82"
 
 [[packages]]
 name = "idna"
@@ -477,14 +477,14 @@ sha256 = "7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523"
 
 [[packages]]
 name = "pip"
-version = "26.1.2"
+version = "26.2"
 
 [[packages.wheels]]
-name = "pip-26.1.2-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/5d/95/6b5cb3461ea5673ba0995989746db58eb18b91b54dbf331e72f569540946/pip-26.1.2-py3-none-any.whl"
+name = "pip-26.2-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/62/36/a3aed958d60531cb442b7ab4596cda7b3621cfb916f8ae1d6769795c7dc1/pip-26.2-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "382ff9f685ee3bc25864f820aa50505825f10f5458ffff07e30a6d96e5715cab"
+sha256 = "931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad"
 
 [[packages]]
 name = "pip-api"
@@ -818,14 +818,14 @@ sha256 = "20c752b6031544d8f694803c35174aee129f1be5ddf886ae46d22f7ffd9b7d75"
 
 [[packages]]
 name = "types-boto3"
-version = "1.43.56"
+version = "1.43.59"
 
 [[packages.wheels]]
-name = "types_boto3-1.43.56-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/f9/3e/873de3ead3d2ba1f679c0f03efbc677e13712d578a838c688f1c500b733b/types_boto3-1.43.56-py3-none-any.whl"
+name = "types_boto3-1.43.59-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/8f/31/3dbb94d50554522c7c6e59dcdd2a51ced65b54b62e01b67885794796277b/types_boto3-1.43.59-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "a6ae7209b7d05e6028c0a20f3a5e1ff0b8b8db21ad94d7f55bf149f473f5ebf3"
+sha256 = "fb02457fbb6db357be26d5dba154783320102e5dadc91771d404a33d42726094"
 
 [[packages]]
 name = "types-boto3-ses"
