@@ -3,10 +3,11 @@
 #
 
 locals {
-  environment = "prod"
-  project     = "caseysparkz"
-  application = "store"
-  namespace   = "${local.environment}-${local.project}-${local.application}"
+  aws_account_id = data.aws_caller_identity.this.account_id
+  environment    = "prod"
+  project        = "caseysparkz"
+  application    = "store"
+  namespace      = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
     Application = local.application
     Domain      = "${random_uuid.this.id}.caseysparkz.com"
@@ -21,16 +22,6 @@ locals {
 
 # Data =========================================================================
 data "aws_caller_identity" "this" {}
-
-data "terraform_remote_state" "this" {
-  backend = "s3"
-  config = {
-    bucket       = "com.caseysparkz.tfstate"
-    key          = "com/caseysparkz.tfstate"
-    region       = "us-west-2"
-    use_lockfile = true
-  }
-}
 
 # Resources ====================================================================
 resource "random_uuid" "this" {}

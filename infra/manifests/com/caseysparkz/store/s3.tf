@@ -7,11 +7,16 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
   statement {
     sid     = "DenyInsecureTransport"
     effect  = "Deny"
-    actions = ["s3:*"]
+    actions = ["*"]
     resources = [
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*",
     ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
 
     condition {
       test     = "Bool"
@@ -23,11 +28,16 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
   statement {
     sid     = "DenyForeignAccess"
     effect  = "Deny"
-    actions = ["s3:*"]
+    actions = ["*"]
     resources = [
       aws_s3_bucket.this.arn,
       "${aws_s3_bucket.this.arn}/*",
     ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
 
     condition {
       test     = "StringNotEquals"
@@ -79,8 +89,10 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   bucket = aws_s3_bucket.this.id
 
   rule {
+    blocked_encryption_types = ["SSE-C"] // Ransomware vector
+
     apply_server_side_encryption_by_default {
-      kms_master_key_id = data.terraform_remote_state.this.outputs.aws_kms_key_id
+      kms_master_key_id = aws_kms_key.this.id
       sse_algorithm     = "aws:kms"
     }
   }
