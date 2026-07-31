@@ -9,7 +9,7 @@ locals {
   environment = "" // TODO
   project     = "" // TODO
   application = "" // TODO
-  namespace   = "" // TODO
+  namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
     Application = local.application
     Environment = local.environment
