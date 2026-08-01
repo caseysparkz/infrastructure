@@ -5,7 +5,7 @@
 locals {
   environment = "global"
   project     = "terraform"
-  application = "tfstate"
+  application = "state"
   namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
     Application = local.application
@@ -46,14 +46,14 @@ resource "aws_kms_key" "this" {
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "alias/${replace(var.bucket_name, ".", "/")}"
+  name          = "alias/${local.namespace}-kms-key"
   target_key_id = aws_kms_key.this.key_id
 }
 
 resource "aws_s3_bucket" "this" {
   bucket        = var.bucket_name # trivy:ignore:AWS-0320
   force_destroy = false
-  tags          = { Name = "${local.namespace}-s3-state" }
+  tags          = { Name = "${local.namespace}-s3-bucket" }
 }
 
 resource "aws_s3_bucket_versioning" "this" {
