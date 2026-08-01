@@ -89,7 +89,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   bucket = aws_s3_bucket.this.id
 
   rule {
-    bucket_key_enabled = true
+    bucket_key_enabled       = true
     blocked_encryption_types = ["SSE-C"] // Ransomware vector
 
     apply_server_side_encryption_by_default {
