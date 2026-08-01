@@ -3,13 +3,19 @@
 #
 
 locals {
-  environment = "prod"
-  project     = "tfstate"
+  environment = "global"
+  project     = "terraform"
   application = "tfstate"
   namespace   = "${local.environment}-${local.project}-${local.application}"
   common_tags = {
-    ManagedBy = "terraform"
-    Namespace = local.namespace
+    Application = local.application
+    Environment = local.environment
+    Project     = local.project
+    Namespace   = local.namespace
+    ManagedBy   = "terraform"
+    Namespace   = local.namespace
+    Repo        = "github.com/caseysparkz/monorepo"
+    RepoPath    = "infra/state"
   }
 }
 
