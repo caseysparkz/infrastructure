@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "aws_kms_key" {
 # Resources ====================================================================
 resource "aws_kms_key" "this" {
   description             = "KMS key used to encrypt ${local.namespace} S3 bucket."
-  deletion_window_in_days = 30
+  deletion_window_in_days = 7
   enable_key_rotation     = true
   tags                    = { Name = "${local.namespace}-kms-key" }
 }
