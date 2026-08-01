@@ -94,6 +94,12 @@ resource "aws_kms_key" "this" {
   tags                    = { Name = "${local.namespace}-kms-key" }
 }
 
+resource "aws_kms_alias" "this" {
+  name          = "alias/${local.namespace}-kms-key"
+  target_key_id = aws_kms_key.this.id
+}
+
+
 resource "aws_kms_key_policy" "this" {
   key_id                             = aws_kms_key.this.id
   bypass_policy_lockout_safety_check = false
