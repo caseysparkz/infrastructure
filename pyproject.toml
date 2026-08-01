@@ -1,12 +1,12 @@
 [project]
-name = "infrastructure"
+name = "cs-monorepo"
 description = "Global installer for the monorepo."
 requires-python = ">=3.13"
 version = "0.1.0"
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [{ name = "CaseySparkz", email = "contact@caseysparkz.com" }]
 dependencies = [
-    "infra-ansible @ file:./ansible",
+    "cs-ansible @ file:./ansible",
     "boto3==1.43.56",
 ]
 
@@ -25,7 +25,7 @@ test = [
     "yamllint==1.38.0",
 ]
 dev = [
-    "infrastructure[test]",
+    "cs-monorepo[test]",
 
     "ipython==9.15.0",
 ]
@@ -33,8 +33,8 @@ scan = [
     "prowler==5.36.0", # AWS posture scanning
 ]
 all = [
-    "infrastructure[dev]",
-    "infrastructure[test]",
+    "cs-monorepo[dev]",
+    "cs-monorepo[test]",
 ]
 
 [tool.setuptools.packages.find]

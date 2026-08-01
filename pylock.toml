@@ -69,14 +69,14 @@ sha256 = "8d3529082b3330e8718986a6a05cc0cd8319f8fddd10104eb7624e1c94b20fd2"
 
 [[packages]]
 name = "botocore"
-version = "1.43.59"
+version = "1.43.62"
 
 [[packages.wheels]]
-name = "botocore-1.43.59-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/f6/cd/62d749f824b25c152144665f7c5eb8b5ca8be967a87e0c63577b7d4501ae/botocore-1.43.59-py3-none-any.whl"
+name = "botocore-1.43.62-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/c0/65/d5dae96de68ffc55acf87c3bae76e9dabeeca92aadf1223f20e9a7860aef/botocore-1.43.62-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "21393c35d23b19d7ba95cc4156b59f4013f80696d667997e1abd9d4e29651708"
+sha256 = "76de153de1ba3e242b2e6df6a13ab8a3fb35d17db562462969e661457b63166e"
 
 [[packages]]
 name = "botocore-stubs"
@@ -146,14 +146,26 @@ sha256 = "7dc2950a2992cd676d35c20ae63522836deeb034f08874699d14068710af3dc1"
 
 [[packages]]
 name = "cryptography"
-version = "49.0.0"
+version = "50.0.0"
 
 [[packages.wheels]]
-name = "cryptography-49.0.0-cp311-abi3-manylinux_2_34_x86_64.whl"
-url = "https://files.pythonhosted.org/packages/a9/3c/f3ad17eecc1a57b0ba236dc01f90e783c51f4a2f35f64777cc4f47a184b2/cryptography-49.0.0-cp311-abi3-manylinux_2_34_x86_64.whl"
+name = "cryptography-50.0.0-cp311-abi3-manylinux_2_34_x86_64.whl"
+url = "https://files.pythonhosted.org/packages/da/3a/f05e32c99d440c9bb891ea0e36c9091891e36be5a9a87ab2ee6ea20729f6/cryptography-50.0.0-cp311-abi3-manylinux_2_34_x86_64.whl"
 
 [packages.wheels.hashes]
-sha256 = "cbc77da8c523d5abd028635ba850a6966fcee2c82e2bf65a41d1d8afe0f98be9"
+sha256 = "82148ec5bddac30b51a5b3c1945075f896fa022cb93f8e4a01e9f6ee95292c5f"
+
+[[packages]]
+name = "cs-ansible"
+
+[packages.directory]
+path = "ansible"
+
+[[packages]]
+name = "cs-monorepo"
+
+[packages.directory]
+path = "."
 
 [[packages]]
 name = "cyclonedx-python-lib"
@@ -220,18 +232,6 @@ url = "https://files.pythonhosted.org/packages/1e/5e/d4e9f1a599fb8e573b7b8716065
 
 [packages.wheels.hashes]
 sha256 = "7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2"
-
-[[packages]]
-name = "infra-ansible"
-
-[packages.directory]
-path = "ansible"
-
-[[packages]]
-name = "infrastructure"
-
-[packages.directory]
-path = "."
 
 [[packages]]
 name = "iniconfig"
@@ -796,14 +796,14 @@ sha256 = "188306098d013b691fcadc011abd66727d3c414c571bb01b1a174ba8c983cf90"
 
 [[packages]]
 name = "traitlets"
-version = "5.15.1"
+version = "5.16.0"
 
 [[packages.wheels]]
-name = "traitlets-5.15.1-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/96/8d/1080ee4c231f361b6ce4470d556c8c435b67c7e0753aaa641497ee92f88b/traitlets-5.15.1-py3-none-any.whl"
+name = "traitlets-5.16.0-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/01/bd/f8607e908605262e4926cbfd2560094bc5d04ef7f8aff1340e7fff503016/traitlets-5.16.0-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "770a53705f84b81ac107e83a1b3328ff2dae16094d8fc3cfc004e4b22dfd8e92"
+sha256 = "94a9967ba45e89e837cf9934029c8d019bea9149cfffa115ed8c1900f679beba"
 
 [[packages]]
 name = "types-awscrt"
@@ -818,14 +818,14 @@ sha256 = "20c752b6031544d8f694803c35174aee129f1be5ddf886ae46d22f7ffd9b7d75"
 
 [[packages]]
 name = "types-boto3"
-version = "1.43.59"
+version = "1.43.62"
 
 [[packages.wheels]]
-name = "types_boto3-1.43.59-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/8f/31/3dbb94d50554522c7c6e59dcdd2a51ced65b54b62e01b67885794796277b/types_boto3-1.43.59-py3-none-any.whl"
+name = "types_boto3-1.43.62-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/3a/18/b2199fce17864916b78bcfe932f40fe684b133d614e8a14ea5ba22ac56de/types_boto3-1.43.62-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "fb02457fbb6db357be26d5dba154783320102e5dadc91771d404a33d42726094"
+sha256 = "e075d0a44420e905a16c684e9e240107c2b95273478259de3ec537ec11eb57cd"
 
 [[packages]]
 name = "types-boto3-ses"
