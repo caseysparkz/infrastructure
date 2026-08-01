@@ -41,7 +41,7 @@ resource "aws_resourcegroups_group" "this" {
 resource "aws_kms_key" "this" {
   description             = "KMS key for terraform state S3 bucket objects."
   enable_key_rotation     = true
-  deletion_window_in_days = 30
+  deletion_window_in_days = 7
   tags                    = { Name = "${local.namespace}-kms-key" }
 }
 
