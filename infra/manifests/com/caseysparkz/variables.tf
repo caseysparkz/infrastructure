@@ -10,6 +10,24 @@ variable "aws_region" {
   default     = "us-west-2"
 }
 
+variable "aws_vpc_cidr" {
+  description = "Subnet CIDR of the new VPC to create."
+  default     = "10.250.0.0/16"
+  type        = string
+
+  validation {
+    condition     = cidrsubnet(var.aws_vpc_cidr, 0, 0) == var.aws_vpc_cidr
+    error_message = "Invalid CIDR."
+  }
+}
+
+variable "enable_pfsense_iam_access_key" {
+  description = "Whether or not to enable the IAM key used in the AWS VPC VPN Wizard."
+  type        = bool
+  sensitive   = false
+  default     = false
+}
+
 # Cloudflare ===================================================================
 variable "mx_servers" {
   description = "MX servers for root domain. Syntax: {server: priority}."
