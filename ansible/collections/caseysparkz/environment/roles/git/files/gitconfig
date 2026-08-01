@@ -68,9 +68,9 @@
         --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
     root-dir = "rev-parse --show-toplevel"
 [credential "https://github.com"]
-    helper = "!/opt/homebrew/bin/gh auth git-credential"
+    helper = "!gh auth git-credential"
 [credential "https://gist.github.com"]
-    helper = "!/opt/homebrew/bin/gh auth git-credential"
+    helper = "!gh auth git-credential"
 [advice]
     skippedCherryPicks = false
 [help]

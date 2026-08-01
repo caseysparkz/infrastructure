@@ -11,20 +11,8 @@
 
 - name: "Configure git"
   tags: ["git"]
-  when: "ansible_facts.system == 'Linux'"
   ansible.builtin.file:
-    src: "{{ git_symlink_src_dir }}/files/gitconfig_linux"
-    dest: "{{ ansible_facts.env.HOME }}/.gitconfig"
-    owner: "{{ ansible_facts.effective_user_id }}"
-    group: "{{ ansible_facts.effective_group_id }}"
-    state: "link"
-    force: true
-
-- name: "Configure git"
-  tags: ["git"]
-  when: "ansible_facts.system == 'Darwin'"
-  ansible.builtin.file:
-    src: "{{ git_symlink_src_dir }}/files/gitconfig_macos"
+    src: "{{ git_symlink_src_dir }}/files/gitconfig"
     dest: "{{ ansible_facts.env.HOME }}/.gitconfig"
     owner: "{{ ansible_facts.effective_user_id }}"
     group: "{{ ansible_facts.effective_group_id }}"
