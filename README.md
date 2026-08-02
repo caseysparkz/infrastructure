@@ -10,7 +10,7 @@ This repository is a monorepo for everything I write.
     * [Go](https://go.dev/doc/install) 1.24.4+
 * [Docker](https://docs.docker.com/engine/install)
    * Docker Compose
-* [Python](https://www.python.org/downloads) 3.14+. Dependencies installed via `pip install .` include:
+* [Python](https://www.python.org/downloads/) 3.14+. Dependencies installed via `pip install .` include:
    * `ansible`
    * `boto3`
 * [Terraform](https://developer.hashicorp.com/terraform/install)
@@ -19,12 +19,12 @@ This repository is a monorepo for everything I write.
 
 * [gh](https://cli.github.com)
 * [hadolint](https://hadolint.com)
-* [infracost](https://www.infracost.io/docs)
+* [infracost](https://www.infracost.io/docs/)
 * [mdl](https://github.com/markdownlint/markdownlint)
 * [mlc](https://github.com/becheran/mlc)
 * [shellcheck](https://github.com/koalaman/shellcheck)
 * [tfschema](https://github.com/minamijoyo/tfschema)
-* [trivy](https://trivy.dev/docs/latest/getting-started/installation)
+* [trivy](https://trivy.dev/docs/latest/getting-started/installation/)
 * Python `[dev,test]` dependencies installed via `pip install .[all]` include:
    * `ansible-lint`
    * `ipython`

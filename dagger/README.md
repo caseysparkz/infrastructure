@@ -8,7 +8,7 @@ I am currently in the process of migrating my CI platform to
 ### Prerequisites
 
 * A running Kubernetes cluster with a preconfigured `kubectl` profile.
-* [Helm](https://helm.sh/docs/intro/install)
+* [Helm](https://helm.sh/docs/intro/install/)
 
 ### Setup
 

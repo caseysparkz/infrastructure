@@ -11,7 +11,7 @@ tags:
     - 'code'
 
 ---
-[Github Repository](https://github.com/caseysparkz/infrastructure/tree/main/ansible)
+[Github Repository](https://github.com/caseysparkz/monorepo/tree/main/ansible)
 
 The playbook aims to:
 
