@@ -1,9 +1,0 @@
----
-mutelist:
-  Accounts:
-    "*":  # All accounts
-      Checks:
-        "*":  # All checks
-        Regions: []  # All regions
-        Resources: []  # All resources
-        Tags: ["Prowler=ignore"]
