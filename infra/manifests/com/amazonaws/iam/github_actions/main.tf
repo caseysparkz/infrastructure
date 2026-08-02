@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "this" {
 
     condition {
       test     = "StringLike"
-      values   = ["repo:caseysparkz/infrastructure:*"]
+      values   = ["repo:caseysparkz/*:*"]
       variable = "token.actions.githubusercontent.com:sub"
     }
 
