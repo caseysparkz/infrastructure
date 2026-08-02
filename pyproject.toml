@@ -7,13 +7,13 @@ readme = { file = "README.md", content-type = "text/markdown" }
 authors = [{ name = "CaseySparkz", email = "contact@caseysparkz.com" }]
 dependencies = [
     "cs-ansible @ file:./ansible",
-    "boto3==1.43.58",
+    "boto3==1.40.61",
 ]
 
 [project.optional-dependencies]
 test = [
-    "boto3-stubs==1.43.58",
-    "botocore-stubs==1.43.14",
+    "boto3-stubs==1.40.61",
+    "botocore-stubs==1.40.61",
     "ipdb==0.13.13",
     "moto==5.2.2",
     "mypy==2.3.0",
@@ -29,12 +29,13 @@ dev = [
 
     "ipython==9.15.0",
 ]
-scan = [
+tools = [
     "prowler==5.36.0", # AWS posture scanning
 ]
 all = [
     "cs-monorepo[dev]",
     "cs-monorepo[test]",
+    "cs-monorepo[tools]",
 ]
 
 [tool.setuptools.packages.find]
