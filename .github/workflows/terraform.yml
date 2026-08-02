@@ -181,6 +181,8 @@ jobs:
       - "changed_terraform"
       - "terraform_validate"
     if: "${{ github.event == 'pull_request' }}"  # * Always runs on pull request if any terraform changed
+    permissions:
+      contents: "read"
     strategy:
       max-parallel: 4
       matrix:
