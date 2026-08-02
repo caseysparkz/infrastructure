@@ -115,21 +115,21 @@ func (m *Terraform) plan(chdir string, varFile string) *dagger.Container {
 
 // Returns the output of 'terraform -chdir={:arg chdir:} fmt -recursive -check'
 // +check
-func (m *Terraform) FmtRecursive(
+func (m *Terraform) Fmt(
 	ctx context.Context,
 	// Directory to run Terraform in. Passed as '-chdir={}'.
 	// +optional
 	// +default="."
 	chdir string,
 ) (string, error) {
-	stdout, err := m.initBackendFalse(chdir).
+	_, err := m.initBackendFalse(chdir).
 		WithExec([]string{"terraform", fmt.Sprintf("-chdir=%s", chdir), "fmt", "-check", "-recursive"}).
 		Stdout(ctx)
 
 	if err != nil {
 		return "", err
 	} else {
-		return stdout, nil
+		return "Files already formatted.", nil
 	}
 }
 
