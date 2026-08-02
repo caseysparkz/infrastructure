@@ -55,7 +55,8 @@ func (m *Python) container() *dagger.Container {
 		From(m.Image).
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
-		WithExec([]string{"python", "-m", "ensurepip"})
+		WithExec([]string{"python", "-m", "ensurepip"}).
+		WithExec([]string{"pip", "install", "--upgrade", "pip", "--quiet", "--root-user-action=ignore"})
 }
 
 // Returns a container with an initialized and empty virtual environment.
@@ -69,7 +70,13 @@ func (m *Python) Venv() *dagger.Container {
 
 // Returns a container with an installed package.
 func (m *Python) PipInstall() *dagger.Container {
-	return m.Venv().WithExec([]string{"pip", "install", "--quiet", "--root-user-action=ignore", m.Pkg})
+	return m.Venv().WithExec([]string{
+		"pip",
+		"install",
+		"--quiet",
+		"--root-user-action=ignore",
+		m.Pkg,
+	})
 }
 
 // Runs PyTest
@@ -81,13 +88,7 @@ func (m *Python) Pytest(
 	// +default=["."]
 	file []string,
 ) (string, error) {
-	stdout, err := m.PipInstall().WithExec(append([]string{"pytest"}, file...)).Stdout(ctx)
-
-	if err != nil {
-		return "", fmt.Errorf("Error: %s", err)
-	} else {
-		return stdout, nil
-	}
+	return m.PipInstall().WithExec(append([]string{"pytest"}, file...)).Stdout(ctx)
 }
 
 // Runs MyPy
@@ -99,13 +100,7 @@ func (m *Python) Mypy(
 	// +default=["."]
 	file []string,
 ) (string, error) {
-	stdout, err := m.PipInstall().WithExec(append([]string{"mypy"}, file...)).Stdout(ctx)
-
-	if err != nil {
-		return "", fmt.Errorf("Error: %s", err)
-	} else {
-		return stdout, nil
-	}
+	return m.PipInstall().WithExec(append([]string{"mypy"}, file...)).Stdout(ctx)
 }
 
 // Runs ruff-check
@@ -117,13 +112,7 @@ func (m *Python) RuffCheck(
 	// +default=["."]
 	file []string,
 ) (string, error) {
-	stdout, err := m.PipInstall().WithExec(append([]string{"ruff", "check"}, file...)).Stdout(ctx)
-
-	if err != nil {
-		return "", fmt.Errorf("Error: %s")
-	} else {
-		return stdout, nil
-	}
+	return m.PipInstall().WithExec(append([]string{"ruff", "check"}, file...)).Stdout(ctx)
 }
 
 // Runs ruff-format --check
@@ -135,25 +124,13 @@ func (m *Python) RuffFormat(
 	// +default=["."]
 	file []string,
 ) (string, error) {
-	stdout, err := m.PipInstall().WithExec(append([]string{"ruff", "format", "--check"}, file...)).Stdout(ctx)
-
-	if err != nil {
-		return "", fmt.Errorf("Error: %w", err)
-	} else {
-		return stdout, nil
-	}
+	return m.PipInstall().WithExec(append([]string{"ruff", "format", "--check"}, file...)).Stdout(ctx)
 }
 
 // Runs pip-audit
 // +check
 func (m *Python) PipAudit(ctx context.Context) (string, error) {
-	stdout, err := m.PipInstall().WithExec([]string{"pip-audit", mountPoint}).Stdout(ctx)
-
-	if err != nil {
-		return "", fmt.Errorf("Error: %w", err)
-	} else {
-		return stdout, nil
-	}
+	return m.PipInstall().WithExec([]string{"pip-audit", mountPoint}).Stdout(ctx)
 }
 
 // Checks if pylock.toml is up-to-date

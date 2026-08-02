@@ -47,25 +47,25 @@ sha256 = "ef28a70bd43115208441b53a045d1549e2f0ec6e3d08a9d142cbc41c1938e8d9"
 
 [[packages]]
 name = "boto3"
-version = "1.43.56"
+version = "1.43.58"
 
 [[packages.wheels]]
-name = "boto3-1.43.56-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/b8/57/3a960c9f581c00f2a591901b46e035ff79ab3956d16607f12306b3b8d483/boto3-1.43.56-py3-none-any.whl"
+name = "boto3-1.43.58-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/1c/85/b0709066efb4ce7b86aba4092c739ad0e458be9d62cf32550fc4c130c93f/boto3-1.43.58-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "feb699d4ab241ef5c1b80bb58277be2aaad365cd4b672d7817e0bc59ee45131b"
+sha256 = "ce1a20cbcfaa1d0b3c8f568e2b6c7fbd34b842ea00e729d49a4b4de522828db9"
 
 [[packages]]
 name = "boto3-stubs"
-version = "1.43.56"
+version = "1.43.58"
 
 [[packages.wheels]]
-name = "boto3_stubs-1.43.56-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/a0/62/2ba9e5d2378be5b3e1cfc8b444ee9a1b5d826493feb15df15cf47eae5c69/boto3_stubs-1.43.56-py3-none-any.whl"
+name = "boto3_stubs-1.43.58-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/b2/1c/c01ee8ba281a0fc62c04d8eb2765ba0d3175ccca89036cea7fb6dd7d818b/boto3_stubs-1.43.58-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "8d3529082b3330e8718986a6a05cc0cd8319f8fddd10104eb7624e1c94b20fd2"
+sha256 = "4abdfbf3b6083273828f13049751643cff14bb241b953647e7a8975107016c6c"
 
 [[packages]]
 name = "botocore"
@@ -135,14 +135,14 @@ sha256 = "84fd18bcc17526fc2b3c1af7d2b9217d32c9c04448c16ec693b9b4f1985c3d33"
 
 [[packages]]
 name = "coverage"
-version = "7.15.2"
+version = "7.15.3"
 
 [[packages.wheels]]
-name = "coverage-7.15.2-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl"
-url = "https://files.pythonhosted.org/packages/31/d3/06b5f1daf95f0f15ab05bd75f26ba5f3c8b33d0bb72f3aaa3cf41d1bad3a/coverage-7.15.2-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl"
+name = "coverage-7.15.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl"
+url = "https://files.pythonhosted.org/packages/29/c6/e92a66cda49a2751b09826d51258f199b92aa0cb005bc5f34e9729a52a9c/coverage-7.15.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl"
 
 [packages.wheels.hashes]
-sha256 = "7dc2950a2992cd676d35c20ae63522836deeb034f08874699d14068710af3dc1"
+sha256 = "7a47e2a0a0ace9241e70ee00e44520f88b843094603dd54303f1bafecd929c30"
 
 [[packages]]
 name = "cryptography"
