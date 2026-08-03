@@ -44,6 +44,30 @@ module "aws_resourcegroups_group" {
 }
 
 # Resources ====================================================================
+resource "aws_organizations_organization" "this" {
+  feature_set              = "ALL"
+  return_organization_only = false
+  aws_service_access_principals = [
+    "cost-optimization-hub.bcm.amazonaws.com",
+    "notifications.amazonaws.com",
+    "sso.amazonaws.com",
+  ]
+  enabled_policy_types = [
+    "AISERVICES_OPT_OUT_POLICY",
+    "SERVICE_CONTROL_POLICY",
+    //"BACKUP_POLICY",
+    //"BEDROCK_POLICY",
+    //"CHATBOT_POLICY",
+    //"DECLARATIVE_POLICY_EC2",
+    //"INSPECTOR_POLICY",
+    //"RESOURCE_CONTROL_POLICY",
+    //"S3_POLICY",
+    //"SECURITYHUB_POLICY",
+    //"TAG_POLICY",
+    //"UPGRADE_ROLLOUT_POLICY",
+  ]
+}
+
 resource "aws_ebs_encryption_by_default" "this" {
   enabled = true // Require EBS encryption
 }
