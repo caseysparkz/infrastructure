@@ -76,7 +76,7 @@ shell:
           - "**/*.bash"
           - "**/*.rsc"
           - "**/*.sh"
-terraform:
+infra: &infra
   - changed-files:
       - any-glob-to-any-file:
           - "**/*.hcl"
@@ -85,3 +85,4 @@ terraform:
           - "**/*.tf.json"
           - "**/*.tftpl"
           - "**/*.tfvars"
+terraform: &infra

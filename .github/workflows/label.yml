@@ -2,16 +2,21 @@
 # Date:         November 13, 2024
 # Description:  Label a pull request with the correct tags.
 ---
-name: "label pull request"
+name: "autolabel"
 on: ["pull_request"]
 jobs:
   label:
-    name: "Label Rull Request"
+    name: "label"
     runs-on: "ubuntu-latest"
     permissions:
       contents: "read"
       pull-requests: "write"
     steps:
+      - name: "git checkout"
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+        with:
+          fetch-depth: 0
+
       - name: "label"
         uses: "actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13"  # v7.0.0
         with:
@@ -20,3 +25,28 @@ jobs:
           sync-labels: false
           dot: true
           pr-number: "${{ github.event.pull_request.number }}"
+
+      # This step and the next are required because actions/labeler cannot create labels based on commit messages
+      - name: "git log | grep | sed | sort | uniq"
+        id: "commit_msgs"
+        run: |
+          readarray -t COMMIT_TAGS < <(                                                                             \
+            git log origin/${{ github.event.pull_request.base.ref }}..HEAD --pretty='%s'                            \
+            | grep -E '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)[:(].*$'                      \
+            | sed 's/[:(].*$//g'                                                                                    \
+            | sort                                                                                                  \
+            | uniq                                                                                                  \
+          )
+
+          echo "labels=$(jq -c -n '$ARGS.positional' --args "${COMMIT_TAGS[@]}")" >> "${GITHUB_OUTPUT}"
+
+      - name: "Label pull request"
+        uses: "actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3" #v9.0.0
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ${{ steps.commit_msgs.outputs.labels }}
+            })
