@@ -3,7 +3,7 @@ autocmd BufNewFile *.js
     \ :0r ~/.vim/templates/javascript.template                              |
     \ :2s/\<DATE\>/\=strftime("%B %d, %Y")/
 
-autocmd Filetype js
+autocmd Filetype js,typescript,typescriptreact
     \ set autoindent                                                        |
     \ set tabstop=2                                                         |
     \ set softtabstop=2                                                     |
