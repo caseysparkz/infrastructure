@@ -3,7 +3,7 @@
 case "$(uname -s)" in
     'Darwin'                                                                )
         export HOMEBREW_NO_ENV_HINTS=1
-        #export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
+        #export DOCKER_HOST="unix://${HOME}/.colima/default/containerd.sock"
         ;;
 
     'Linux'                                                                 )
