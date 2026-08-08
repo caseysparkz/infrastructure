@@ -30,7 +30,7 @@ dev = [
     "ipython==9.15.0",
 ]
 tools = [
-    "prowler==5.36.0", # AWS posture scanning
+    "prowler==5.37.1", # AWS posture scanning
 ]
 all = [
     "cs-monorepo[dev]",
