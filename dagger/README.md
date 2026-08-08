@@ -1,7 +1,7 @@
 # Dagger
 
 I am currently in the process of migrating my CI platform to
-[Dagger](https://dagger.io).
+[Dagger](https://dagger.io/)
 
 ## Running Dagger in Kubernetes
 

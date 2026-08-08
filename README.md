@@ -6,13 +6,14 @@ This repository is a monorepo for everything I write.
 
 ### Required Software and Languages
 
-* [Dagger](https://dagger.io)
-    * [Go](https://go.dev/doc/install) 1.24.4+
+* [Dagger](https://dagger.io/)
+  * [Go](https://go.dev/doc/install) 1.24.4+
 * [Docker](https://docs.docker.com/engine/install)
-   * Docker Compose
-* [Python](https://www.python.org/downloads/) 3.14+. Dependencies installed via `pip install .` include:
-   * `ansible`
-   * `boto3`
+  * Docker Compose
+* [Python](https://www.python.org/downloads/) 3.14+. Dependencies installed via
+  `pip install .` include:
+  * `ansible`
+  * `boto3`
 * [Terraform](https://developer.hashicorp.com/terraform/install)
 
 ### Recommended Software
@@ -26,14 +27,14 @@ This repository is a monorepo for everything I write.
 * [tfschema](https://github.com/minamijoyo/tfschema)
 * [trivy](https://trivy.dev/docs/latest/getting-started/installation/)
 * Python `[dev,test]` dependencies installed via `pip install .[all]` include:
-   * `ansible-lint`
-   * `ipython`
-   * `mypy`
-   * `pip-audit`
-   * `pytest-cov`
-   * `pytest`
-   * `ruff`
-   * `yamllint`
+  * `ansible-lint`
+  * `ipython`
+  * `mypy`
+  * `pip-audit`
+  * `pytest-cov`
+  * `pytest`
+  * `ruff`
+  * `yamllint`
 
 ## Filesystem Hierarchy
 
