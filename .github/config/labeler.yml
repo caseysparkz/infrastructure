@@ -50,6 +50,9 @@ docs:
           - "**/*.md"
           - "**/doc/**"
           - "**/docs/**"
+infra:
+  - changed-files:
+      - any-glob-to-any-file: ["infra/**"]
 git:
   - changed-files:
       - any-glob-to-any-file:
@@ -76,7 +79,7 @@ shell:
           - "**/*.bash"
           - "**/*.rsc"
           - "**/*.sh"
-infra: &infra
+terraform:
   - changed-files:
       - any-glob-to-any-file:
           - "**/*.hcl"
@@ -85,4 +88,3 @@ infra: &infra
           - "**/*.tf.json"
           - "**/*.tftpl"
           - "**/*.tfvars"
-terraform: &infra
