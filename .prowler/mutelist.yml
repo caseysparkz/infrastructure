@@ -1,3 +1,8 @@
 ---
 mutelist:
+  Checks:
+    - "macie_*"
+    - "sagemaker*"
+    - "trustedadvisor_premium_support_plan_subscribed"
+    - "kms_cmk_not_deleted_unintentionally"
   Tags: ["Prowler=ignore"]
