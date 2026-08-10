@@ -99,7 +99,6 @@ resource "aws_kms_alias" "this" {
   target_key_id = aws_kms_key.this.id
 }
 
-
 resource "aws_kms_key_policy" "this" {
   key_id                             = aws_kms_key.this.id
   bypass_policy_lockout_safety_check = false
