@@ -80,14 +80,14 @@ sha256 = "e88d86643daa1d85e1c4e9644187aca60325955c596ea2eea646730857998631"
 
 [[packages]]
 name = "botocore-stubs"
-version = "1.43.14"
+version = "1.43.67"
 
 [[packages.wheels]]
-name = "botocore_stubs-1.43.14-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/89/ca/f017727b11895908c5dedc829cf2ec35e0c4b2a26ba875db325fef2cefdf/botocore_stubs-1.43.14-py3-none-any.whl"
+name = "botocore_stubs-1.43.67-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/4e/5e/bdbf19967898a032292da65a47d6e25b2eee55865db4e687f861d80b5602/botocore_stubs-1.43.67-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "fb98f1475c92fd718644e786b5c543a20f1b1f610e89e0a7191c3f1f429c75aa"
+sha256 = "c51262bac3341c1cda71f05fa01141fffd3990d7a92c7960e3b755c1bc830373"
 
 [[packages]]
 name = "cachecontrol"
@@ -804,17 +804,6 @@ url = "https://files.pythonhosted.org/packages/ad/66/0d785f0bc5e4315a96c989bb476
 
 [packages.wheels.hashes]
 sha256 = "f775618166caa0396c8e337099240f2bd3e5e917d203b2e6fbe21a58d3cb1f6b"
-
-[[packages]]
-name = "types-awscrt"
-version = "0.36.2"
-
-[[packages.wheels]]
-name = "types_awscrt-0.36.2-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/26/62/0102c136eaeb4c397903d5a48d99287a32e9dfe1595bc4ca0ade2113f56f/types_awscrt-0.36.2-py3-none-any.whl"
-
-[packages.wheels.hashes]
-sha256 = "7d94abfa5f839c1052fc88fdc8e9a085fcda5da739bb1da92c080c19eef1c72a"
 
 [[packages]]
 name = "types-boto3"

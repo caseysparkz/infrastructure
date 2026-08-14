@@ -13,7 +13,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "boto3-stubs==1.43.69",
-    "botocore-stubs==1.43.14",
+    "botocore-stubs==1.43.67",
     "ipdb==0.13.13",
     "moto==5.2.2",
     "mypy==2.3.0",
