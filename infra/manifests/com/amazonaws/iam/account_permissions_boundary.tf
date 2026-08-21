@@ -1,12 +1,8 @@
 /* IAM Permissions Boundary - Restrict Services */
 
-locals {
-  iam_global_permissions_boundary_name = "${local.namespace}-iam-policy-permissionsboundary"
-}
-
 // Data ========================================================================
-data "aws_iam_policy_document" "global_permissions_boundary" {
-  statement { // Restrict boundary to pre-approved resources
+data "aws_iam_policy_document" "global_permissions_boundary" { // trivy:ignore:AWS-0345
+  statement {                                                  // Restrict boundary to pre-approved resources
     sid       = "RestrictAllowedResources"
     effect    = "Allow"
     actions   = [for resource in local.allowed_services : "${resource}:*"]
@@ -38,17 +34,17 @@ data "aws_iam_policy_document" "global_permissions_boundary" {
     condition {
       test     = "StringEquals"
       variable = "iam:PermissionsBoundary"
-      values   = ["arn:aws:iam::${local.aws_account_id}:policy/${local.iam_global_permissions_boundary_name}"]
+      values   = ["arn:aws:iam::${local.aws_account_id}:policy/${local.namespace}-iam-policy-permissionsboundary"]
     }
   }
 }
 
 // Resources ===================================================================
 resource "aws_iam_policy" "global_permissions_boundary" {
-  name   = local.iam_global_permissions_boundary_name
+  name   = "${local.namespace}-iam-policy-permissionsboundary"
   policy = data.aws_iam_policy_document.global_permissions_boundary.json
   path   = "/global/policies/"
-  tags   = { Name = local.iam_global_permissions_boundary_name }
+  tags   = { Name = "${local.namespace}-iam-policy-permissionsboundary" }
 }
 
 // Outputs =====================================================================
