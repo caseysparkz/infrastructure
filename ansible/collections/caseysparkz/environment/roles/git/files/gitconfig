@@ -44,7 +44,8 @@
     pruneexpire = "14 days"
 [alias]
     ac = "commit --amend --no-edit"
-    cb = "branch --show-current"
+    b = "branch"
+    bc = "branch --show-current"
     cmsg = "! printf 'build\nchore\nci\ndocs\nfeat\nfix\nperf\nrefactor\nrevert\nstyle\ntest\n'"
     cp = "cherry-pick"
     fdiff = "!f() { git diff \"${1:-main}\" --name-only; }; f"
