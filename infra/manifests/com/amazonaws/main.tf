@@ -55,11 +55,11 @@ resource "aws_organizations_organization" "this" {
   ]
   enabled_policy_types = [
     "AISERVICES_OPT_OUT_POLICY",
+    "DECLARATIVE_POLICY_EC2",
     "SERVICE_CONTROL_POLICY",
     //"BACKUP_POLICY",
     //"BEDROCK_POLICY",
     //"CHATBOT_POLICY",
-    //"DECLARATIVE_POLICY_EC2",
     //"INSPECTOR_POLICY",
     //"RESOURCE_CONTROL_POLICY",
     //"S3_POLICY",
@@ -69,10 +69,6 @@ resource "aws_organizations_organization" "this" {
   ]
 }
 
-resource "aws_ebs_encryption_by_default" "this" {
-  enabled = true // Require EBS encryption
-}
+resource "aws_ebs_encryption_by_default" "this" { enabled = true } // Require EBS encryption
 
-resource "aws_ec2_instance_metadata_defaults" "this" {
-  http_tokens = "required" // Require IMDSv2
-}
+resource "aws_ec2_instance_metadata_defaults" "this" { http_tokens = "required" } // Require IMDSv2
