@@ -1,21 +1,11 @@
-/* Policies */
+/* Organization Policy: S3  */
 
 locals {
   s3_arns               = ["arn:aws:s3:::*/*", "arn:aws:s3:::*"]
   s3_encryption_methods = ["AES256", "aws:kms"] // SSE-C is a ransomware vector, do not support
-  disallowed_services   = ["bedrock", "nova"]
 }
 
 // Data ========================================================================
-data "aws_iam_policy_document" "denied_services" {
-  statement { // Block the use of the service
-    sid       = "DenyDisallowedServices"
-    effect    = "Deny"
-    actions   = [for service in local.disallowed_services : "${service}:*"]
-    resources = ["*"]
-  }
-}
-
 data "aws_iam_policy_document" "s3_encryption" {
   statement { // Require encryption on bucket creation
     sid       = "EnforceEncryptionOnBucketCreate"
@@ -70,38 +60,6 @@ data "aws_iam_policy_document" "s3_encryption" {
 }
 
 // Resources ===================================================================
-//// AI Policy Configuration ---------------------------------------------------
-resource "aws_organizations_policy" "ai_opt_out" {
-  name        = "AiOptOut"
-  description = "AI opt-out policy."
-  type        = "AISERVICES_OPT_OUT_POLICY"
-  content = jsonencode({ "services" : { "default" : { "opt_out_policy" : {
-    "@@assign" : "optOut",
-    "@@operators_allowed_for_child_policies" : ["@@none"]
-  } } } })
-  tags = { Name = "${local.namespace}-org-policy-aioptout" }
-}
-
-resource "aws_organizations_policy_attachment" "ai_opt_out" {
-  policy_id = aws_organizations_policy.ai_opt_out.id
-  target_id = aws_organizations_organization.this.roots[0].id
-}
-
-//// Denied Services Configuration ---------------------------------------------
-resource "aws_organizations_policy" "denied_services" {
-  name        = "DeniedServices"
-  description = "Disallow the use of specified services."
-  type        = "SERVICE_CONTROL_POLICY"
-  content     = data.aws_iam_policy_document.denied_services.json
-  tags        = { Name = "${local.namespace}-org-policy-deniedservices" }
-}
-
-resource "aws_organizations_policy_attachment" "denied_services" {
-  policy_id = aws_organizations_policy.denied_services.id
-  target_id = aws_organizations_organization.this.roots[0].id
-}
-
-//// S3 Encryption Configuration -----------------------------------------------
 resource "aws_organizations_policy" "s3_encryption" {
   name        = "S3EncryptionConfiguration"
   description = "Require: KMS on bucket creation, encyption at rest, encryption in transit."
