@@ -1,6 +1,4 @@
-################################################################################
-# Locals
-#
+/* Locals - Allowed Services */
 
 locals {
   allowed_services = [

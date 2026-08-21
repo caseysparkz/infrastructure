@@ -1,11 +1,9 @@
-################################################################################
-# Cloudflare
-#
+/* Cloudflare */
 
 locals {
   cloudflare_zone_id = data.cloudflare_zones.domain.result[0].id
   cloudflare_comment = "Terraform managed."
-  cloudflare_dmarc_policy = { # Parsed to string
+  cloudflare_dmarc_policy = { // Parsed to string
     p     = "reject"
     sp    = "reject"
     adkim = "s"
@@ -17,11 +15,11 @@ locals {
   }
 }
 
-# Data =========================================================================
-data "cloudflare_zones" "domain" { name = var.root_domain } # Root zone
+// Data ========================================================================
+data "cloudflare_zones" "domain" { name = var.root_domain } // Root zone
 
-# Resources ====================================================================
-resource "cloudflare_dns_record" "root_cname" { # Redirect bucket
+// Resources ===================================================================
+resource "cloudflare_dns_record" "root_cname" { // Redirect bucket
   zone_id = local.cloudflare_zone_id
   name    = var.root_domain
   content = aws_s3_bucket_website_configuration.web_root.website_endpoint
@@ -31,7 +29,7 @@ resource "cloudflare_dns_record" "root_cname" { # Redirect bucket
   comment = local.cloudflare_comment
 }
 
-resource "cloudflare_dns_record" "subdomain_cname" { # Site bucket
+resource "cloudflare_dns_record" "subdomain_cname" { // Site bucket
   zone_id = local.cloudflare_zone_id
   name    = var.subdomain
   content = aws_s3_bucket_website_configuration.www_site.website_endpoint
@@ -41,7 +39,7 @@ resource "cloudflare_dns_record" "subdomain_cname" { # Site bucket
   comment = local.cloudflare_comment
 }
 
-resource "cloudflare_dns_record" "ses_verification" { # Verify domain ownership
+resource "cloudflare_dns_record" "ses_verification" { // Verify domain ownership
   zone_id = local.cloudflare_zone_id
   name    = "_amazonses.${aws_ses_domain_identity.root_domain.id}"
   content = aws_ses_domain_identity.root_domain.verification_token
@@ -51,7 +49,7 @@ resource "cloudflare_dns_record" "ses_verification" { # Verify domain ownership
   comment = local.cloudflare_comment
 }
 
-resource "cloudflare_dns_record" "subdomain_mx" { # SES MX record
+resource "cloudflare_dns_record" "subdomain_mx" { // SES MX record
   zone_id  = local.cloudflare_zone_id
   name     = var.subdomain
   content  = "feedback-smtp.${data.aws_region.current.region}.amazonses.com"
@@ -62,7 +60,7 @@ resource "cloudflare_dns_record" "subdomain_mx" { # SES MX record
   comment  = local.cloudflare_comment
 }
 
-resource "cloudflare_dns_record" "subdomain_spf" { # SPF record
+resource "cloudflare_dns_record" "subdomain_spf" { // SPF record
   zone_id = local.cloudflare_zone_id
   name    = var.subdomain
   content = "v=spf1 include:amazonses.com -all"
@@ -72,7 +70,7 @@ resource "cloudflare_dns_record" "subdomain_spf" { # SPF record
   comment = local.cloudflare_comment
 }
 
-resource "cloudflare_dns_record" "dkim" { # DKIM record
+resource "cloudflare_dns_record" "dkim" { // DKIM record
   count   = 3
   zone_id = local.cloudflare_zone_id
   name    = "${aws_ses_domain_dkim.root_domain.dkim_tokens[count.index]}._domainkey"

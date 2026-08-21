@@ -1,12 +1,10 @@
-################################################################################
-# IAM Permissions Boundary - DenyNonTerraformMutate
-#
+/* IAM Permissions Boundary - Restrict Services */
 
 locals {
   iam_global_permissions_boundary_name = "${local.namespace}-iam-policy-permissionsboundary"
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_iam_policy_document" "global_permissions_boundary" {
   statement { // Restrict boundary to pre-approved resources
     sid       = "RestrictAllowedResources"
@@ -45,7 +43,7 @@ data "aws_iam_policy_document" "global_permissions_boundary" {
   }
 }
 
-# Resources ====================================================================
+// Resources ===================================================================
 resource "aws_iam_policy" "global_permissions_boundary" {
   name   = local.iam_global_permissions_boundary_name
   policy = data.aws_iam_policy_document.global_permissions_boundary.json
@@ -53,7 +51,7 @@ resource "aws_iam_policy" "global_permissions_boundary" {
   tags   = { Name = local.iam_global_permissions_boundary_name }
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "admin_permissions_boundary_policy_name" {
   description = "Name of the global account permissions boundary policy"
   value       = aws_iam_policy.global_permissions_boundary.name

@@ -1,6 +1,4 @@
-################################################################################
-# Main
-#
+/* Main */
 
 locals {
   aws_account_id = data.aws_caller_identity.this.account_id
@@ -18,7 +16,7 @@ locals {
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/caseysparkz"
   }
-  dmarc_list = [ # Parsed to string
+  dmarc_list = [ // Parsed to string
     { key = "p", value = "reject" },
     { key = "sp", value = "reject" },
     { key = "adkim", value = "s" },
@@ -28,7 +26,7 @@ locals {
     { key = "rua", value = "mailto:dmarc_rua@${var.root_domain}" },
     { key = "ruf", value = "mailto:dmarc_ruf@${var.root_domain}" },
   ]
-  dmarc_policy       = join(";", [for item in local.dmarc_list : "${item.key}=${item.value}"]) # Parse local.dmarc_list
+  dmarc_policy       = join(";", [for item in local.dmarc_list : "${item.key}=${item.value}"]) // Parse local.dmarc_list
   cloudflare_comment = "Terraform managed."
   cloudflare_zone_id = data.cloudflare_zones.root_domain.result[0].id
   cloudflare_zone_settings = {
@@ -42,7 +40,7 @@ locals {
   }
 }
 
-# Data =========================================================================
+// Data =========================================================================
 data "cloudflare_zones" "root_domain" { name = var.root_domain }
 
 data "aws_caller_identity" "this" {}
@@ -85,8 +83,8 @@ data "aws_iam_policy_document" "aws_kms_key" {
   }
 }
 
-# Resources ====================================================================
-# AWS::KMS ---------------------------------------------------------------------
+// Resources ===================================================================
+//// KMS -----------------------------------------------------------------------
 resource "aws_kms_key" "this" {
   description             = "KMS key to encrypt domain artifacts/S3 bucket objects."
   deletion_window_in_days = 30
@@ -105,7 +103,7 @@ resource "aws_kms_key_policy" "this" {
   policy                             = data.aws_iam_policy_document.aws_kms_key.json
 }
 
-# Cloudflare -------------------------------------------------------------------
+//// Cloudflare ----------------------------------------------------------------
 resource "cloudflare_zone_setting" "root_zone" {
   for_each   = local.cloudflare_zone_settings
   zone_id    = local.cloudflare_zone_id
@@ -135,15 +133,15 @@ resource "cloudflare_dns_record" "pka" {
   comment  = local.cloudflare_comment
 }
 
-# Modules ======================================================================
-# AWS::ResourceGroups ----------------------------------------------------------
+// Modules =====================================================================
+//// ResourceGroups ------------------------------------------------------------
 module "aws_resourcegroups_group" {
   source              = "../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"
   common_tags         = local.common_tags
 }
 
-# Proton: @ --------------------------------------------------------------------
+//// Proton: @ -----------------------------------------------------------------
 module "proton" {
   source             = "../../../modules/proton_domain"
   cloudflare_zone_id = local.cloudflare_zone_id
@@ -158,7 +156,7 @@ module "proton" {
   }
 }
 
-# Proton: home. ----------------------------------------------------------------
+//// Proton: home. -------------------------------------------------------------
 module "proton_home" {
   source             = "../../../modules/proton_domain"
   cloudflare_zone_id = local.cloudflare_zone_id
@@ -175,7 +173,7 @@ module "proton_home" {
   }
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "root_domain" {
   description = "Root domain of the deployed infrastructure"
   value       = var.root_domain

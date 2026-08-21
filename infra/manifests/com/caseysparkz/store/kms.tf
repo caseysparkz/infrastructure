@@ -1,8 +1,6 @@
-################################################################################
-# KMS
-#
+/* KMS */
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_iam_policy_document" "aws_kms_key" {
   statement {
     sid       = "EnableIamUserPermissions"
@@ -20,7 +18,7 @@ data "aws_iam_policy_document" "aws_kms_key" {
   }
 }
 
-# Resources ====================================================================
+// Resources ===================================================================
 resource "aws_kms_key" "this" {
   description             = "KMS key used to encrypt ${local.namespace} S3 bucket."
   deletion_window_in_days = 7

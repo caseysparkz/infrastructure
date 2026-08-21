@@ -1,8 +1,6 @@
-################################################################################
-# Terraform and Providers
-#
+/* Terraform and Providers */
 
-# Terraform ====================================================================
+// Terraform ===================================================================
 terraform {
   required_version = ">= 1.10.5, < 2.0.0"
 
@@ -26,16 +24,18 @@ terraform {
   }
 }
 
-# Providers ====================================================================
+// Providers ===================================================================
 provider "aws" {
   region = var.aws_region
 
   default_tags { tags = local.common_tags }
 }
 
-provider "cloudflare" { api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string }
+provider "cloudflare" {
+  api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string
+}
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_secretsmanager_secret" "cloudflare_token" {
   arn = "arn:aws:secretsmanager:${var.aws_region}:${local.aws_account_id}:secret:cloudflare/api_token"
 }
@@ -44,7 +44,7 @@ data "aws_secretsmanager_secret_version" "cloudflare_token" {
   secret_id = data.aws_secretsmanager_secret.cloudflare_token.id
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "aws_region" {
   description = "Region to which tf config is deployed."
   value       = var.aws_region

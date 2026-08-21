@@ -1,9 +1,10 @@
-################################################################################
-# Main
-#
-# Author:       Casey Sparks
-# Date:         July 30, 2026
-# Description:  Global AWS IAM roles, policies, and permissions boundaries.
+/*
+Main
+
+Author:       Casey Sparks
+Date:         July 30, 2026
+Description:  Global AWS IAM roles, policies, and permissions boundaries.
+*/
 
 locals {
   aws_account_id = data.aws_caller_identity.this.account_id
@@ -21,10 +22,10 @@ locals {
   }
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_caller_identity" "this" {}
 
-# Modules ======================================================================
+// Modules =====================================================================
 module "aws_resourcegroups_group" {
   source              = "../../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"

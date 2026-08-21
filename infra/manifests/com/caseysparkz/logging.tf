@@ -1,11 +1,7 @@
-################################################################################
-# Global Logging
-#
+/* Global Logging */
 
-# Data =========================================================================
-
-# Resources ====================================================================
-resource "aws_s3_bucket" "logging" { #trivy:ignore:AWS-0089
+// Resources ===================================================================
+resource "aws_s3_bucket" "logging" { // trivy:ignore:AWS-0089
   bucket = "${local.namespace}-s3-bucket-logging"
   tags   = { Name = "${local.namespace}-s3-bucket-logging" }
 }
@@ -35,7 +31,7 @@ resource "aws_s3_bucket_public_access_block" "logging" {
   restrict_public_buckets = true
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "aws_s3_logging_bucket_id" {
   description = "ID of the global AWS S3 log bucket."
   value       = aws_s3_bucket.logging.id

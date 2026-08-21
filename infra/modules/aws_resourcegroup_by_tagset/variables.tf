@@ -1,6 +1,4 @@
-###############################################################################
-# Variables
-#
+/* Variables */
 
 variable "resource_group_name" {
   description = "Name to apply to the resource group."

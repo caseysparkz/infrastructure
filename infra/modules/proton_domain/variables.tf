@@ -1,9 +1,4 @@
-################################################################################
-# Variables
-#
-# Author:       Casey Sparks
-# Date:         August 04, 2025
-# Description:  Varibales needed to set up and verify a new ProtonMail domain.
+/* Variables */
 
 variable "cloudflare_zone_id" {
   type        = string

@@ -1,8 +1,6 @@
-################################################################################
-# S3
-#
+/* S3 */
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_iam_policy_document" "s3_bucket_policy" {
   statement {
     sid     = "DenyInsecureTransport"
@@ -26,8 +24,8 @@ data "aws_iam_policy_document" "s3_bucket_policy" {
   }
 }
 
-# Resources ====================================================================
-resource "aws_s3_bucket" "this" { #trivy:ignore:AWS-0089
+// Resources ===================================================================
+resource "aws_s3_bucket" "this" { // trivy:ignore:AWS-0089
   bucket        = "${var.bucket_name_prefix}.${data.terraform_remote_state.this.outputs.root_domain}"
   force_destroy = false
   tags          = { Name = "${local.namespace}-s3-bucket" }
@@ -75,7 +73,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   }
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "aws_s3_bucket_url" {
   description = "URL of the S3 bucket."
   value       = aws_s3_bucket.this.bucket_regional_domain_name

@@ -1,8 +1,6 @@
-################################################################################
-# AWS S3
-#
+/* AWS S3 */
 
-# Data Objects =================================================================
+// Data ========================================================================
 data "aws_iam_policy_document" "s3_public_read_access" {
   statement {
     sid     = "PublicReadGetObject"
@@ -18,8 +16,8 @@ data "aws_iam_policy_document" "s3_public_read_access" {
   }
 }
 
-# Resources ====================================================================
-# WWW site ---------------------------------------------------------------------
+// Resources ===================================================================
+//// WWW site ------------------------------------------------------------------
 resource "aws_s3_bucket" "www_site" { // trivy:ignore:AWS-0089 trivy:ignore:AWS-0090 trivy:ignore:AWS-0132
   bucket        = var.subdomain
   force_destroy = true
@@ -67,7 +65,7 @@ resource "aws_s3_bucket_acl" "www_site" {
     aws_s3_bucket_public_access_block.www_site,
   ]
   bucket = aws_s3_bucket.www_site.id
-  acl    = "public-read" #tfsec:ignore:aws-s3-no-public-access-with-acl
+  acl    = "public-read" // tfsec:ignore:aws-s3-no-public-access-with-acl
 }
 
 resource "aws_s3_bucket_policy" "www_site" {
@@ -75,7 +73,7 @@ resource "aws_s3_bucket_policy" "www_site" {
   policy = data.aws_iam_policy_document.s3_public_read_access.json
 }
 
-# Redirect root ----------------------------------------------------------------
+//// @ -------------------------------------------------------------------------
 resource "aws_s3_bucket" "web_root" { // trivy:ignore:AWS-0089 trivy:ignore:AWS-0090 trivy:ignore:AWS-0132
   bucket        = var.root_domain
   force_destroy = true
@@ -107,7 +105,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "web_root" { // tr
   }
 }
 
-# S3 Lambda artifact -----------------------------------------------------------
+// S3 Lambda artifact ----------------------------------------------------------
 resource "aws_s3_object" "lambda_contact_form" {
   bucket      = var.artifact_bucket_id
   key         = basename(data.archive_file.lambda_contact_form.output_path)
@@ -115,7 +113,7 @@ resource "aws_s3_object" "lambda_contact_form" {
   source_hash = filemd5(data.archive_file.lambda_contact_form.output_path)
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "aws_s3_bucket_endpoint" {
   description = "Bucket endpoint"
   value       = aws_s3_bucket_website_configuration.www_site.website_endpoint

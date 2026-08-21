@@ -1,10 +1,8 @@
-################################################################################
-# Terraform and Providers
-#
+/* Terraform and Providers */
 
 locals { aws_account_id = data.aws_caller_identity.current.account_id }
 
-# Terraform ====================================================================
+// Terraform ===================================================================
 terraform {
   required_version = ">= 1.10.5, < 2.0.0"
 
@@ -28,12 +26,14 @@ terraform {
   }
 }
 
-# Providers ====================================================================
+// Providers ===================================================================
 provider "aws" { region = var.aws_region }
 
-provider "cloudflare" { api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string }
+provider "cloudflare" {
+  api_token = data.aws_secretsmanager_secret_version.cloudflare_token.secret_string
+}
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_caller_identity" "current" {}
 
 data "aws_secretsmanager_secret" "cloudflare_token" {

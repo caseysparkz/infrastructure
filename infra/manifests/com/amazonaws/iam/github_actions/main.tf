@@ -1,6 +1,4 @@
-################################################################################
-# Main
-#
+/* Main */
 
 locals {
   aws_account_id = data.aws_caller_identity.current.account_id
@@ -20,7 +18,7 @@ locals {
   }
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "this" {
@@ -48,14 +46,14 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-# Modules ======================================================================
+// Modules =====================================================================
 module "aws_resourcegroups_group" {
   source              = "../../../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"
   common_tags         = local.common_tags
 }
 
-# Resources ====================================================================
+// Resources ===================================================================
 resource "aws_iam_openid_connect_provider" "this" {
   url             = "https://token.actions.githubusercontent.com"
   client_id_list  = ["sts.amazonaws.com"]
@@ -68,7 +66,7 @@ resource "aws_iam_role" "this" {
   name                 = "${local.namespace}-iam-role"
   description          = "IAM role assumed by GitHub Actions allowing Terraform deployments."
   assume_role_policy   = data.aws_iam_policy_document.this.json
-  max_session_duration = 3600 # Min. allowable
+  max_session_duration = 3600 // Min. allowable
   tags                 = { Name = "${local.namespace}-iam-role" }
 }
 
@@ -81,7 +79,7 @@ resource "aws_iam_role_policy_attachment" "github_actions" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "aws_role_arn" {
   description = "ARN of the AWS IAM role for GitHub Actions to assume."
   value       = aws_iam_role.this.arn

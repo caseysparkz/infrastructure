@@ -1,6 +1,4 @@
-################################################################################
-# Policies
-#
+/* Policies */
 
 locals {
   s3_arns               = ["arn:aws:s3:::*/*", "arn:aws:s3:::*"]
@@ -8,7 +6,7 @@ locals {
   disallowed_services   = ["bedrock", "nova"]
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_iam_policy_document" "denied_services" {
   statement { // Block the use of the service
     sid       = "DenyDisallowedServices"
@@ -71,8 +69,8 @@ data "aws_iam_policy_document" "s3_encryption" {
   }
 }
 
-# Resources ====================================================================
-## AI Policy Configuration -----------------------------------------------------
+// Resources ===================================================================
+//// AI Policy Configuration ---------------------------------------------------
 resource "aws_organizations_policy" "ai_opt_out" {
   name        = "AiOptOut"
   description = "AI opt-out policy."
@@ -89,7 +87,7 @@ resource "aws_organizations_policy_attachment" "ai_opt_out" {
   target_id = aws_organizations_organization.this.roots[0].id
 }
 
-## Denied Services Configuration -----------------------------------------------
+//// Denied Services Configuration ---------------------------------------------
 resource "aws_organizations_policy" "denied_services" {
   name        = "DeniedServices"
   description = "Disallow the use of specified services."
@@ -103,7 +101,7 @@ resource "aws_organizations_policy_attachment" "denied_services" {
   target_id = aws_organizations_organization.this.roots[0].id
 }
 
-## S3 Encryption Configuration -------------------------------------------------
+//// S3 Encryption Configuration -----------------------------------------------
 resource "aws_organizations_policy" "s3_encryption" {
   name        = "S3EncryptionConfiguration"
   description = "Require: KMS on bucket creation, encyption at rest, encryption in transit."

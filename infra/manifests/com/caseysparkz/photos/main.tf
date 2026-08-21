@@ -1,6 +1,4 @@
-################################################################################
-# Main
-#
+/* Main */
 
 locals {
   environment = "prod"
@@ -19,7 +17,7 @@ locals {
   }
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_caller_identity" "this" {}
 
 data "terraform_remote_state" "this" {
@@ -32,7 +30,7 @@ data "terraform_remote_state" "this" {
   }
 }
 
-# Resources ====================================================================
+// Resources ===================================================================
 module "aws_resourcegroups_group" {
   source              = "../../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"

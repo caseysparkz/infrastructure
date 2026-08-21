@@ -1,11 +1,12 @@
-################################################################################
-# Main
-#
-# Author:       Casey Sparks
-# Date:         June 29, 2026
-# Description:  Easily create an AWS Resource Groups group.
+/*
+Main
 
-# Resources ====================================================================
+Author:       Casey Sparks
+Date:         June 29, 2026
+Description:  Easily create an AWS Resource Groups group.
+*/
+
+// Resources ===================================================================
 resource "aws_resourcegroups_group" "this" {
   name        = var.resource_group_name
   description = var.resource_group_description

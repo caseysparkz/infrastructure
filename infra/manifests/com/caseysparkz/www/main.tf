@@ -1,6 +1,4 @@
-################################################################################
-# Main
-#
+/* Main */
 
 locals {
   environment     = "prod"
@@ -20,7 +18,7 @@ locals {
   }
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "terraform_remote_state" "this" {
   backend = "s3"
   config = {
@@ -31,14 +29,13 @@ data "terraform_remote_state" "this" {
   }
 }
 
-# Resources ====================================================================
+// Modules =====================================================================
 module "aws_resourcegroups_group" {
   source              = "../../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"
   common_tags         = local.common_tags
 }
 
-# Modules ======================================================================
 module "artifacts" {
   source      = "../../../../modules/s3_artifacts"
   root_domain = data.terraform_remote_state.this.outputs.root_domain

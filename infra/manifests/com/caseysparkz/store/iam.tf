@@ -1,8 +1,6 @@
-################################################################################
-# IAM
-#
+/* IAM */
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_iam_policy_document" "s3_read_write" {
   statement { // Allow S3 read/write
     sid    = "AllowS3BucketReadWrite"
@@ -33,7 +31,7 @@ data "aws_iam_policy_document" "s3_read_write" {
   }
 }
 
-# Resources ====================================================================
+// Resources ===================================================================
 resource "aws_iam_user" "this" {
   name = "${local.namespace}-iam-user"
   tags = { Name = "${local.namespace}-iam-user" }
@@ -62,7 +60,7 @@ resource "aws_iam_access_key" "this" {
   lifecycle { ignore_changes = [status] }
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "aws_iam_access_keys" {
   description = "AWS access key ID and secret key for the S3 user."
   sensitive   = true

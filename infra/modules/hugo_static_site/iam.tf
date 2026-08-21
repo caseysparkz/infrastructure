@@ -1,8 +1,6 @@
-################################################################################
-# AWS IAM
-#
+/* AWS IAM */
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_iam_policy_document" "lambda_iam_role" {
   statement {
     effect  = "Allow"
@@ -49,21 +47,21 @@ data "aws_iam_policy_document" "lambda_iam_policy" {
   }
 }
 
-# Resources ====================================================================
-# IAM role ---------------------------------------------------------------------
+// Resources ===================================================================
+//// IAM role ------------------------------------------------------------------
 resource "aws_iam_role" "lambda_contact_form" {
   name               = "${local.reverse_dns_subdomain_dir}-lambda-contact-form-iam-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_iam_role.json
 }
 
-# Policies ---------------------------------------------------------------------
+//// Policies ------------------------------------------------------------------
 resource "aws_iam_policy" "lambda_iam_policy" {
   name        = "${local.reverse_dns_subdomain_dir}-lambda-contact-form-iam-policy"
   description = "Policy for Lambda to send emails via AWS SES, decrypt S3 artifacts, and log."
   policy      = data.aws_iam_policy_document.lambda_iam_policy.json
 }
 
-# Policy attachments -----------------------------------------------------------
+//// Policy attachments --------------------------------------------------------
 resource "aws_iam_role_policy_attachment" "lambda_iam_policy" {
   role       = aws_iam_role.lambda_contact_form.name
   policy_arn = aws_iam_policy.lambda_iam_policy.arn

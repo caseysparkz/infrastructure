@@ -1,9 +1,10 @@
-################################################################################
-# Main
-#
-# Author:       Casey Sparks
-# Date:         July 28, 2026
-# Description:  Minimal security configurations and organization policies.
+/*
+Main
+
+Author:       Casey Sparks
+Date:         July 28, 2026
+Description:  Minimal security configurations and organization policies.
+*/
 
 locals {
   aws_account_id = data.aws_caller_identity.this.account_id
@@ -22,7 +23,7 @@ locals {
   }
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_caller_identity" "this" {}
 
 data "terraform_remote_state" "this" {
@@ -36,14 +37,14 @@ data "terraform_remote_state" "this" {
   }
 }
 
-# Modules ======================================================================
+// Modules =====================================================================
 module "aws_resourcegroups_group" {
   source              = "../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"
   common_tags         = local.common_tags
 }
 
-# Resources ====================================================================
+// Resources ===================================================================
 resource "aws_organizations_organization" "this" {
   feature_set              = "ALL"
   return_organization_only = false

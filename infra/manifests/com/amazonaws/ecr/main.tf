@@ -1,6 +1,4 @@
-################################################################################
-# Main
-#
+/* Main */
 
 locals {
   aws_region     = data.aws_region.this.region
@@ -21,7 +19,7 @@ locals {
   }
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_caller_identity" "this" {}
 
 data "aws_region" "this" {}
@@ -36,14 +34,14 @@ data "terraform_remote_state" "this" {
   }
 }
 
-# Resources ====================================================================
+// Resources ===================================================================
 module "aws_resourcegroups_group" {
   source              = "../../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"
   common_tags         = local.common_tags
 }
 
-# Modules ======================================================================
+// Modules =====================================================================
 module "ecr" {
   source             = "../../../../modules/ecr"
   root_domain        = data.terraform_remote_state.this.outputs.root_domain
@@ -52,7 +50,7 @@ module "ecr" {
   docker_socket      = var.docker_socket
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "ecr_registry_url" {
   description = "URL of the deployed ECR registry."
   value       = module.ecr.ecr_registry_url

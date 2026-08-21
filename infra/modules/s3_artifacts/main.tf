@@ -1,9 +1,7 @@
-################################################################################
-# Main
-#
+/* Main */
 
-# Resources ====================================================================
-resource "aws_s3_bucket" "this" { #trivy:ignore:AWS-0089
+// Resources ===================================================================
+resource "aws_s3_bucket" "this" { // trivy:ignore:AWS-0089
   bucket        = "${var.root_domain}-artifacts"
   force_destroy = false
 }
@@ -45,7 +43,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   }
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "s3_bucket_id" {
   description = "ID/FQDN of the S3 bucket."
   value       = aws_s3_bucket.this.id

@@ -1,8 +1,5 @@
-################################################################################
-# Variables
-#
+/* Variables */
 
-# Misc. ========================================================================
 variable "aws_region" {
   description = "Region to deploy the Terraformed resources."
   type        = string

@@ -1,6 +1,4 @@
-################################################################################
-# Variables
-#
+/* Variables */
 
 variable "root_domain" {
   description = "Root domain of the infrastructure."

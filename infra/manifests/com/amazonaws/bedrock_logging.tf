@@ -1,9 +1,10 @@
-################################################################################
-# Bedrock
-#
-# Enable Bedrock model invocation and log to S3.
+/*
+Bedrock
 
-# Data =========================================================================
+Enable Bedrock model invocation and log to S3.
+*/
+
+// Data ========================================================================
 data "aws_iam_policy_document" "allow_bedrock_log_s3" {
   statement { // Allow bedrock to write logs to S3
     sid       = "AllowBedrockLogS3"
@@ -30,9 +31,9 @@ data "aws_iam_policy_document" "allow_bedrock_log_s3" {
   }
 }
 
-# Modules ======================================================================
+// Modules =====================================================================
 
-# Resources ====================================================================
+// Resources ===================================================================
 resource "aws_s3_bucket" "bedrock_logs" { // trivy:ignore:AWS-0089
   bucket        = "${local.namespace}-s3-bucket-bedrocklogs"
   force_destroy = true

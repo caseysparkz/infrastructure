@@ -1,16 +1,14 @@
-################################################################################
-# Main
-#
+/* Main */
 
 locals {
   ecr_registry_url     = replace(data.aws_ecr_authorization_token.this.proxy_endpoint, "https://", "")
   docker_compose_files = fileset("${var.docker_compose_dir}/", "*.compose.yml")
 }
 
-# Data =========================================================================
+// Data ========================================================================
 data "aws_ecr_authorization_token" "this" {}
 
-# Resources ====================================================================
+// Resources ===================================================================
 resource "aws_ecr_repository" "this" {
   for_each = toset([
     for f in fileset("${var.docker_compose_dir}/", "*.Dockerfile") :
@@ -28,7 +26,7 @@ resource "aws_ecr_repository" "this" {
   }
 }
 
-resource "null_resource" "docker_login" { # Log in to ECR
+resource "null_resource" "docker_login" { // Log in to ECR
   depends_on = [aws_ecr_repository.this]
 
   provisioner "local-exec" {
@@ -36,10 +34,10 @@ resource "null_resource" "docker_login" { # Log in to ECR
   }
 }
 
-resource "null_resource" "docker_compose_build" { # Build images
+resource "null_resource" "docker_compose_build" { // Build images
   depends_on = [null_resource.docker_login]
   for_each   = local.docker_compose_files
-  triggers   = { filehash = filesha1("${var.docker_compose_dir}/${each.key}") } # If dockerfile has changed.
+  triggers   = { filehash = filesha1("${var.docker_compose_dir}/${each.key}") } // If dockerfile has changed.
 
   provisioner "local-exec" {
     working_dir = var.docker_compose_dir
@@ -48,13 +46,13 @@ resource "null_resource" "docker_compose_build" { # Build images
   }
 }
 
-resource "docker_registry_image" "this" { # Push images to ECR
+resource "docker_registry_image" "this" { // Push images to ECR
   depends_on = [null_resource.docker_compose_build]
   for_each   = toset([for file in local.docker_compose_files : replace(file, ".compose.yml", "")])
   name       = "${local.ecr_registry_url}/${each.key}"
 }
 
-# Outputs ======================================================================
+// Outputs =====================================================================
 output "ecr_registry_url" {
   description = "URL of the deployed ECR registry."
   value       = replace(data.aws_ecr_authorization_token.this.proxy_endpoint, "https://", "")
