@@ -27,7 +27,7 @@ test = [
 dev = [
     "cs-monorepo[test]",
 
-    "ipython==9.15.0",
+    "ipython==9.16.1",
 ]
 all = [
     "cs-monorepo[dev]",
