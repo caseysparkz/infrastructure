@@ -13,7 +13,7 @@ locals {
     ManagedBy   = "terraform"
     Namespace   = local.namespace
     Repo        = "github.com/caseysparkz/monorepo"
-    RepoPath    = "infra/state"
+    RepoPath    = "infra/manifests/tfstate"
   }
 }
 
