@@ -12,6 +12,8 @@ on:
       - "ready_for_review"
       - "reopened"
       - "synchronize"
+env:
+  AWS_DEFAULT_REGION: "us-west-2"
 jobs:
   dagger_check_ansible:
     name: "dagger"
@@ -28,7 +30,7 @@ jobs:
       - name: "aws sso login"
         uses: "aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c"  # v6.2.3
         with:
-          aws-region: "${{ secrets.AWS_DEFAULT_REGION }}"
+          aws-region: "${{ env.AWS_DEFAULT_REGION }}"
           role-to-assume: "${{ secrets.AWS_ROLE_ARN }}"
           role-session-name: "gha-${{ github.run_id }}"
 

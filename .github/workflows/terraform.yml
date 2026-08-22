@@ -26,9 +26,10 @@ on:
       - "infra/**"
       - "!infra/**/README.md"
 env:
+  AWS_DEFAULT_REGION: "us-west-2"
+  INFRACOST_CONFIG: "terraform/infracost.yml"
   TERRAFORM_PLANFILE: "/tmp/out.tfplan"
   TERRAFORM_VERSION: "1.15.6" # Increment to update Terraform
-  INFRACOST_CONFIG: "terraform/infracost.yml"
 jobs:
   changed_terraform:
     name: "git diff"
@@ -100,7 +101,7 @@ jobs:
       - name: "aws sso login"
         uses: "aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c"  # v6.2.3
         with:
-          aws-region: "${{ secrets.AWS_DEFAULT_REGION }}"
+          aws-region: "${{ env.AWS_DEFAULT_REGION }}"
           role-to-assume: "${{ secrets.AWS_ROLE_ARN }}"
           role-session-name: "gha-${{ github.run_id }}"
 
@@ -331,8 +332,9 @@ jobs:
       - name: "aws sso login"
         uses: "aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c"  # v6.2.3
         with:
-          aws-region: "${{ secrets.AWS_DEFAULT_REGION }}"
+          aws-region: "${{ env.AWS_DEFAULT_REGION }}"
           role-to-assume: "${{ secrets.AWS_ROLE_ARN }}"
+          role-session-name: "gha-${{ github.run_id }}"
 
       - name: "terraform init"
         run: "terraform init"
