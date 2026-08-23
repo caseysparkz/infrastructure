@@ -29,7 +29,7 @@ env:
   AWS_DEFAULT_REGION: "us-west-2"
   INFRACOST_CONFIG: "terraform/infracost.yml"
   TERRAFORM_PLANFILE: "/tmp/out.tfplan"
-  TERRAFORM_VERSION: "1.15.6" # Increment to update Terraform
+  TERRAFORM_VERSION: "1.15.9" # Increment to update Terraform
 jobs:
   changed_terraform:
     name: "git diff"
