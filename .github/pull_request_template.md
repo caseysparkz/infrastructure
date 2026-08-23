@@ -9,16 +9,16 @@
 
 ## Changes Include
 
-* [ ] feat:     Non-breaking change that adds functionality.
-* [ ] fix:      Patches a bug in the codebase.
-* [ ] docs:     Documentation update.
-* [ ] chore:    Code maintenance such an incrementing dependency versions.
-* [ ] ci:       Addition or editation of CI functions.
-* [ ] test:     Addition or editation of tests.
-* [ ] build:    Changes to the application build system.
-* [ ] style:    Code style updates w/o change to code function itself.
-* [ ] refactor: Changes to code logic which do not change the code function.
-* [ ] perf:     Changes that improve the performance of the application.
+* [ ] **feat.** Non-breaking change that adds functionality.
+* [ ] **fix.** Patches a bug in the codebase.
+* [ ] **docs.** Documentation update.
+* [ ] **chore.** Code maintenance such as incrementing dependency versions.
+* [ ] **ci.** Addition or editation of CI functions.
+* [ ] **test.** Addition or editation of tests.
+* [ ] **build.** Changes to the application build system.
+* [ ] **style.** Code style updates w/o change to code function itself.
+* [ ] **refactor.** Changes to code logic which do not change the code function.
+* [ ] **perf.** Changes that improve the performance of the application.
 
 ## Checklist
 
