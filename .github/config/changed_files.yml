@@ -11,7 +11,10 @@ graphviz:
   - "**/*.gv"
 infracost: ["terraform/**/infracost*.yml"]
 markdown: ["**/*.md"]
-python: ["**/*.py"]
+python:
+  - "**/*.py"
+  - "**/pylock.toml"
+  - "**/pyproject.toml"
 jinja: ["**/*.j2"]
 shell:
   - "**/*.bash"

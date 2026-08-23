@@ -1,0 +1,60 @@
+# Author:       Casey Sparks
+# Date:         November 15, 2023
+# Description:  Run dagger checks.
+---
+name: "CI"
+on:
+  pull_request:
+    branches: ["main"]
+env:
+  AWS_DEFAULT_REGION: "us-west-2"
+jobs:
+  dagger_check:
+    name: "dagger"
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: "git checkout"
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+        with:
+          fetch-depth: 2
+
+      - name: "git diff ${{ github.base.ref }} --name-only"
+        id: "changed_files"
+        uses: "tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96" # 47.0.6
+        with:
+          files_yaml_from_source_file: ".github/config/changed_files.yml"
+          matrix: true
+
+      - name: "aws sso login"
+        uses: "aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c"  # v6.2.3
+        with:
+          aws-region: "${{ env.AWS_DEFAULT_REGION }}"
+          role-to-assume: "${{ secrets.AWS_ROLE_ARN }}"
+          role-session-name: "gha-${{ github.run_id }}"
+
+      - name: "dagger check ansible:*"  # Ansible
+        if: "${{ steps.changed_files.outputs.ansible_any_changed == 'true' }}"
+        uses: "./.github/actions/dagger-check"
+        with:
+          filter: "ansible:*"
+
+      - name: "dagger check python:*"  # Python
+        if: "${{ steps.changed_files.outputs.python_any_changed == 'true' }}"
+        uses: "./.github/actions/dagger-check"
+        with:
+          filter: "python:*"
+
+      - name: "dagger check terraform:*"  # Terraform
+        if: "${{ steps.changed_files.outputs.terraform_any_changed == 'true' }}"
+        uses: "./.github/actions/dagger-check"
+        with:
+          filter: "terraform:*"
+
+      - name: "dagger check yaml:*"  # YAML
+        if: "${{ steps.changed_files.outputs.yaml_any_changed == 'true' }}"
+        uses: "./.github/actions/dagger-check"
+        with:
+          filter: "yaml:*"
