@@ -1,6 +1,6 @@
 {
   "name": "monorepo",
-  "engineVersion": "v0.21.8",
+  "engineVersion": "v0.21.9",
   "sdk": {
     "source": "go"
   },
@@ -12,6 +12,10 @@
     {
       "name": "compliance",
       "source": "dagger/modules/compliance"
+    },
+    {
+      "name": "github",
+      "source": "dagger/modules/github"
     },
     {
       "name": "python",

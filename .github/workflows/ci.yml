@@ -9,6 +9,7 @@ on:
 env:
   AWS_DEFAULT_REGION: "us-west-2"
   DO_NOT_TRACK: "1"  # Disable Dagger telemetry
+  GITHUB_TOKEN: "${{ github.token }}"
 jobs:
   dagger_check:
     name: "dagger"
@@ -16,6 +17,7 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
+      pull-requests: "write"
     steps:
       - name: "git checkout"
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
@@ -41,6 +43,11 @@ jobs:
         uses: "./.github/actions/dagger-check"
         with:
           filter: "ansible:*"
+
+      - name: "dagger check github:*"  # GitHub
+        uses: "./.github/actions/dagger-check"
+        with:
+          filter: "github:*"
 
       - name: "dagger check python:*"  # Python
         if: "${{ steps.changed_files.outputs.python_any_changed == 'true' }}"
