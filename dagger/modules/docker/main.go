@@ -26,7 +26,7 @@ type Docker struct {
 	Source *dagger.Directory
 }
 
-// Runs hadolint (Dockerfile linter) against files
+// Runs hadolint (Dockerfile linter) against files.
 func (m *Docker) Hadolint(
 	ctx context.Context,
 	// Files to lint.
@@ -46,7 +46,7 @@ func (m *Docker) Hadolint(
 		Stdout(ctx)
 }
 
-// Returns a container that echoes whatever string argument is provided
+// Checks the validity of a docker compose file.
 func (m *Docker) ComposeConfig(
 	ctx context.Context,
 	// File to lint.

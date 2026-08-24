@@ -58,7 +58,7 @@ type Ansible struct {
 	Source             *dagger.Directory
 }
 
-// Returns a container that echoes whatever string argument is provided
+// Returns a container with aws CLI installed, repo mounted, and ansible package installed.
 func (m *Ansible) container() *dagger.Container {
 	awsDirPath := "/usr/local/aws-cli"
 
@@ -75,7 +75,7 @@ func (m *Ansible) container() *dagger.Container {
 		WithExec([]string{"pip", "install", "--quiet", "--root-user-action=ignore", m.PipPackage})
 }
 
-// Runs ansible-lint
+// Runs ansible-lint against the ansible/ directory.
 // +check
 func (m *Ansible) Lint(ctx context.Context) (string, error) {
 	stdout, err := m.container().
@@ -90,7 +90,7 @@ func (m *Ansible) Lint(ctx context.Context) (string, error) {
 	}
 }
 
-// Runs yamllint against the ansible/ directory
+// Runs yamllint against the ansible/ directory.
 // +check
 func (m *Ansible) Yamllint(ctx context.Context) (string, error) {
 	return dag.Yaml().Lint(ctx, dagger.YamlLintOpts{Path: ansibleDir})

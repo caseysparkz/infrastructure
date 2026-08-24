@@ -8,8 +8,8 @@ import (
 	"fmt"
 )
 
-var mountPoint = "/mnt"
 var image = "docker.io/koalaman/shellcheck"
+var mountPoint = "/mnt"
 
 func New(
 	// Version of shellcheck to run
@@ -33,12 +33,10 @@ type Shell struct {
 	Source  *dagger.Directory
 }
 
-// Returns a container that echoes whatever string argument is provided
+// Runs shellcheck against a given path (or paths).
 func (m *Shell) Lint(
 	ctx context.Context,
-	// File to lint (relative to :arg source:).
-	// +optional
-	// +default=["."]
+	// Files to lint (relative to :arg source:).
 	file []string,
 ) (string, error) {
 	return dag.Container().

@@ -10,8 +10,8 @@ import (
 	"fmt"
 )
 
-var mountPoint = "/mnt"
 var image = "docker.io/library/python"
+var mountPoint = "/mnt"
 
 func New(
 	// Version of Python to run

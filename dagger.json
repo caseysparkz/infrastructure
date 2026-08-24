@@ -1,6 +1,6 @@
 {
   "name": "monorepo",
-  "engineVersion": "v0.21.7",
+  "engineVersion": "v0.21.8",
   "sdk": {
     "source": "go"
   },
@@ -38,6 +38,10 @@
     {
       "name": "dagdocker",
       "source": "dagger/modules/docker"
+    },
+    {
+      "name": "github",
+      "source": "dagger/modules/github"
     },
     {
       "name": "python",

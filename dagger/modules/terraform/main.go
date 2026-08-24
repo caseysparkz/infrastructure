@@ -57,14 +57,14 @@ type Terraform struct {
 	Planfile           string
 }
 
-// Returns a container with in initialized Terraform directory
+// Returns a container with an initialized Terraform directory.
 func (m *Terraform) container() *dagger.Container {
 	return dag.Container().
 		From(fmt.Sprintf("%s:%s", m.Image, m.TerraformVersion)).
 		WithMountedDirectory(mountPoint, m.Source)
 }
 
-// Returns a container with in initialized Terraform directory
+// Returns a container with an initialized Terraform directory.
 func (m *Terraform) init(chdir string) *dagger.Container {
 	return m.container().
 		WithMountedCache(
@@ -81,7 +81,7 @@ func (m *Terraform) init(chdir string) *dagger.Container {
 		WithExec([]string{"terraform", fmt.Sprintf("-chdir=%s", chdir), "init"})
 }
 
-// Returns a container with in initialized Terraform directory (no backend)
+// Returns a container with an initialized Terraform directory (no backend).
 func (m *Terraform) initBackendFalse(chdir string) *dagger.Container {
 	return m.container().
 		WithMountedCache(
@@ -113,7 +113,7 @@ func (m *Terraform) plan(chdir string, varFile string) *dagger.Container {
 		})
 }
 
-// Returns the output of 'terraform -chdir={:arg chdir:} fmt -recursive -check'
+// Returns the output of 'terraform -chdir={:arg chdir:} fmt -recursive -check'.
 // +check
 func (m *Terraform) Fmt(
 	ctx context.Context,
@@ -133,7 +133,7 @@ func (m *Terraform) Fmt(
 	}
 }
 
-// Returns the output of 'terraform -chdir={:arg chdir:} validate'
+// Returns the output of 'terraform -chdir={:arg chdir:} validate'.
 func (m *Terraform) Validate(
 	ctx context.Context,
 	// Directory to run Terraform in. Passed as '-chdir={}'.
@@ -150,7 +150,7 @@ func (m *Terraform) Validate(
 	}
 }
 
-// Returns the output of 'terraform plan'
+// Returns the output of 'terraform plan'.
 func (m *Terraform) Plan(
 	ctx context.Context,
 	// Directory to run Terraform in. Passed as '-chdir={}'.
@@ -170,7 +170,7 @@ func (m *Terraform) Plan(
 	}
 }
 
-// Returns the output of 'terraform apply'
+// Returns the output of 'terraform apply'.
 func (m *Terraform) Apply(
 	ctx context.Context,
 	// Directory to run Terraform in. Passed as '-chdir={}'.
