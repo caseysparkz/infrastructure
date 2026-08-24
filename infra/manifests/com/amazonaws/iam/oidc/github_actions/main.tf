@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "this" {
 
     condition {
       test     = "StringLike"
-      values   = ["repo:caseysparkz/*:*"]
+      values   = ["repo:caseysparkz@45407933/monorepo@578333854"]
       variable = "token.actions.githubusercontent.com:sub"
     }
 
@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "this" {
 
 // Modules =====================================================================
 module "aws_resourcegroups_group" {
-  source              = "../../../../../modules/aws_resourcegroup_by_tagset"
+  source              = "../../../../../../modules/aws_resourcegroup_by_tagset"
   resource_group_name = "${local.namespace}-rg"
   common_tags         = local.common_tags
 }
