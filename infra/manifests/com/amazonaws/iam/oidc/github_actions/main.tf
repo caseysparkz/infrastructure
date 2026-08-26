@@ -34,14 +34,14 @@ data "aws_iam_policy_document" "this" {
 
     condition {
       test     = "StringLike"
-      values   = ["repo:caseysparkz@45407933/monorepo@578333854"]
       variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:caseysparkz@45407933/monorepo@578333854:*"]
     }
 
     condition {
       test     = "StringLike"
-      values   = ["sts.amazonaws.com"]
       variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
     }
   }
 }
