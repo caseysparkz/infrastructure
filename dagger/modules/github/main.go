@@ -66,20 +66,20 @@ func (m *Github) getPrCommitTypes(ctx context.Context) []string {
 		Stdout(ctx)
 
 	if stderr != nil {
-		return []string{""}
+		return []string{}
 	}
 
 	commitLog := strings.Split(stdout, "\n")
 
-	for k := range commitLog {
+	for k := range commitLog { // Parse commit log to map of valid types
 		for j := range validTypes {
-			if strings.HasPrefix(commitLog[k], validTypes[j]) {
+			if strings.HasPrefix(commitLog[k], validTypes[j]) { // Remove invalid commit types from log
 				commitTypes[validTypes[j]] = true
 			}
 		}
 	}
 
-	return slices.Collect(maps.Keys(commitTypes))
+	return slices.Collect(maps.Keys(commitTypes)) // Cast map to slice
 }
 
 // Returns a container with an initialized Git repository, and the GH CLI tool
@@ -112,13 +112,11 @@ func (m *Github) container() *dagger.Container {
 func (m *Github) LabelPr(ctx context.Context) (string, error) {
 	commitTypes := m.getPrCommitTypes(ctx)
 
-	stdout, stderr := m.container().
-		WithExec([]string{"gh", "pr", "edit", "--add-label", strings.Join(commitTypes, ",")}). // Label PR
-		Stdout(ctx)
-
-	if stderr != nil {
-		return "", stderr
+	if len(commitTypes) == 0 {
+		return "", nil
 	} else {
-		return stdout, nil
+		return m.container().
+			WithExec([]string{"gh", "pr", "edit", "--add-label", strings.Join(commitTypes, ",")}). // Label PR
+			Stdout(ctx)
 	}
 }
