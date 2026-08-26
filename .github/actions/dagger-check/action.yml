@@ -6,7 +6,7 @@ inputs:
     description: "Version of Dagger to run."
     type: "string"
     required: false
-    default: "0.21.7"
+    default: "latest"
   filter:
     description: "Filter for the dagger checks to run."
     type: "string"
