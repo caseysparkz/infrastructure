@@ -1,0 +1,29 @@
+---
+- name: "Enable zswap"
+  become: true
+  tags: ["zswap"]
+  ansible.builtin.copy: &defaults
+    dest: "/sys/module/zswap/parameters/enabled"
+    content: "Y\n"
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    force: true
+
+- name: "Set zswap threshold percentage"
+  become: true
+  tags: ["zswap"]
+  ansible.builtin.copy:
+    <<: *defaults
+    dest: "/sys/module/zswap/parameters/accept_threshold_percent"
+    content: "90\n"
+
+- name: "Enable zswap shrinker"
+  become: true
+  become_user: "root"
+  tags: ["zswap"]
+  ansible.builtin.copy:
+    <<: *defaults
+    dest: "/sys/module/zswap/parameters/shrinker_enabled"
+    content: "Y\n"
