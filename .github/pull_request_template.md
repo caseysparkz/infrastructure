@@ -9,16 +9,17 @@
 
 ## Changes Include
 
-* [ ] **feat.** Non-breaking change that adds functionality.
-* [ ] **fix.** Patches a bug in the codebase.
-* [ ] **docs.** Documentation update.
-* [ ] **chore.** Code maintenance such as incrementing dependency versions.
-* [ ] **ci.** Addition or editation of CI functions.
-* [ ] **test.** Addition or editation of tests.
-* [ ] **build.** Changes to the application build system.
-* [ ] **style.** Code style updates w/o change to code function itself.
-* [ ] **refactor.** Changes to code logic which do not change the code function.
-* [ ] **perf.** Changes that improve the performance of the application.
+* [ ] **build.** Changes that affect the build system or external dependencies.
+* [ ] **chore.** Other changes that don't modify src or test files.
+* [ ] **ci.** Changes to CI configuration files and scripts.
+* [ ] **docs.** Documentation-only changes.
+* [ ] **feat.** A new feature.
+* [ ] **fix.** A bug fix.
+* [ ] **perf.** A code change that improves performance.
+* [ ] **refactor.** A code change that neither fixes a bug nor adds a feature.
+* [ ] **revert.** Reverts a previous commit.
+* [ ] **style.** Changes that do not affect the meaning of the code.
+* [ ] **test.** Adding missing tests or correcting existing tests.
 
 ## Checklist
 

@@ -1,3 +1,3 @@
 # GitHub Action Configuration Files
 
-This directory contains config files supplementary to GitHub actions.
+This directory contains configuration files supplementary to GitHub actions.

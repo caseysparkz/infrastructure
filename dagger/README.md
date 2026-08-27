@@ -3,10 +3,6 @@
 I am currently in the process of migrating my CI platform to
 [Dagger](https://dagger.io/)
 
-## Developing Dagger Modules
-
-Refer to the [official documentation](https://docs.dagger.io/0.21.4/extending/modules/)
-
 ## Running Dagger in Kubernetes
 
 ### Prerequisites
