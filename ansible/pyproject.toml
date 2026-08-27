@@ -8,7 +8,7 @@ dependencies = ["ansible-core==2.21.1"]
 
 [project.optional-dependencies]
 test = ["ansible-lint==26.6.0"]
-all = ["infra-ansible[test]"]
+all = ["cs-ansible[test]"]
 
 [tool.setuptools.packages.find]
 where = []

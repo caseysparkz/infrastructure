@@ -12,6 +12,8 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
+    "cs-ansible[test]",
+
     "boto3-stubs==1.43.74",
     "botocore-stubs==1.43.67",
     "ipdb==0.13.13",
@@ -30,6 +32,8 @@ dev = [
     "ipython==9.16.1",
 ]
 all = [
+    "cs-ansible[all]",
+
     "cs-monorepo[dev]",
     "cs-monorepo[test]",
 ]
