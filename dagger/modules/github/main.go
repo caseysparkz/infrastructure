@@ -15,6 +15,19 @@ import (
 
 var mountPoint = "/mnt"
 var tmpDir = "/tmp"
+var validTypes = []string{ // Valid commit types
+	"build",
+	"chore",
+	"ci",
+	"docs",
+	"feat",
+	"fix",
+	"perf",
+	"refactor",
+	"revert",
+	"style",
+	"test",
+}
 
 func New(
 	// GitHub Token
@@ -46,19 +59,6 @@ type Github struct {
 
 // Get the intersection of two slices
 func (m *Github) getPrCommitTypes(ctx context.Context) []string {
-	validTypes := []string{ // Valid commit types
-		"build",
-		"chore",
-		"ci",
-		"docs",
-		"feat",
-		"fix",
-		"perf",
-		"refactor",
-		"revert",
-		"style",
-		"test",
-	}
 	commitTypes := make(map[string]bool)
 
 	var stdout, stderr = m.container().

@@ -9,7 +9,7 @@ on:
 env:
   AWS_DEFAULT_REGION: "us-west-2"
   DO_NOT_TRACK: "1"  # Disable Dagger telemetry
-  GITHUB_TOKEN: "${{ github.token }}"
+  DAGGER_VERSION: "latest"
 jobs:
   dagger_check:
     name: "dagger"
@@ -22,6 +22,7 @@ jobs:
       - name: "git checkout"
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
+          ref: "${{ github.event.pull_request.head.ref }}"  # Explicitly check out branch by name
           fetch-depth: 2
 
       - name: "git diff ${{ github.base.ref }} --name-only"
@@ -38,31 +39,51 @@ jobs:
           role-to-assume: "${{ secrets.AWS_ROLE_ARN }}"
           role-session-name: "gha-${{ github.run_id }}"
 
-      - name: "dagger check ansible:*"  # Ansible
+      - name: "export DAGGER_CLOUD_TOKEN=$(aws secretsmanager get-secret-value --secret-id dagger/api_token)"
+        uses: "aws-actions/aws-secretsmanager-get-secrets@2cb1a461cbd4865ac4299648312e4704c646cd53"  # v3.0.1
+        with:
+          secret-ids: "DAGGER_CLOUD_TOKEN, dagger/api_token"
+          name-transformation: "none"
+          parse-json-secrets: false
+          auto-select-family-attempt-timeout: 500
+
+      - name: "dagger check ansible:*"
         if: "${{ steps.changed_files.outputs.ansible_any_changed == 'true' }}"
-        uses: "./.github/actions/dagger-check"
+        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
         with:
           filter: "ansible:*"
+          version: "${{ env.DAGGER_VERSION }}"
+          cloud-token: "${{ env.DAGGER_CLOUD_TOKEN }}"
 
-      - name: "dagger check github:*"  # GitHub
-        uses: "./.github/actions/dagger-check"
+      - name: "dagger check github:*"
+        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
+        env:
+          GITHUB_TOKEN: "${{ github.token }}"
         with:
           filter: "github:*"
+          version: "${{ env.DAGGER_VERSION }}"
+          cloud-token: "${{ env.DAGGER_CLOUD_TOKEN }}"
 
-      - name: "dagger check python:*"  # Python
+      - name: "dagger check python:*"
         if: "${{ steps.changed_files.outputs.python_any_changed == 'true' }}"
-        uses: "./.github/actions/dagger-check"
+        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
         with:
           filter: "python:*"
+          version: "${{ env.DAGGER_VERSION }}"
+          cloud-token: "${{ env.DAGGER_CLOUD_TOKEN }}"
 
-      - name: "dagger check terraform:*"  # Terraform
+      - name: "dagger check terraform:*"
         if: "${{ steps.changed_files.outputs.terraform_any_changed == 'true' }}"
-        uses: "./.github/actions/dagger-check"
+        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
         with:
           filter: "terraform:*"
+          version: "${{ env.DAGGER_VERSION }}"
+          cloud-token: "${{ env.DAGGER_CLOUD_TOKEN }}"
 
-      - name: "dagger check yaml:*"  # YAML
+      - name: "dagger check yaml:*"
         if: "${{ steps.changed_files.outputs.yaml_any_changed == 'true' }}"
-        uses: "./.github/actions/dagger-check"
+        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
         with:
           filter: "yaml:*"
+          version: "${{ env.DAGGER_VERSION }}"
+          cloud-token: "${{ env.DAGGER_CLOUD_TOKEN }}"
