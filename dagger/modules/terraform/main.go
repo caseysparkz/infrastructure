@@ -27,7 +27,7 @@ func New(
 	// Version of Terraform to run
 	// +optional
 	// +default="1.15.8"
-	tfVersion string,
+	terraformVersion string,
 	// Repository root dir.
 	// +optional
 	// +ignore=["*cache*",".coverage",".env",".git*",".terraform",".venv","build","dist","node_modules","*.log"]
@@ -39,9 +39,8 @@ func New(
 		AwsAccessKeyId:     awsAccessKeyId,
 		AwsSecretAccessKey: awsSecretAccessKey,
 		AwsSessionToken:    awsSessionToken,
-		TerraformVersion:   tfVersion,
+		Version:            terraformVersion,
 		Source:             source,
-		Image:              "docker.io/hashicorp/terraform",
 		Planfile:           fmt.Sprintf("%s/out.tfplan", tmpDir),
 	}
 }
@@ -51,7 +50,7 @@ type Terraform struct {
 	AwsAccessKeyId     *dagger.Secret
 	AwsSecretAccessKey *dagger.Secret
 	AwsSessionToken    *dagger.Secret
-	TerraformVersion   string
+	Version            string
 	Source             *dagger.Directory
 	Image              string
 	Planfile           string
@@ -60,7 +59,7 @@ type Terraform struct {
 // Returns a container with an initialized Terraform directory.
 func (m *Terraform) container() *dagger.Container {
 	return dag.Container().
-		From(fmt.Sprintf("%s:%s", m.Image, m.TerraformVersion)).
+		From(fmt.Sprintf("docker.io/hashicorp/terraform:%s", m.Version)).
 		WithMountedDirectory(mountPoint, m.Source)
 }
 
@@ -184,7 +183,7 @@ func (m *Terraform) Apply(
 		Stdout(ctx)
 
 	if err != nil {
-		return "", fmt.Errorf("Error: %s", err)
+		return "", fmt.Errorf("error: %s", err)
 	} else {
 		return stdout, nil
 	}

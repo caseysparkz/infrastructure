@@ -7,8 +7,6 @@ import (
 	"dagger/yaml/internal/dagger"
 )
 
-var mountPoint = "/mnt"
-
 func New(
 	// Project source directory
 	// +optional

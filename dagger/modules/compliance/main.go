@@ -29,31 +29,35 @@ func New(
 	source *dagger.Directory,
 ) *Compliance {
 	return &Compliance{
-		GrypeImage: fmt.Sprintf("docker.io/anchore/grype:v%s", grypeVersion),
-		SyftImage:  fmt.Sprintf("docker.io/anchore/syft:v%s", syftVersion),
-		Source:     source,
+		GrypeVersion: grypeVersion,
+		SyftVersion:  syftVersion,
+		Source:       source,
 	}
 }
 
 type Compliance struct {
-	GrypeImage string
-	SyftImage  string
-	Source     *dagger.Directory
+	GrypeVersion string
+	SyftVersion  string
+	Source       *dagger.Directory
 }
 
 // Runs Syft inside dagger to generate a software bill of materials (SBOM)
 func (m *Compliance) sbomFile() *dagger.File {
 	syftCacheDir := "%s/.cache/syft"
+	syftImage := fmt.Sprintf("docker.io/anchore/syft:v%s", m.SyftVersion)
 
 	return dag.Container().
-		From(m.SyftImage).
+		From(syftImage).
 		WithMountedDirectory(mountPoint, m.Source).
-		WithMountedCache(syftCacheDir, dag.CacheVolume(m.SyftImage)).
+		WithMountedCache(syftCacheDir, dag.CacheVolume(syftImage)).
 		WithEnvVariable("SYFT_CACHE_DIR", syftCacheDir).
 		WithWorkdir(mountPoint).
 		WithExec([]string{"/syft", "scan", "."}).
 		File("./spdx.json")
 }
+
+// TODO: implement
+// func (m *Compliance) Grype(ctx context.Context) (string, error) {}
 
 // Returns the contents of the Syft (SPDX) SBOM (JSON)
 func (m *Compliance) Sbom(ctx context.Context) (string, error) {

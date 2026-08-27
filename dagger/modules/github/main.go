@@ -14,7 +14,6 @@ import (
 )
 
 var mountPoint = "/mnt"
-var tmpDir = "/tmp"
 var validTypes = []string{ // Valid commit types
 	"build",
 	"chore",
@@ -45,7 +44,6 @@ func New(
 	return &Github{
 		GithubToken:  githubToken,
 		GhCliVersion: ghCliVersion,
-		Image:        "debian:latest",
 		Source:       source,
 	}
 }
@@ -53,7 +51,6 @@ func New(
 type Github struct {
 	GithubToken  *dagger.Secret
 	GhCliVersion string
-	Image        string
 	Source       *dagger.Directory
 }
 
@@ -92,7 +89,7 @@ func (m *Github) container() *dagger.Container {
 	)
 
 	return dag.Container().
-		From(m.Image).
+		From("debian:latest").
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
 		WithSecretVariable("GH_TOKEN", m.GithubToken).
