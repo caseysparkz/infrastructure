@@ -113,14 +113,14 @@ sha256 = "ec74791a194b25dfb3bf86b82bb60706523c9579b547bedeaf2a5f6dccca7f52"
 
 [[packages]]
 name = "botocore"
-version = "1.43.81"
+version = "1.43.82"
 
 [[packages.wheels]]
-name = "botocore-1.43.81-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/a7/bc/f72141175335fae251e625cdc6758328df0f6c1244e4fcb7880429223628/botocore-1.43.81-py3-none-any.whl"
+name = "botocore-1.43.82-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/46/70/78cd83cf91d954846fe034edac415a700fd919782a003f1c71b779d06cfd/botocore-1.43.82-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "a5d343674b63a619b7f1f3caef4eedb403500c7a8b95a9e7d8cac98b95501adb"
+sha256 = "97b3e89061decc91e7745d726dae595cbe2053894611c49ea91d6fdcb2ecc36b"
 
 [[packages]]
 name = "botocore-stubs"
@@ -488,14 +488,14 @@ sha256 = "3817f1e39721ca833579b921e53e3b68547ace6a34d848c9486fbb5905808de9"
 
 [[packages]]
 name = "msgpack"
-version = "1.2.1"
+version = "1.2.2"
 
 [[packages.wheels]]
-name = "msgpack-1.2.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
-url = "https://files.pythonhosted.org/packages/79/d3/36a46a8ed992b781acbc05928bd5bee3c810cb0c3563bf81a7b0c04a1a76/msgpack-1.2.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+name = "msgpack-1.2.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+url = "https://files.pythonhosted.org/packages/6e/d3/6592e4064619b04f2dd0054c5fa13e37e3d55eb26044483d871fadb2f46b/msgpack-1.2.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
 
 [packages.wheels.hashes]
-sha256 = "787c9bebb5833e8f6fc8abca3c0597683d8d87f56a8842b6b89c75a5f3176e2d"
+sha256 = "d24b38a825bcca41bb956de50eb98451ef291304a8607fad99e619043d3e79b9"
 
 [[packages]]
 name = "mypy"
@@ -620,14 +620,14 @@ sha256 = "4659bc2a667783e7a15d190f6fccf8b2486685b6dba4c19c3876314769c57526"
 
 [[packages]]
 name = "platformdirs"
-version = "4.11.4"
+version = "4.11.5"
 
 [[packages.wheels]]
-name = "platformdirs-4.11.4-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/28/be/0ff05fcd2938fb58ad9219bd54135968342d214737e012d62d43f06a2dd6/platformdirs-4.11.4-py3-none-any.whl"
+name = "platformdirs-4.11.5-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/c7/12/6f3fcd5067a9cbf4f8664b32957973498da8b083455203c8d9cab83a725c/platformdirs-4.11.5-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "e34ff91a24bcddc6d939b878bdf3f5c437c9c46fe9e212b1bf455fdf1ee57586"
+sha256 = "89f8d42695853b89c7170bd49bc3dc593f98a71e695ede88e06a3b247bc4563b"
 
 [[packages]]
 name = "pluggy"
