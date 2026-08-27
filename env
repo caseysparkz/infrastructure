@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# Author:       Casey Sparks
+# Date:         August 26, 2026
+# Description:  Set required environment variables.
+# Usage:        `source ./env`
+# To do:        Write in error handling.
+
+preflight_checks() {
+    local CHECKS_FAILED='false'
+
+    if which aws > /dev/null 2>&1; then  # Check AWS CLI installed
+        if ! aws sts get-caller-identity > /dev/null 2>&1; then
+            printf 'Logging in to AWS.\n'
+            aws sso login  # Log in to AWS if not logged in
+        fi
+    else
+        printf 'AWS CLI not installed.\n'
+
+        CHECKS_FAILED='true'
+    fi
+
+    if which gh > /dev/null 2>&1; then  # Check AWS CLI installed
+        if ! gh auth token > /dev/null 2>&1; then
+            printf 'Logging in to AWS.\n'
+            gh auth login  # Log in to GitHub if not logged in
+        fi
+    else
+        printf 'GitHub CLI not installed.\n'
+
+        CHECKS_FAILED='true'
+    fi
+
+    if "${CHECKS_FAILED}"; then  # Graceful exit
+        printf 'Exiting.\n' >&2 && exit 1
+    fi
+}
+
+load_aws() {
+    printf 'Setting AWS environment variables.\n'
+    printf '* AWS_ACCESS_KEY_ID\n'
+    printf '* AWS_SECRET_ACCESS_KEY\n'
+    printf '* AWS_SESSION_TOKEN\n'
+    printf '* AWS_CREDENTIAL_EXPIRATION\n'
+
+    unset AWS_ACCESS_KEY_ID
+    unset AWS_SECRET_ACCESS_KEY
+    unset AWS_SESSION_TOKEN
+    unset AWS_CREDENTIAL_EXPIRATION
+
+    eval "$(aws configure export-credentials --format env)"
+
+    export AWS_ACCESS_KEY_ID
+    export AWS_SECRET_ACCESS_KEY
+    export AWS_SESSION_TOKEN
+    export AWS_CREDENTIAL_EXPIRATION
+
+    printf 'Done.\n\n'
+}
+
+load_github() {
+    printf 'Setting GitHub environment variables.\n'
+    printf '* GITHUB_TOKEN\n'
+
+    unset GITHUB_TOKEN
+
+    GITHUB_TOKEN="$(gh auth token)"
+
+    export GITHUB_TOKEN
+
+    printf 'Done.\n\n'
+}
+
+preflight_checks
+load_aws
+load_github
+
+printf 'Environment is ready.\n'
