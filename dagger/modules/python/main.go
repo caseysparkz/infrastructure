@@ -10,7 +10,6 @@ import (
 	"fmt"
 )
 
-var image = "docker.io/library/python"
 var mountPoint = "/mnt"
 
 func New(
@@ -33,7 +32,7 @@ func New(
 	source *dagger.Directory,
 ) *Python {
 	return &Python{
-		Image:   fmt.Sprintf("%s:%s-slim", image, pythonVersion),
+		Version: pythonVersion,
 		VenvDir: fmt.Sprintf("%s/.venv", mountPoint),
 		Path:    pyPath,
 		Source:  source,
@@ -42,7 +41,7 @@ func New(
 }
 
 type Python struct {
-	Image   string
+	Version string
 	VenvDir string
 	Path    string
 	Source  *dagger.Directory
@@ -52,7 +51,7 @@ type Python struct {
 // Returns a container with pip installed and the repo as the pwd.
 func (m *Python) container() *dagger.Container {
 	return dag.Container().
-		From(m.Image).
+		From(fmt.Sprintf("docker.io/library/python:%s-slim", m.Version)).
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
 		WithExec([]string{"python", "-m", "ensurepip"}).
@@ -62,7 +61,10 @@ func (m *Python) container() *dagger.Container {
 // Returns a container with an initialized and empty virtual environment.
 func (m *Python) Venv() *dagger.Container {
 	return m.container().
-		WithMountedCache(m.VenvDir, dag.CacheVolume(m.Image)).
+		WithMountedCache(
+			m.VenvDir,
+			dag.CacheVolume(fmt.Sprintf("docker.io/library/python:%s-slim", m.Version)),
+		).
 		WithExec([]string{"python", "-m", "venv", m.VenvDir}).
 		WithEnvVariable("VIRTUAL_ENV", m.VenvDir).
 		WithEnvVariable("PATH", "${VIRTUAL_ENV}/bin:${PATH}", dagger.ContainerWithEnvVariableOpts{Expand: true})
@@ -141,9 +143,9 @@ func (m *Python) Pylock(ctx context.Context) (string, error) {
 	posthash, _ := m.PipInstall().WithExec([]string{"pip", "lock", m.Pkg}).File(lockfile).Digest(ctx)
 
 	if hashError != nil {
-		return "", fmt.Errorf("Could not hash pylock.toml: %s", hashError)
+		return "", fmt.Errorf("could not hash pylock.toml: %s", hashError)
 	} else if prehash != posthash {
-		return "", fmt.Errorf("Hashes do not match. pylock.toml has not been updated.")
+		return "", fmt.Errorf("hashes do not match: pylock.toml has not been updated")
 	} else {
 		return "pylock.toml is up to date", nil
 	}

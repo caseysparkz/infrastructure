@@ -36,10 +36,9 @@ func (m *Docker) Hadolint(
 	// +default="2.14.0"
 	hadolintVersion string,
 ) (string, error) {
-	image := fmt.Sprintf("%s:v%s", "ghcr.io/hadolint/hadolint", hadolintVersion)
 
 	return dag.Container().
-		From(image).
+		From(fmt.Sprintf("ghcr.io/hadolint/hadolint:v%s", hadolintVersion)).
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
 		WithExec(append([]string{"hadolint", "--no-color"}, file...)).
@@ -56,10 +55,9 @@ func (m *Docker) ComposeConfig(
 	// +default="latest"
 	composeVersion string,
 ) (string, error) {
-	image := fmt.Sprintf("%s:%s", "docker.io/docker/compose", composeVersion)
 
 	return dag.Container().
-		From(image).
+		From(fmt.Sprintf("docker.io/docker/compose:%s", composeVersion)).
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
 		WithExec([]string{"docker", "compose", file}).

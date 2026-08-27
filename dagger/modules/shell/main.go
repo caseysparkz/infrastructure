@@ -8,7 +8,6 @@ import (
 	"fmt"
 )
 
-var image = "docker.io/koalaman/shellcheck"
 var mountPoint = "/mnt"
 
 func New(
@@ -40,9 +39,9 @@ func (m *Shell) Lint(
 	file []string,
 ) (string, error) {
 	return dag.Container().
-		From(fmt.Sprintf("%s:v%s", image, m.Version)).
+		From(fmt.Sprintf("docker.io/koalaman/shellcheck:v%s", m.Version)).
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
-		WithExec(append([]string{"shellcheck"}, files...)).
+		WithExec(append([]string{"shellcheck"}, file...)).
 		Stdout(ctx)
 }
