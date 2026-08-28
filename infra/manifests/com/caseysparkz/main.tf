@@ -191,3 +191,9 @@ output "aws_kms_key_arn" {
   value       = aws_kms_key.this.arn
   sensitive   = false
 }
+
+output "cloudflare_zone_id" {
+  description = "ID of the Cloudflare root zone."
+  value       = local.cloudflare_zone_id
+  sensitive   = false
+}
