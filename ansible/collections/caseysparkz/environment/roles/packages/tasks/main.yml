@@ -1,3 +1,40 @@
 ---
-- name: "Install system packages"
-  ansible.builtin.import_tasks: "install.yml"
+- name: "Install system packages [apt]"
+  become: true
+  when: "ansible_facts.os_family == 'Debian'"
+  tags: ["apt"]
+  ansible.builtin.apt:
+    pkg: "{{ packages_apt }}"
+    state: "present"
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: "Stat homebrew"
+  when: &macos "ansible_facts.os_family == 'Darwin'"
+  tags: ["brew"]
+  register: "homebrew"
+  ansible.builtin.stat:
+    path: &homebrew_dir "/opt/homebrew/"
+
+- name: "Dowload Homebrew installation script"
+  when: &needs_brew
+    - *macos
+    - "not homebrew.stat.exists"
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/Homebrew/install/150c69df1e54b0b74c9fcca5a201410a2300816a/install.sh"
+    dest: &install_script "/tmp/install_homebrew.sh"
+    checksum: "sha256:12479a24be3f5307eecac7cde670fad7118640f031229e964f544b1367b52a41"
+    mode: 755
+
+- name: "Install Homebrew"
+  when: *needs_brew
+  ansible.builtin.shell:
+    cmd: *install_script
+    creates: *homebrew_dir
+
+- name: "Install system packages [brew]"
+  when: "ansible_facts.os_family == 'Darwin'"
+  tags: ["brew"]
+  community.general.homebrew:
+    name: "{{ packages_homebrew }}"
+    state: "present"
