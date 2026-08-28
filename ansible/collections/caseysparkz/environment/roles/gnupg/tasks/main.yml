@@ -24,7 +24,6 @@
       - "gnupg"
       - "gnupg-pkcs11-scd"
     state: "present"
-    update_homebrew: true
 
 - name: "Create ~/.gnupg"
   tags: ["gnupg"]

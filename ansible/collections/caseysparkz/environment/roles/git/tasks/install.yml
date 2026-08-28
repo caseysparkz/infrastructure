@@ -24,4 +24,3 @@
   community.general.homebrew:
     name: *packages
     state: "present"
-    update_homebrew: true
