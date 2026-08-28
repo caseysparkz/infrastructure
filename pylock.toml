@@ -477,14 +477,14 @@ sha256 = "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
 
 [[packages]]
 name = "moto"
-version = "5.2.2"
+version = "5.2.3"
 
 [[packages.wheels]]
-name = "moto-5.2.2-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/c1/45/13cff46f4f617a6e97e1d497d75abd913e250bb4c823a4985668c6e593e4/moto-5.2.2-py3-none-any.whl"
+name = "moto-5.2.3-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/58/80/ee7ace7a49bd525455497fa2ff198111877d6f93b908b657adeb2cf057a4/moto-5.2.3-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "3817f1e39721ca833579b921e53e3b68547ace6a34d848c9486fbb5905808de9"
+sha256 = "5ec31b3cdbb383a19d46030157bd82aaaa7a9cc5f564200f995663d347bd4728"
 
 [[packages]]
 name = "msgpack"
