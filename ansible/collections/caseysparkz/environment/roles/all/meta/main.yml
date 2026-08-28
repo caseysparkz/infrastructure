@@ -5,17 +5,23 @@ galaxy_info:
   issue_tracker_url: "https://github.com/caseysparkz/monorepo/issues"
   license: "GPL-2.0-or-later"
   min_ansible_version: "2.17"
-  galaxy_tags: ["linux"]
+  galaxy_tags:
+    - "linux"
+    - "macos"
   platforms:
     - name: "Debian"
-      versions: ["bookworm"]
+      versions:
+        - "bookworm"
+        - "trixie"
+    - name: "MacOS"
+      vesions: ["all"]
 dependencies:
   - role: "caseysparkz.environment.bash"
   - role: "caseysparkz.environment.dotfiles"
   - role: "caseysparkz.environment.filesystem"
+  - role: "caseysparkz.environment.packages"  # Provides `brew`. Needs to appear before other packages.
   - role: "caseysparkz.environment.git"
   - role: "caseysparkz.environment.gnupg"
-  - role: "caseysparkz.environment.packages"
   - role: "caseysparkz.environment.screen"
   - role: "caseysparkz.environment.scripts"
   - role: "caseysparkz.environment.ssh"
