@@ -1,0 +1,22 @@
+# Author:       Casey Sparks
+# Date:         August 27, 2026
+# Description:  Shellcheck image
+---
+services:
+  debian:
+    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/shellcheck:0.10.0"
+    build:
+      context: "."
+      dockerfile: "shellcheck.Dockerfile"
+      platforms: ["linux/amd64"]
+      network: "host"
+      labels:
+        com.caseysparkz.registry: "770088062852.dkr.ecr.us-west-2.amazonaws.com"
+        com.caseysparkz.name: "shellcheck"
+        com.caseysparkz.version: "0.10.0"
+        com.caseysparkz.os.name: "scratch"
+        com.caseysparkz.os.version: ""
+        com.caseysparkz.architecture: "amd64"
+        com.caseysparkz.description: "Shellcheck image."
+        com.caseysparkz.maintainer.author.name: "Casey Sparks"
+        com.caseysparkz.maintainer.author.email: "docker@caseysparkz.com"

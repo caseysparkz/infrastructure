@@ -5,37 +5,17 @@
 # Usage:        `source ./env`
 # To do:        Write in error handling.
 
-preflight_checks() {
-    local CHECKS_FAILED='false'
-
+load_aws() {
     if which aws > /dev/null 2>&1; then  # Check AWS CLI installed
         if ! aws sts get-caller-identity > /dev/null 2>&1; then
             printf 'Logging in to AWS.\n'
-            aws sso login  # Log in to AWS if not logged in
+            aws sso login
         fi
     else
         printf 'AWS CLI not installed.\n'
-
-        CHECKS_FAILED='true'
+        exit 1
     fi
 
-    if which gh > /dev/null 2>&1; then  # Check AWS CLI installed
-        if ! gh auth token > /dev/null 2>&1; then
-            printf 'Logging in to AWS.\n'
-            gh auth login  # Log in to GitHub if not logged in
-        fi
-    else
-        printf 'GitHub CLI not installed.\n'
-
-        CHECKS_FAILED='true'
-    fi
-
-    if "${CHECKS_FAILED}"; then  # Graceful exit
-        printf 'Exiting.\n' >&2 && exit 1
-    fi
-}
-
-load_aws() {
     printf 'Setting AWS environment variables.\n'
     printf '* AWS_ACCESS_KEY_ID\n'
     printf '* AWS_SECRET_ACCESS_KEY\n'
@@ -58,6 +38,16 @@ load_aws() {
 }
 
 load_github() {
+    if which gh > /dev/null 2>&1; then  # Check AWS CLI installed
+        if ! gh auth token > /dev/null 2>&1; then
+            printf 'Logging in to GitHub CLI.\n'
+            gh auth login
+        fi
+    else
+        printf 'GitHub CLI not installed.\n'
+        exit 1
+    fi
+
     printf 'Setting GitHub environment variables.\n'
     printf '* GITHUB_TOKEN\n'
 
@@ -70,8 +60,49 @@ load_github() {
     printf 'Done.\n\n'
 }
 
-preflight_checks
+setup_kubernetes_environment() {
+    if ! which helm > /dev/null 2>&1; then
+        printf 'Helm not installed.\n'
+        exit 1
+    fi
+
+    if ! which kubectl > /dev/null 2>&1; then
+        printf 'kubectl not installed.\n'
+        exit 1
+    fi
+
+    local DAGGER_ENGINE_POD_NAME
+
+    printf 'Setting up dagger namespace.\n'
+
+    helm upgrade                                                            \
+        --install                                                           \
+        --namespace=dagger                                                  \
+        --create-namespace                                                  \
+        dagger                                                              \
+        oci://registry.dagger.io/dagger-helm
+
+    kubectl wait                                                            \
+        --for condition=Ready                                               \
+        --timeout=60s                                                       \
+        pod                                                                 \
+        --selector=name=dagger-dagger-helm-engine                           \
+        --namespace=dagger
+
+    DAGGER_ENGINE_POD_NAME="$(kubectl get pod                               \
+        --selector=name=dagger-dagger-helm-engine                           \
+        --namespace=dagger                                                  \
+        --output=jsonpath='{.items[0].metadata.name}'                       \
+    )"
+
+    _EXPERIMENTAL_DAGGER_RUNNER_HOST="kube-pod://${DAGGER_ENGINE_POD_NAME}?namespace=dagger"
+
+    export _EXPERIMENTAL_DAGGER_RUNNER_HOST
+}
+
+
 load_aws
 load_github
+setup_kubernetes_environment
 
 printf 'Environment is ready.\n'

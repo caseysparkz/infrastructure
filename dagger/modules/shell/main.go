@@ -39,7 +39,7 @@ func (m *Shell) Lint(
 	file []string,
 ) (string, error) {
 	return dag.Container().
-		From(fmt.Sprintf("docker.io/koalaman/shellcheck:v%s", m.Version)).
+		From(fmt.Sprintf("770088062852.dkr.ecr.us-west-2.amazonaws.com/shellcheck:%s", m.Version)).
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
 		WithExec(append([]string{"shellcheck"}, file...)).
