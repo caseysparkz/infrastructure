@@ -52,14 +52,14 @@ jobs:
 
       - name: "dagger check ansible:*"
         if: "${{ steps.changed_files.outputs.ansible_any_changed == 'true' }}"
-        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
+        uses: "dagger/checks@64525befa1c36dd55577dae083df5c8968d9325a"  # v1.1.0
         with:
           filter: "ansible:*"
           version: "${{ env.DAGGER_VERSION }}"
           cloud-token: "${{ env.DAGGER_CLOUD_TOKEN }}"
 
       - name: "dagger check github:*"
-        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
+        uses: "dagger/checks@64525befa1c36dd55577dae083df5c8968d9325a"  # v1.1.0
         env:
           GITHUB_TOKEN: "${{ github.token }}"
         with:
@@ -69,7 +69,7 @@ jobs:
 
       - name: "dagger check python:*"
         if: "${{ steps.changed_files.outputs.python_any_changed == 'true' }}"
-        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
+        uses: "dagger/checks@64525befa1c36dd55577dae083df5c8968d9325a"  # v1.1.0
         with:
           filter: "python:*"
           version: "${{ env.DAGGER_VERSION }}"
@@ -77,7 +77,7 @@ jobs:
 
       - name: "dagger check terraform:*"
         if: "${{ steps.changed_files.outputs.terraform_any_changed == 'true' }}"
-        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
+        uses: "dagger/checks@64525befa1c36dd55577dae083df5c8968d9325a"  # v1.1.0
         with:
           filter: "terraform:*"
           version: "${{ env.DAGGER_VERSION }}"
@@ -85,7 +85,7 @@ jobs:
 
       - name: "dagger check yaml:*"
         if: "${{ steps.changed_files.outputs.yaml_any_changed == 'true' }}"
-        uses: "dagger/checks@765b9ae2bb9b17fa7b1214958c7589a84d1e6ed0"  # v1.0.0
+        uses: "dagger/checks@64525befa1c36dd55577dae083df5c8968d9325a"  # v1.1.0
         with:
           filter: "yaml:*"
           version: "${{ env.DAGGER_VERSION }}"
