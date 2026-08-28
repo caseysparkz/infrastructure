@@ -7,9 +7,10 @@ locals {
   project        = "caseysparkz"
   application    = "ecr"
   namespace      = "${local.environment}-${local.project}-${local.application}"
+  domain         = "ecr.${data.terraform_remote_state.this.outputs.root_domain}"
   common_tags = {
     Application = local.application
-    Domain      = "ecr.${var.root_domain}"
+    Domain      = local.domain
     Environment = local.environment
     ManagedBy   = "terraform"
     Namespace   = local.namespace
