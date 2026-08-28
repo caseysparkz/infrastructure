@@ -8,7 +8,9 @@ galaxy_info:
   galaxy_tags: ["security"]
   platforms:
     - name: "Debian"
-      versions: ["bookworm"]
+      versions:
+        - "bookworm"
+        - "trixie"
 dependencies:
   - role: "caseysparkz.security.auditd"
   # role: "caseysparkz.security.defaultdeny"
