@@ -10,7 +10,9 @@ galaxy_info:
     - "performance"
   platforms:
     - name: "Debian"
-      versions: ["bookworm"]
+      versions:
+        - "bookworm"
+        - "trixie"
 dependencies:
   - role: "caseysparkz.performance.filesystem"
   - role: "caseysparkz.performance.ioscheduler"
