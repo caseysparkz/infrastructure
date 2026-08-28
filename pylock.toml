@@ -102,14 +102,14 @@ sha256 = "d7f6a921efbda61ed787b403df8b64a95bc66e66299e9772fc40c235c28a5bde"
 
 [[packages]]
 name = "boto3-stubs"
-version = "1.43.74"
+version = "1.43.80"
 
 [[packages.wheels]]
-name = "boto3_stubs-1.43.74-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/b5/88/64ed0ae4d46c715fec6d3f6ecf6b92a7883ca2009532d871e67e02a1a0af/boto3_stubs-1.43.74-py3-none-any.whl"
+name = "boto3_stubs-1.43.80-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/2b/02/c17d4f8105c08927b6eec1a4679ba7b6813377f2e8f50966b48c530d1b5d/boto3_stubs-1.43.80-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "ec74791a194b25dfb3bf86b82bb60706523c9579b547bedeaf2a5f6dccca7f52"
+sha256 = "d0a2d98cafd8828a1cab6e348a8414d0dc665f46a3cc798679746e8c040409ef"
 
 [[packages]]
 name = "botocore"
@@ -620,14 +620,14 @@ sha256 = "4659bc2a667783e7a15d190f6fccf8b2486685b6dba4c19c3876314769c57526"
 
 [[packages]]
 name = "platformdirs"
-version = "4.11.5"
+version = "4.11.6"
 
 [[packages.wheels]]
-name = "platformdirs-4.11.5-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/c7/12/6f3fcd5067a9cbf4f8664b32957973498da8b083455203c8d9cab83a725c/platformdirs-4.11.5-py3-none-any.whl"
+name = "platformdirs-4.11.6-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/4e/d8/2784c6eabb991b5b7494ff9e9888c74a0a72ad613c3ec5adbfcecc0724c7/platformdirs-4.11.6-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "89f8d42695853b89c7170bd49bc3dc593f98a71e695ede88e06a3b247bc4563b"
+sha256 = "b22d992e863bc651c26b16242041c7979db6e3286e548f9a76cc91238fac599e"
 
 [[packages]]
 name = "pluggy"
