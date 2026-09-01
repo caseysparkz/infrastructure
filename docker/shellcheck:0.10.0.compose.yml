@@ -4,14 +4,14 @@
 ---
 services:
   debian:
-    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/shellcheck:0.10.0"
+    image: "ecr.caseysparkz.com/shellcheck:0.10.0"
     build:
       context: "."
       dockerfile: "shellcheck.Dockerfile"
       platforms: ["linux/amd64"]
       network: "host"
       labels:
-        com.caseysparkz.registry: "770088062852.dkr.ecr.us-west-2.amazonaws.com"
+        com.caseysparkz.registry: "ecr.caseysparkz.com"
         com.caseysparkz.name: "shellcheck"
         com.caseysparkz.version: "0.10.0"
         com.caseysparkz.os.name: "scratch"

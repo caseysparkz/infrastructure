@@ -1,4 +1,4 @@
-FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/debian13:0.0.1
+FROM ecr.caseysparkz.com/debian13:0.0.1
 
 LABEL contact="docker@caseysparkz.com"
 LABEL maintainer="docker@caseysparkz.com"

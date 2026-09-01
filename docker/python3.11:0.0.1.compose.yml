@@ -4,14 +4,14 @@
 ---
 services:
   python3:
-    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/python3.11:0.0.1"
+    image: "ecr.caseysparkz.com/python3.11:0.0.1"
     build:
       context: "."
       dockerfile: "python3.11.Dockerfile"
       platforms: ["linux/amd64"]
       network: "host"
       labels:
-        com.caseysparkz.registry: "770088062852.dkr.ecr.us-west-2.amazonaws.com"
+        com.caseysparkz.registry: "ecr.caseysparkz.com"
         com.caseysparkz.name: "python3.11"
         com.caseysparkz.version: "0.0.1"
         com.caseysparkz.os.name: "debian"

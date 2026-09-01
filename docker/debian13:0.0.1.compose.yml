@@ -4,14 +4,14 @@
 ---
 services:
   debian:
-    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/debian13:0.0.1"
+    image: "ecr.caseysparkz.com/debian13:0.0.1"
     build:
       context: "."
       dockerfile: "debian13.Dockerfile"
       platforms: ["linux/amd64"]
       network: "host"
       labels:
-        com.caseysparkz.registry: "770088062852.dkr.ecr.us-west-2.amazonaws.com"
+        com.caseysparkz.registry: "ecr.caseysparkz.com"
         com.caseysparkz.name: "debian13"
         com.caseysparkz.version: "0.0.1"
         com.caseysparkz.os.name: "debian"

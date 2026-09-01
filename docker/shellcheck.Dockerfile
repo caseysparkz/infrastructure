@@ -1,5 +1,5 @@
 # INTERMEDIATE =================================================================
-FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/debian13:0.0.1 AS intermediate
+FROM ecr.caseysparkz.com/debian13:0.0.1 AS intermediate
 
 # hadolint ignore=DL3002
 USER root
