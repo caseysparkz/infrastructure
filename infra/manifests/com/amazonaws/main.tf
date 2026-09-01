@@ -71,4 +71,9 @@ resource "aws_organizations_organization" "this" {
 
 resource "aws_ebs_encryption_by_default" "this" { enabled = true } // Require EBS encryption
 
-resource "aws_ec2_instance_metadata_defaults" "this" { http_tokens = "required" } // Require IMDSv2
+resource "aws_ec2_instance_metadata_defaults" "this" {
+  http_tokens                 = "required" // Require IMDSv2
+  http_endpoint               = "enabled"
+  http_put_response_hop_limit = 16
+  instance_metadata_tags      = "enabled"
+}
