@@ -13,8 +13,6 @@ galaxy_info:
       versions:
         - "bookworm"
         - "trixie"
-    - name: "MacOS"
-      vesions: ["all"]
 dependencies:
   - role: "caseysparkz.environment.bash"
   - role: "caseysparkz.environment.dotfiles"
