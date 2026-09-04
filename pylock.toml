@@ -36,14 +36,14 @@ sha256 = "94e58501cc7fafaa505dd9daea3bddb4affa6e8efe8217323c06d7194a312f57"
 
 [[packages]]
 name = "ast-serialize"
-version = "0.8.0"
+version = "0.9.0"
 
 [[packages.wheels]]
-name = "ast_serialize-0.8.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-url = "https://files.pythonhosted.org/packages/bf/32/7f77ea87fa0836daab706ed5cb7f903bb25fa26a77439011aee626af11d8/ast_serialize-0.8.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+name = "ast_serialize-0.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+url = "https://files.pythonhosted.org/packages/aa/e2/750a0b136bb02ff8e4a17d65a3a78cd478ee50724704df8215797a226ba3/ast_serialize-0.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 
 [packages.wheels.hashes]
-sha256 = "252f883290d1cdb728eb7fe1d9a7221b88af5a329aae0bc91ddee4dafb820331"
+sha256 = "1514f4a39704e2e815f9fc675fc13f19f694f212086b520110840782cf3c5295"
 
 [[packages]]
 name = "asttokens"
@@ -113,14 +113,14 @@ sha256 = "d0a2d98cafd8828a1cab6e348a8414d0dc665f46a3cc798679746e8c040409ef"
 
 [[packages]]
 name = "botocore"
-version = "1.43.85"
+version = "1.43.89"
 
 [[packages.wheels]]
-name = "botocore-1.43.85-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/20/4b/bb053aec2a9902df4cdbf9301dd5a41dd197c1cef0c085a32f5d04eeb3e3/botocore-1.43.85-py3-none-any.whl"
+name = "botocore-1.43.89-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/9e/9d/96f9dee6d12eedf1c2b4264eefd59c7ac8cac10daadb9a7bfccc9ee881c6/botocore-1.43.89-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "685510e5f4c0f321806c815a60f121a176c0969665f053c4a336209cbe62b1d5"
+sha256 = "d7211220c815427fe71225acc6909e4ab5dfab3b03770e72fd16cf9eb86b3d1a"
 
 [[packages]]
 name = "botocore-stubs"
@@ -620,14 +620,14 @@ sha256 = "4659bc2a667783e7a15d190f6fccf8b2486685b6dba4c19c3876314769c57526"
 
 [[packages]]
 name = "platformdirs"
-version = "4.11.6"
+version = "4.11.7"
 
 [[packages.wheels]]
-name = "platformdirs-4.11.6-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/4e/d8/2784c6eabb991b5b7494ff9e9888c74a0a72ad613c3ec5adbfcecc0724c7/platformdirs-4.11.6-py3-none-any.whl"
+name = "platformdirs-4.11.7-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/27/6e/80993e10a0482f630cef528635789233224f36b1ffd11592aa15d13ff9ce/platformdirs-4.11.7-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "b22d992e863bc651c26b16242041c7979db6e3286e548f9a76cc91238fac599e"
+sha256 = "8a02cb259042c79d1cd0450facc2fe6dc9d303ae7901afbe33bf8ea0b188cef6"
 
 [[packages]]
 name = "pluggy"
@@ -972,14 +972,14 @@ sha256 = "f775618166caa0396c8e337099240f2bd3e5e917d203b2e6fbe21a58d3cb1f6b"
 
 [[packages]]
 name = "types-boto3"
-version = "1.43.85"
+version = "1.43.89"
 
 [[packages.wheels]]
-name = "types_boto3-1.43.85-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/17/05/ae8d18f4de32671d15e683d3f860cd683401acfa84f84f9f7a3498eaf0e5/types_boto3-1.43.85-py3-none-any.whl"
+name = "types_boto3-1.43.89-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/b8/1b/04a78df1311ed51e1a54a7a88e2da9d1ab4114ff472d1c0fdc0be08140b9/types_boto3-1.43.89-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "4c0c345f8f3e8d3e5c2330ca2f75cbf1b661e6f6d552fa77b7bfc49800e6f4a0"
+sha256 = "0d04c2c246eb52042347ac8352c8b4753986b6ef10746d952c91051725358d73"
 
 [[packages]]
 name = "types-boto3-ses"
