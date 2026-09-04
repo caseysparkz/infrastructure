@@ -11,8 +11,8 @@ for_window [class="^.*"] border pixel 0
 ## Misc. keybindings.
 bindsym $mod+Return exec xterm
 bindsym $mod+Escape kill
-#bindsym $mod+d exec --no-startup-id dmenu_run -i  -nb \#000000 -nf \#ddc6f3 -sb \#ddc6f3 -sf \#000000
-bindsym $mod+d exec --no-startup-id ${HOME}/.local/bin/dmenu_recency
+bindsym $mod+d exec --no-startup-id "${HOME}/.local/bin/dmenu_recency"
+bindsym $mod+b exec --no-startup-id "${BROWSER:-firefox}"
 #bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
 
 ## Function Keys
@@ -32,8 +32,8 @@ bindsym F10 exec --no-startup-id sudo bluetooth toggle; exec notify-send "Toggle
 bindsym $mod+t exec --no-startup-id picom -bcCGF -i 0.9 -e 0.755555 --no-fading-openclose --sw-opti
 bindsym $mod+Shift+t exec --no-startup-id pkill picom
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym Print --release exec --no-startup-id scrot ${HOME}/Pictures/screenshots/%Y-%m-%d_%H.%M%.%S.png
-bindsym Ctrl+Print --release exec --no-startup-id scrot ${HOME}/Pictures/screenshots/%Y-%m-%d_%H.%M.%S.png -f -s
+bindsym Print --release exec --no-startup-id scrot "${HOME}/Pictures/screenshots/%Y-%m-%d_%H.%M%.%S.png"
+bindsym Ctrl+Print --release exec --no-startup-id scrot "${HOME}/Pictures/screenshots/%Y-%m-%d_%H.%M.%S.png" -f -s
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 ## Change Focus
