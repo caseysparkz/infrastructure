@@ -5,6 +5,8 @@
 # Usage:        `source ./env`
 # To do:        Write in error handling.
 
+unset _EXPERIMENTAL_DAGGER_RUNNER_HOST
+
 load_aws() {
     if which aws > /dev/null 2>&1; then  # Check AWS CLI installed
         if ! aws sts get-caller-identity > /dev/null 2>&1; then
@@ -103,6 +105,7 @@ setup_kubernetes_environment() {
 
 load_aws
 load_github
-setup_kubernetes_environment
+
+if [[ "${1:-}" == '--kubernetes' ]]; then setup_kubernetes_environment; fi
 
 printf 'Environment is ready.\n'
