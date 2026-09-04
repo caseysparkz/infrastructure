@@ -334,14 +334,14 @@ sha256 = "45529994741c4ab6d2388bfa5d7b725c2cf7fe9deffabdb8a6113aa5ed449ed4"
 
 [[packages]]
 name = "ipython"
-version = "9.16.1"
+version = "9.17.1"
 
 [[packages.wheels]]
-name = "ipython-9.16.1-py3-none-any.whl"
-url = "https://files.pythonhosted.org/packages/bc/8e/1239df488393d61076653bfb29f759d0f60cab8e030abdf7c17c31539b51/ipython-9.16.1-py3-none-any.whl"
+name = "ipython-9.17.1-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/2d/1e/65b59cf518c106aa755e7f7da3099027738687a862ec785060702a481320/ipython-9.17.1-py3-none-any.whl"
 
 [packages.wheels.hashes]
-sha256 = "4acae635506f6d352d94c4899a19d5f85f8bc4d230932342dca556fdab1c69b4"
+sha256 = "6d1645743cfd1a07eb695d85aa2b5fa66721f8cbae9431d4049f7084bbf06509"
 
 [[packages]]
 name = "ipython-pygments-lexers"
