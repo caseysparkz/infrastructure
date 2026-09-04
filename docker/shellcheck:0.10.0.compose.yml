@@ -4,7 +4,7 @@
 ---
 services:
   debian:
-    image: "ecr.caseysparkz.com/shellcheck:0.10.0"
+    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/shellcheck:0.10.0"
     build:
       context: "."
       dockerfile: "shellcheck.Dockerfile"

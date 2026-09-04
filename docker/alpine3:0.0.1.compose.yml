@@ -4,7 +4,7 @@
 ---
 services:
   alpine:
-    image: "ecr.caseysparkz.com/alpine3:0.0.1"
+    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/alpine3:0.0.1"
     build:
       context: "."
       dockerfile: "alpine3.Dockerfile"

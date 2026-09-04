@@ -23,7 +23,7 @@ export EDITOR='/usr/bin/vim'
 # Misc.
 export ALIASES="${HOME}/.bash_aliases"
 export DO_NOT_TRACK='1'
-export ECR='ecr.caseysparkz.com'
+export ECR='770088062852.dkr.ecr.us-west-2.amazonaws.com'
 export FUNCTIONS="${HOME}/.bash/functions"
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GH='git@github.com'
@@ -59,7 +59,7 @@ export PYTHONBREAKPOINT='IPython.terminal.debugger.set_trace'
 export SSH_AUTH_SOCK
 
 ## Terraform
-#export TF_CLI_ARGS_test='-parallelism=30'
+export TF_CLI_ARGS_test='-parallelism=30'
 export TF_CLI_CONFIG_FILE="${HOME}/.terraform.d/terraformrc"
 export TF_LOG='trace'
 export TF_LOG_PATH="${TMPDIR}/terraform.log"

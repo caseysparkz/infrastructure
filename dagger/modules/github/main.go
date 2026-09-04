@@ -76,7 +76,7 @@ func (m *Github) getPrCommitTypes(ctx context.Context) []string {
 // Returns a container with an initialized Git repository, and the GH CLI tool
 func (m *Github) container() *dagger.Container {
 	return dag.Container().
-		From("ecr.caseysparkz.com/dagger_github:0.0.1").
+		From("770088062852.dkr.ecr.us-west-2.amazonaws.com/dagger_github:0.0.1").
 		WithMountedDirectory(
 			mountPoint,
 			m.Source,

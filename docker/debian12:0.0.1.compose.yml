@@ -4,7 +4,7 @@
 ---
 services:
   debian:
-    image: "ecr.caseysparkz.com/debian12:0.0.1"
+    image: "770088062852.dkr.ecr.us-west-2.amazonaws.com/debian12:0.0.1"
     build:
       context: "."
       dockerfile: "debian12.Dockerfile"
