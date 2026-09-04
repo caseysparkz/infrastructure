@@ -36,14 +36,14 @@ sha256 = "94e58501cc7fafaa505dd9daea3bddb4affa6e8efe8217323c06d7194a312f57"
 
 [[packages]]
 name = "ast-serialize"
-version = "0.9.0"
+version = "0.10.0"
 
 [[packages.wheels]]
-name = "ast_serialize-0.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-url = "https://files.pythonhosted.org/packages/aa/e2/750a0b136bb02ff8e4a17d65a3a78cd478ee50724704df8215797a226ba3/ast_serialize-0.9.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+name = "ast_serialize-0.10.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+url = "https://files.pythonhosted.org/packages/31/ce/e6e0a311c16f84f13528f1cb32dec1ce68102711070c10c0c688a6c3cdf5/ast_serialize-0.10.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 
 [packages.wheels.hashes]
-sha256 = "1514f4a39704e2e815f9fc675fc13f19f694f212086b520110840782cf3c5295"
+sha256 = "eb1b20121a62da5937b0c11c8f31667be0102342bf55459bb44a10d8549f8f3f"
 
 [[packages]]
 name = "asttokens"
@@ -873,14 +873,14 @@ sha256 = "4d1032919280ebc04a80e4fb1e93f7a738129857eaec9448310e638c8bccefcf"
 
 [[packages]]
 name = "ruff"
-version = "0.16.4"
+version = "0.16.5"
 
 [[packages.wheels]]
-name = "ruff-0.16.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-url = "https://files.pythonhosted.org/packages/5e/b6/56bc0b8cf45b54b28b3a5e6381c8945d51b5b18adf659454c32295209a31/ruff-0.16.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+name = "ruff-0.16.5-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+url = "https://files.pythonhosted.org/packages/ee/34/ee245ca55f64443233034b3d02b03236b19242004281247c079390b7facd/ruff-0.16.5-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 
 [packages.wheels.hashes]
-sha256 = "f2d812e482f5a7e02eee26cd73d2a37ebbdf47d795ea63ba1b89110ae93e9fb3"
+sha256 = "ef0f69e191a13a3c9816f63163c88790cb12cd157bbbb384e9c44745702ab105"
 
 [[packages]]
 name = "s3transfer"
