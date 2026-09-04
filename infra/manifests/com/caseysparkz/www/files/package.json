@@ -3,7 +3,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "alpinejs": "^3.15.12",
-    "autoprefixer": "^10.5.0",
+    "autoprefixer": "^10.5.4",
     "hugo-extended": "^0.160.1",
     "postcss": "^8.5.18",
     "postcss-cli": "^11.0.1",
@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "vite build --mode production && hugo --minify --gc --cleanDestinationDir",
+    "deploy": "pnpm run build && aws s3 sync --delete ./public s3://www.caseysparkz.com",
     "dev": "vite build --mode development && hugo server --disableFastRender --noHTTPCache --disableBrowserError",
     "hugo": "hugo",
     "test": "hugo"
