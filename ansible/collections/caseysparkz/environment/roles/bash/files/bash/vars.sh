@@ -42,8 +42,11 @@ export ANSIBLE_DUPLICATE_YAML_DICT_KEY='ignore'
 export DAGGER_NO_NAG='1'
 
 ## Docker
+DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
+
 export DOCKER_BUILDKIT='1'
 export DOCKER_DEFAULT_PLATFORM='linux/amd64'
+export DOCKER_HOST
 
 ## PGP
 export GPG_TTY
