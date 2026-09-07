@@ -27,7 +27,7 @@ func New(
 	pkg string,
 	// Project source directory
 	// +optional
-	// +ignore=["*cache*",".coverage",".env",".git*",".terraform",".venv","build","dist","node_modules","*.log"]
+	// +ignore=["*","!**/*.py","!**/*.toml","!*.ini","**/.venv"]
 	// +defaultPath="/"
 	source *dagger.Directory,
 ) *Python {
