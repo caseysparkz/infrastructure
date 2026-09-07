@@ -13,7 +13,7 @@ var mountPoint = "/mnt"
 func New(
 	// Project source directory
 	// +optional
-	// +ignore=["*cache*",".coverage",".env",".git",".terraform",".venv","build","dist","node_modules","*.log"]
+	// +ignore=["*","!docker/","!.hadolint.yaml"]
 	// +defaultPath="/"
 	source *dagger.Directory,
 ) *Docker {
@@ -55,11 +55,10 @@ func (m *Docker) ComposeConfig(
 	// +default="latest"
 	composeVersion string,
 ) (string, error) {
-
 	return dag.Container().
-		From(fmt.Sprintf("docker.io/docker/compose:%s", composeVersion)).
+		From(fmt.Sprintf("docker.io/library/docker:%s", composeVersion)).
 		WithMountedDirectory(mountPoint, m.Source).
 		WithWorkdir(mountPoint).
-		WithExec([]string{"docker", "compose", file}).
+		WithExec([]string{"docker", "compose", "--file", file, "config"}).
 		Stdout(ctx)
 }
