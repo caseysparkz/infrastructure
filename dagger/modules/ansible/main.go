@@ -12,12 +12,16 @@ var mountPoint = "/mnt"
 var ansibleDir = "./ansible/"
 
 func New(
+	// Path to the Ansible directory, relative to :arg source:.
+	// +optional
+	// +default="ansible"
+	ansibleDir string,
+	// AWS Access Key ID
+	awsAccessKeyId *dagger.Secret,
 	// AWS default region
 	// +optional
 	// +default="us-west-2"
 	awsDefaultRegion string,
-	// AWS Access Key ID
-	awsAccessKeyId *dagger.Secret,
 	// AWS Secret Access Key
 	awsSecretAccessKey *dagger.Secret,
 	// AWS Session Token
@@ -27,42 +31,50 @@ func New(
 	// +optional
 	// +default=".[test]"
 	pipPackage string,
-	// Path to the Ansible directory, relative to :arg source:.
+	// Version of Python to run
 	// +optional
-	// +default="ansible"
-	ansibleDir string,
+	// +default="3.13"
+	pythonVersion string,
 	// Project source directory
 	// +optional
-	// +ignore=["*cache*",".coverage",".env",".git*",".terraform",".venv","build","dist","node_modules","*.log"]
+	// +ignore=["*","!ansible/**","!**/*.toml","!**/*.ini","!**/*.py","!**/*.yml","!**/*.yaml"]
 	// +defaultPath="/"
 	source *dagger.Directory,
 ) *Ansible {
 	return &Ansible{
-		AwsDefaultRegion:   awsDefaultRegion,
+		AnsibleDir:         fmt.Sprintf("%s/%s", mountPoint, ansibleDir),
 		AwsAccessKeyId:     awsAccessKeyId,
+		AwsDefaultRegion:   awsDefaultRegion,
 		AwsSecretAccessKey: awsSecretAccessKey,
 		AwsSessionToken:    awsSessionToken,
 		PipPackage:         pipPackage,
-		AnsibleDir:         fmt.Sprintf("%s/%s", mountPoint, ansibleDir),
+		PythonVersion:      pythonVersion,
 		Source:             source,
 	}
 }
 
 type Ansible struct {
-	AwsDefaultRegion   string
+	AnsibleDir         string
 	AwsAccessKeyId     *dagger.Secret
+	AwsDefaultRegion   string
 	AwsSecretAccessKey *dagger.Secret
 	AwsSessionToken    *dagger.Secret
 	PipPackage         string
-	AnsibleDir         string
+	PythonVersion      string
 	Source             *dagger.Directory
 }
 
 // Returns a container with aws CLI installed, repo mounted, and ansible package installed.
 func (m *Ansible) container() *dagger.Container {
 	awsDirPath := "/usr/local/aws-cli"
+	container := dag.Container().
+		From(fmt.Sprintf("docker.io/library/python:%s-slim", m.PythonVersion)).
+		WithMountedDirectory(mountPoint, m.Source).
+		WithWorkdir(ansibleDir).
+		WithExec([]string{"python", "-m", "ensurepip"}).
+		WithExec([]string{"pip", "install", "--upgrade", "pip", "--quiet", "--root-user-action=ignore"})
 
-	return dag.Python().Venv().
+	return dag.Python().Venv(container).
 		// Make the AWS CLI available within context
 		WithDirectory(awsDirPath, dag.Container().From("docker.io/amazon/aws-cli:latest").Directory(awsDirPath)).
 		WithExec([]string{"ln", "-s", fmt.Sprintf("%s/v2/current/bin/aws", awsDirPath), "/usr/local/bin/aws"}).

@@ -59,8 +59,8 @@ func (m *Python) container() *dagger.Container {
 }
 
 // Returns a container with an initialized and empty virtual environment.
-func (m *Python) Venv() *dagger.Container {
-	return m.container().
+func (m *Python) Venv(container *dagger.Container) *dagger.Container {
+	return container.
 		WithMountedCache(
 			m.VenvDir,
 			dag.CacheVolume(fmt.Sprintf("docker.io/library/python:%s-slim", m.Version)),
@@ -72,7 +72,7 @@ func (m *Python) Venv() *dagger.Container {
 
 // Returns a container with an installed package.
 func (m *Python) PipInstall() *dagger.Container {
-	return m.Venv().WithExec([]string{
+	return m.Venv(m.container()).WithExec([]string{
 		"pip",
 		"install",
 		"--quiet",
