@@ -1,5 +1,5 @@
 # INTERMEDIATE =================================================================
-FROM ecr.caseysparkz.com/debian13:0.0.1 AS intermediate
+FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/debian13:0.0.1 AS intermediate
 
 # hadolint ignore=DL3002
 USER root
@@ -11,11 +11,11 @@ RUN true                                                                    \
         shellcheck=0.10.0-1
 
 # FINAL ========================================================================
+FROM scratch
+
 LABEL contact="docker@caseysparkz.com"
 LABEL maintainer="docker@caseysparkz.com"
 LABEL parent_image="scratch"
-
-FROM scratch
 
 COPY --from=intermediate    /mnt                                        /
 COPY --from=intermediate    /usr/bin/shellcheck                         /usr/bin/

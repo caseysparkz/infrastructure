@@ -2,7 +2,7 @@
 # Date:         July 31, 2024
 # Description:  Python 3.11.2 image
 
-FROM ecr.caseysparkz.com/debian12:0.0.1
+FROM 770088062852.dkr.ecr.us-west-2.amazonaws.com/debian12:0.0.1
 
 LABEL contact="docker@caseysparkz.com"
 LABEL maintainer="docker@caseysparkz.com"
