@@ -30,7 +30,7 @@ func New(
 	terraformVersion string,
 	// Repository root dir.
 	// +optional
-	// +ignore=["*cache*",".coverage",".env",".git*",".terraform",".venv","build","dist","node_modules","*.log"]
+	// +ignore=["*","!terraform/"]
 	// +defaultPath="/"
 	source *dagger.Directory,
 ) *Terraform {
