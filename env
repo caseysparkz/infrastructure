@@ -62,6 +62,23 @@ load_github() {
     printf 'Done.\n\n'
 }
 
+login_ecr() {
+    if which aws > /dev/null 2>&1; then  # Check AWS CLI installed
+        printf 'Logging into AWS ECR.\n'
+
+        aws ecr get-login-password                                          \
+        | docker login                                                      \
+            --username AWS                                                  \
+            --password-stdin                                                \
+            770088062852.dkr.ecr.us-west-2.amazonaws.com
+    else
+        printf 'AWS CLI not installed.\n'
+        exit 1
+    fi
+
+    printf 'Done.\n\n'
+}
+
 setup_kubernetes_environment() {
     if ! which helm > /dev/null 2>&1; then
         printf 'Helm not installed.\n'
@@ -102,9 +119,9 @@ setup_kubernetes_environment() {
     export _EXPERIMENTAL_DAGGER_RUNNER_HOST
 }
 
-
 load_aws
 load_github
+login_ecr
 
 if [[ "${1:-}" == '--kubernetes' ]]; then setup_kubernetes_environment; fi
 
