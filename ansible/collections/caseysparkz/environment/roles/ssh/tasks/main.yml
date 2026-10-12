@@ -10,6 +10,6 @@
     src: "config"
     dest: "{{ ansible_facts.env.HOME }}/.ssh/config"
     owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    group: "{{ ansible_facts.os_family == 'Darwin' | ansible.builtin.ternary('staff', ansible_user) }}"
     mode: "0600"
     force: false

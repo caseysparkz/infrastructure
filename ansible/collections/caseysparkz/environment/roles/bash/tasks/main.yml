@@ -3,6 +3,13 @@
   ansible.builtin.set_fact:
     bash_symlink_src_dir: "{{ role_path | replace(collections_path, inventory_dir ~ '/collections') }}"
 
+- name: "Add (Homebrew) bash to allowed shells"
+  when: "ansible_facts.os_family == 'Darwin'"
+  ansible.builtin.lineinfile:
+    path: "/etc/shells"
+    line: "/opt/homebrew/bin/bash"
+    state: "present"
+
 - name: "Symlink ~/.bash directory"
   tags: ["bash"]
   ansible.builtin.file:
