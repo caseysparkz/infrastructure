@@ -7,7 +7,7 @@ readme = { file = "README.md", content-type = "text/markdown" }
 dependencies = ["ansible-core==2.21.5"]
 
 [project.optional-dependencies]
-test = ["ansible-lint==26.9.0"]
+test = ["ansible-lint==26.10.1"]
 all = ["cs-ansible[test]"]
 
 [tool.setuptools.packages.find]
