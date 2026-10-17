@@ -5,7 +5,8 @@
 # Usage:        `source ./env`
 # To do:        Write in error handling.
 
-unset _EXPERIMENTAL_DAGGER_RUNNER_HOST
+set -eu
+unset _EXPERIMENTAL_DAGGER_RUNNER_HOST  # Non-local runtime
 
 log(){
     local MSG="${1:?}"          # Log message
@@ -41,9 +42,9 @@ log(){
     if [ "${EXIT}" == true ]; then
         printf 'Exiting.'
         exit "${RC}"
-    else
-        return "${RC}"
     fi
+
+    return "${RC}"
 }
 
 load_aws() {
@@ -61,7 +62,7 @@ load_aws() {
     export AWS_SESSION_TOKEN
     log '* AWS_CREDENTIAL_EXPIRATION' DEBUG
     export AWS_CREDENTIAL_EXPIRATION
-    log 'Done.\n'
+    log 'Done.'
 }
 
 load_github() {
@@ -75,7 +76,7 @@ load_github() {
 
     export GITHUB_TOKEN
 
-    log 'Done.\n'
+    log 'Done.'
 }
 
 login_ecr() {
@@ -92,7 +93,7 @@ login_ecr() {
         --password-stdin                                                \
         "${ECR}"
 
-    log 'Done.\n'
+    log 'Done.'
 }
 
 setup_kubernetes_environment() {
