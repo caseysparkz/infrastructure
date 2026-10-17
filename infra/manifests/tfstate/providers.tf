@@ -7,7 +7,6 @@ terraform {
     region       = "us-west-2"
     bucket       = "com.caseysparkz.tfstate"
     key          = "tfstate.tfstate"
-    encrypt      = true
     use_lockfile = true
   }
 
