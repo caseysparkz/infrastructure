@@ -4,7 +4,7 @@ locals { aws_account_id = data.aws_caller_identity.this.account_id }
 
 // Terraform ===================================================================
 terraform {
-  required_version = ">= 1.10.5, < 2.0.0"
+  required_version = ">= 1.16.6, < 2.0.0"
 
   required_providers {
     aws = {
