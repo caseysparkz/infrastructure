@@ -2,16 +2,16 @@
 # Date:         March 19, 2025
 # Description:  Run Terraform operations to:
 #                 1. Enumerate directories with changed Terraform files.
-#                 2. Run tests against changed Terraform modules.
-#                 3. Validate the syntax of changed Terraform manifests.
-#                 4. Check the security posture of the changed Terraform
+#                 1. Run tests against changed Terraform modules.
+#                 1. Validate the syntax of changed Terraform manifests.
+#                 1. Check the security posture of the changed Terraform
 #                     modules and manifests.
-#                 5. Generate a cost estimate of planned infrastructure changes
+#                 1. Generate a cost estimate of planned infrastructure changes
 #                     and post the estimate to the pull request.
-#                 6. Depending on if the event is a pull request or merge:
+#                 1. Depending on if the event is a pull request or merge:
 #                   a. On pull request: Plan infrastructure changes and comment
 #                       the plan to the pull request.
-#                   b. On merge: Deploy infrastructure changes.
+#                   a. On merge: Deploy infrastructure changes.
 ---
 name: "terraform"
 on:
@@ -27,9 +27,9 @@ on:
       - "!infra/**/README.md"
 env:
   AWS_DEFAULT_REGION: "us-west-2"
-  INFRACOST_CONFIG: "terraform/infracost.yml"
-  TERRAFORM_PLANFILE: "/tmp/out.tfplan"
-  TERRAFORM_VERSION: "1.16.6" # Increment to update Terraform
+  INFRACOST_CONFIG: "infracost.yml"
+  TF_PLANFILE: "/tmp/out.tfplan"
+  TF_VERSION: "1.16.6" # Increment to update Terraform
 jobs:
   changed_terraform:
     name: "git diff"
@@ -62,7 +62,7 @@ jobs:
           files_yaml_from_source_file: ".github/config/changed_files.yml"
           matrix: true
           dir_names: true
-          dir_names_max_depth: 3 # evaluates to ["terraform/modules/x","terraform/modules/y","terraform/modules/z"]
+          dir_names_max_depth: 3 # evaluates to ["infra/modules/x","infra/modules/y","infra/modules/z"]
 
       - name: "Get all changed Terraform directories"
         id: "all_changed"
@@ -71,14 +71,12 @@ jobs:
           MODULE_DIRS: "${{ steps.changed_modules.outputs.tfmodule_all_changed_files }}"
         run: |
           ALL_DIRS="$(                                                                          \
-            echo                                                                                \
-              "${MANIFEST_DIRS}"                                                                \
-              "${MODULE_DIRS}"                                                                  \
+            printf '%s\n' "${MANIFEST_DIRS}" "${MODULE_DIRS}"                                   \
             | jq -s '.[0] + .[1]'                                                               \
             | jq -r tostring                                                                    \
           )"
 
-          echo "tf_all_changed_dirs=${ALL_DIRS}" >> "${GITHUB_OUTPUT}"
+          printf 'tf_all_changed_dirs=%s\n' "${ALL_DIRS}" >> "${GITHUB_OUTPUT}"
 
       - name: "Debug outputs"
         env:
@@ -95,11 +93,10 @@ jobs:
   terraform_test:
     name: "terraform test"
     runs-on: "ubuntu-latest"
+    if: "${{ github.event_name == 'pull_request' && needs.changed_terraform.outputs.module_dirs != '[]' }}"
     needs: ["changed_terraform"]
-    # Runs on pull request if Terraform modules changed.
-    if: "${{ github.event == 'pull_request' }}"
     concurrency:
-      group: "${{ github.workflow }}-terraformtest"
+      group: "${{ github.workflow }}-terraformtest-${{ matrix.dir }}"
       cancel-in-progress: false
     permissions:
       contents: "read"
@@ -119,7 +116,7 @@ jobs:
       - name: "apt install -y terraform"
         uses: "hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e" # v4.0.1
         with:
-          terraform_version: "${{ env.TERRAFORM_VERSION }}"
+          terraform_version: "${{ env.TF_VERSION }}"
 
       - name: "terraform init"
         run: "terraform init --upgrade --backend=false" # Don't need backend for linting
@@ -130,10 +127,8 @@ jobs:
   terraform_validate:
     name: "terraform validate"
     runs-on: "ubuntu-latest"
+    if: "${{ needs.changed_terraform.outputs.all_dirs != '[]' }}"
     needs: ["changed_terraform"]
-    # * Always runs on pull request
-    # * Runs on push if Terraform manifests are changed
-    if: "${{ needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
     permissions:
       contents: "read"
     strategy:
@@ -152,7 +147,7 @@ jobs:
       - name: "apt install -y terraform"
         uses: "hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e" # v4.0.1
         with:
-          terraform_version: "${{ env.TERRAFORM_VERSION }}"
+          terraform_version: "${{ env.TF_VERSION }}"
 
       - name: "terraform init"
         run: "terraform init --upgrade --backend=false" # Don't need backend for linting
@@ -163,10 +158,10 @@ jobs:
   trivy:
     name: "trivy"
     runs-on: "ubuntu-latest"
+    if: "${{ github.event_name == 'pull_request' }}"
     needs:
       - "changed_terraform"
       - "terraform_validate"
-    if: "${{ github.event == 'pull_request' }}"  # * Always runs on pull request if any terraform changed
     permissions:
       contents: "read"
     strategy:
@@ -189,10 +184,10 @@ jobs:
   infracost_diff:
     name: "infracost diff"
     runs-on: "ubuntu-latest"
+    if: "${{ github.event_name == 'pull_request' && needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
     needs:
       - "changed_terraform"
       - "terraform_validate"
-    if: "${{ github.event_name == 'pull_request' && needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
     permissions:
       contents: "read"
       pull-requests: "write"
@@ -284,7 +279,8 @@ jobs:
   terraform_plan:
     name: "terraform plan"
     runs-on: "ubuntu-latest"
-    if: "${{ needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
+    # Planfiles handed to terraform_apply via artifacts.
+    if: "${{ github.event_name == 'pull_request' && needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
     concurrency:
       group: "${{ github.workflow }}-terraformplan-${{ matrix.dir }}"
       cancel-in-progress: false
@@ -292,6 +288,7 @@ jobs:
       - "changed_terraform"
       - "terraform_validate"
     permissions:
+      actions: "write" # Delete stale planfile artifacts
       contents: "read"
       id-token: "write"
       pull-requests: "write"
@@ -312,32 +309,58 @@ jobs:
       - name: "apt install -y terraform"
         uses: "hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e" # v4.0.1
         with:
-          terraform_version: "${{ env.TERRAFORM_VERSION }}"
+          terraform_version: "${{ env.TF_VERSION }}"
 
       - name: "aws sso login"
         uses: "aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd"  # v6.3.0
         with:
           aws-region: "${{ env.AWS_DEFAULT_REGION }}"
           role-session-name: "gha-${{ github.run_id }}"
-          role-to-assume: >
-            ${{
-              github.event_name == 'push'
-              && secrets.AWS_ROLE_ARN_ADMIN
-              || secrets.AWS_ROLE_ARN_READONLY
-            }}
+          role-to-assume: "${{ secrets.AWS_ROLE_ARN_READONLY }}"
 
       - name: "terraform init"
         run: "terraform init"
 
       - name: "terraform plan"
-        run: "terraform plan -out=${TERRAFORM_PLANFILE}"
+        run: "terraform plan -no-color -out=${TF_PLANFILE}"
+
+      - name: "Delete stale planfiles"
+        # Keep only the latest planfile per PR + directory: drop artifacts from
+        # earlier runs. A planfile is always uploaded (even with no changes), so
+        # terraform_apply can treat a missing planfile as an error.
+        id: "artifact"
+        env:
+          DIR: "${{ matrix.dir }}"
+          GH_TOKEN: "${{ github.token }}"
+          PR_NUMBER: "${{ github.event.pull_request.number }}"
+          REPO: "${{ github.repository }}"
+          RUN_ID: "${{ github.run_id }}"
+        run: |
+          NAME="tfplan-pr${PR_NUMBER}-$(printf '%s' "${DIR}" | tr '/' '_')"
+
+          printf 'name=%s\n' "${NAME}" >> "${GITHUB_OUTPUT}"
+
+          gh api                                                              \
+            --paginate "repos/${REPO}/actions/artifacts?name=${NAME}"         \
+            --jq ".artifacts[] | select(.workflow_run.id != ${RUN_ID}) | .id" \
+          | while read -r ID; do
+            gh api --method DELETE "repos/${REPO}/actions/artifacts/${ID}"
+          done
+
+      - name: "Upload planfile"
+        uses: "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a" # v7.0.1
+        with:
+          name: "${{ steps.artifact.outputs.name }}"
+          path: "${{ env.TF_PLANFILE }}"
+          if-no-files-found: "error"
+          overwrite: true
+          retention-days: 8
 
       - name: "gh pr comment"
-        if: "${{ github.event_name == 'pull_request' }}"
         uses: "borchero/terraform-plan-comment@f585438eda2fa77c6f275994b92aeccd86ef3542"  # v3.2.0
         with:
           token: "${{ github.token }}"
-          planfile: "${{ env.TERRAFORM_PLANFILE }}"
+          planfile: "${{ env.TF_PLANFILE }}"
           terraform-cmd: "terraform"
           working-directory: "${{ matrix.dir }}"
           header: "Terraform Plan"
@@ -348,6 +371,7 @@ jobs:
   terraform_apply:
     name: "terraform apply"
     runs-on: "ubuntu-latest"
+    # Runs on push only, applying the planfile from the merged PR.
     if: "${{ github.event_name == 'push' && needs.changed_terraform.outputs.manifest_dirs != '[]' }}"
     concurrency:
       group: "${{ github.workflow }}-terraformapply-${{ matrix.dir }}"
@@ -355,10 +379,11 @@ jobs:
     needs:
       - "changed_terraform"
       - "terraform_validate"
-      - "terraform_plan"
     permissions:
+      actions: "read" # Download planfile artifacts from the PR run
       contents: "read"
       id-token: "write"
+      pull-requests: "read"
     strategy:
       fail-fast: false
       max-parallel: 4
@@ -368,6 +393,56 @@ jobs:
       run:
         working-directory: "${{ matrix.dir }}"
     steps:
+      # Fails when no planfile from the merged PR's final commit exists (e.g.
+      # direct push to main, expired artifact, or failed plan), rather than
+      # silently skipping the apply.
+      - name: "Find planfile"
+        id: "planfile"
+        working-directory: "${{ github.workspace }}"
+        env:
+          DIR: "${{ matrix.dir }}"
+          GH_TOKEN: "${{ github.token }}"
+          REPO: "${{ github.repository }}"
+          SHA: "${{ github.sha }}"
+        run: |
+          PR="$(                                                                \
+            gh api "repos/${REPO}/commits/${SHA}/pulls"                         \
+              --jq '[.[] | select(.merged_at != null)][0] // empty
+                  | "\(.number) \(.head.sha)"'                                  \
+          )"
+
+          if [ -z "${PR}" ]; then
+            printf '::error::No merged PR for %s; cannot apply %s without a reviewed plan.\n' "${SHA}" "${DIR}"
+            exit 1
+          fi
+
+          read -r PR_NUMBER PR_HEAD_SHA <<< "${PR}"
+
+          NAME="tfplan-pr${PR_NUMBER}-$(printf '%s' "${DIR}" | tr '/' '_')"
+          RUN_IDS="$(                                                           \
+            gh api --paginate "repos/${REPO}/actions/artifacts?name=${NAME}"    \
+              --jq ".artifacts[]
+                  | select(.expired == false and .workflow_run.head_sha == \"${PR_HEAD_SHA}\")
+                  | .workflow_run.id"                                         \
+          )"
+          RUN_ID="${RUN_IDS%%$'\n'*}"  # Newest first
+
+          if [ -z "${RUN_ID}" ]; then
+            printf '::error::No planfile for %s at %s (PR #%s). It may have expired; re-run the PR terraform plan, then re-run this job.\n' "${DIR}" "${PR_HEAD_SHA}" "${PR_NUMBER}"
+            exit 1
+          fi
+
+          printf 'name=%s\n' "${NAME}" >> "${GITHUB_OUTPUT}"
+          printf 'run_id=%s\n' "${RUN_ID}" >> "${GITHUB_OUTPUT}"
+
+      - name: "Download planfile"
+        uses: "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c" # v8.0.1
+        with:
+          name: "${{ steps.planfile.outputs.name }}"
+          run-id: "${{ steps.planfile.outputs.run_id }}"
+          github-token: "${{ github.token }}"
+          path: "/tmp"
+
       - name: "git checkout"
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
         with:
@@ -376,7 +451,7 @@ jobs:
       - name: "apt install -y terraform"
         uses: "hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e" # v4.0.1
         with:
-          terraform_version: "${{ env.TERRAFORM_VERSION }}"
+          terraform_version: "${{ env.TF_VERSION }}"
 
       - name: "aws sso login"
         uses: "aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd"  # v6.3.0
@@ -388,8 +463,5 @@ jobs:
       - name: "terraform init"
         run: "terraform init"
 
-      - name: "terraform plan"
-        run: "terraform plan -out=${TERRAFORM_PLANFILE}"
-
       - name: "terraform apply"
-        run: "terraform apply --auto-approve ${TERRAFORM_PLANFILE}"
+        run: "terraform apply --auto-approve ${TF_PLANFILE}"

@@ -13,7 +13,7 @@ go:
 graphviz:
   - "**/*.dot"
   - "**/*.gv"
-infracost: ["terraform/**/infracost*.yml"]
+infracost: ["infra/**/infracost*.yml"]
 markdown: ["**/*.md"]
 python:
   - "**/*.py"
