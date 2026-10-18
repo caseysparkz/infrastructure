@@ -1,28 +1,32 @@
 /* KMS */
 
+locals {
+  kms_admin_actions = [
+    "kms:CancelKeyDeletion",
+    "kms:Create*",
+    "kms:Delete*",
+    "kms:Describe*",
+    "kms:Disable*",
+    "kms:Enable*",
+    "kms:Get*",
+    "kms:List*",
+    "kms:Put*",
+    "kms:Revoke*",
+    "kms:RotateKeyOnDemand",
+    "kms:ScheduleKeyDeletion",
+    "kms:TagResource",
+    "kms:UntagResource",
+    "kms:Update*",
+  ]
+}
+
 // Data ========================================================================
 data "aws_iam_policy_document" "kms_key" {
   statement { // KeyAdministration
     sid       = "KeyAdministration"
     effect    = "Allow"
     resources = ["*"]
-    actions = [
-      "kms:CancelKeyDeletion",
-      "kms:Create*",
-      "kms:Delete*",
-      "kms:Describe*",
-      "kms:Disable*",
-      "kms:Enable*",
-      "kms:Get*",
-      "kms:List*",
-      "kms:Put*",
-      "kms:Revoke*",
-      "kms:RotateKeyOnDemand",
-      "kms:ScheduleKeyDeletion",
-      "kms:TagResource",
-      "kms:UntagResource",
-      "kms:Update*",
-    ]
+    actions   = local.kms_admin_actions
 
     principals {
       type        = "AWS"

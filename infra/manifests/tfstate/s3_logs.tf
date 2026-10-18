@@ -250,11 +250,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs" {
   }
 }
 
-resource "aws_cloudtrail" "this" { // trivy:ignore:AWS-0014 trivy:ignore:AWS-0015 trivy:ignore:AWS-0162
-  depends_on                    = [aws_s3_bucket_policy.logs]
+resource "aws_cloudtrail" "this" { // trivy:ignore:AWS-0014 trivy:ignore:AWS-0015
+  depends_on                    = [aws_s3_bucket_policy.logs, aws_iam_role_policy.cloudtrail_logs]
   name                          = local.cloudtrail_name
   s3_bucket_name                = aws_s3_bucket.logs.id
   s3_key_prefix                 = local.logs_cloudtrail_prefix
+  cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
+  cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_logs.arn
   enable_log_file_validation    = true
   include_global_service_events = false // S3 and KMS events are regional
   is_multi_region_trail         = false // State bucket and KMS key are single-region

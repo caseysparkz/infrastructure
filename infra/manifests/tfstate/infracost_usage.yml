@@ -61,6 +61,14 @@ resource_usage:
       monthly_standard_data_retrieval_gb: 0
       monthly_bulk_data_retrieval_gb: 0
       early_delete_gb: 0
+  aws_cloudwatch_log_group.cloudtrail:
+    storage_gb: 1
+    monthly_data_ingested_gb: 1
+    monthly_data_scanned_gb: 0
+  aws_sns_topic.alerts:
+    monthly_requests: 1000
+    request_size_kb: 4
+    email_subscriptions: 1
 resource_type_default_usage:
   aws_acmpca_certificate_authority:
     monthly_requests: 20000
