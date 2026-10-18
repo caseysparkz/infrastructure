@@ -6,6 +6,7 @@ locals {
   project        = "caseysparkz"
   application    = "root"
   namespace      = "${local.environment}-${local.project}-${local.application}"
+  owner          = "security@caseysparkz.com"
   common_tags = {
     Application = local.application
     Domain      = var.root_domain
@@ -15,6 +16,7 @@ locals {
     Project     = local.project
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/caseysparkz"
+    Owner       = local.owner
   }
   dmarc_list = [ // Parsed to string
     { key = "p", value = "reject" },

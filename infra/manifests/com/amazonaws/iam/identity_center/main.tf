@@ -13,6 +13,7 @@ locals {
   project                   = "aws"
   application               = "identitycenter"
   namespace                 = "${local.environment}-${local.project}-${local.application}"
+  owner                     = "security@caseysparkz.com"
   common_tags = {
     Application = local.application
     Environment = local.environment
@@ -21,6 +22,7 @@ locals {
     Project     = local.project
     Repo        = "github.com/PrimordiumLabs/infrasec"
     RepoPath    = "terraform/com/amazonaws/iam/ssoadmin_permissionsets"
+    Owner       = local.owner
   }
 }
 

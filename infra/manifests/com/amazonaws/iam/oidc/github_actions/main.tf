@@ -7,6 +7,7 @@ locals {
   application    = "githubactions"
   namespace      = "${local.environment}-${local.project}-${local.application}"
   tfstate_bucket = "com.caseysparkz.tfstate"
+  owner          = "security@caseysparkz.com"
   common_tags = {
     Application = local.application
     Domain      = "github.com"
@@ -16,6 +17,7 @@ locals {
     Project     = local.project
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/amazonaws/iam/github_actions"
+    Owner       = local.owner
   }
 }
 

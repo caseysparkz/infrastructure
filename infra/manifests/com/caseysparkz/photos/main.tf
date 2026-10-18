@@ -5,6 +5,7 @@ locals {
   project     = "caseysparkz"
   application = "photos"
   namespace   = "${local.environment}-${local.project}-${local.application}"
+  owner       = "security@caseysparkz.com"
   common_tags = {
     Application = local.application
     Domain      = "photos.caseysparkz.com"
@@ -14,6 +15,7 @@ locals {
     Project     = local.project
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/caseysparkz/photos"
+    Owner       = local.owner
   }
 }
 

@@ -12,6 +12,7 @@ locals {
   project        = "ai"
   application    = replace(split(".", var.aws_bedrock_foundation_model_id)[1], "-", "") // Evaluates to model name
   namespace      = "${local.environment}-${local.project}-${local.application}"
+  owner          = "security@caseysparkz"
   common_tags = {
     Application = local.application
     Environment = local.environment
@@ -20,6 +21,7 @@ locals {
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/amazonaws/bedrock"
     ModelId     = var.aws_bedrock_foundation_model_id
+    Owner       = local.owner
   }
 }
 

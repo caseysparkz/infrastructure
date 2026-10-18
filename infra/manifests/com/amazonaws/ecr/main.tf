@@ -8,6 +8,7 @@ locals {
   application    = "ecr"
   namespace      = "${local.environment}-${local.project}-${local.application}"
   domain         = "ecr.${data.terraform_remote_state.this.outputs.root_domain}"
+  owner          = "ecr@caseysparkz.com"
   common_tags = {
     Application = local.application
     Domain      = local.domain
@@ -17,6 +18,7 @@ locals {
     Project     = local.project
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/amazonaws/ecr"
+    Owner       = local.owner
   }
 }
 

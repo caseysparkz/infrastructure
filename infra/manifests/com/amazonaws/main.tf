@@ -12,6 +12,7 @@ locals {
   project        = "aws"
   application    = "config"
   namespace      = "${local.environment}-${local.project}-${local.application}"
+  owner          = "security@caseysparkz.com"
   common_tags = {
     Application = local.application
     Environment = local.environment
@@ -20,6 +21,7 @@ locals {
     Project     = local.project
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/amazonaws"
+    Owner       = local.owner
   }
 }
 

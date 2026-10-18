@@ -3,18 +3,18 @@
 terraform {
   required_version = ">= 1.10.5, < 2.0.0"
 
-  backend "s3" {
-    region       = "us-west-2"
-    bucket       = "com.caseysparkz.tfstate"
-    key          = "tfstate.tfstate"
-    use_lockfile = true
-  }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 6.41.0, < 7.0.0"
     }
+  }
+
+  backend "s3" {
+    region       = "us-west-2"
+    bucket       = "com.caseysparkz.tfstate"
+    key          = "tfstate.tfstate"
+    use_lockfile = true
   }
 }
 

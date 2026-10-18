@@ -1,11 +1,12 @@
 /* Main */
 
 locals {
+  aws_kms_key_arn = data.terraform_remote_state.this.outputs.aws_kms_key_arn
   environment     = "prod"
   project         = "caseysparkz"
   application     = "www"
   namespace       = "${local.environment}-${local.project}-${local.application}"
-  aws_kms_key_arn = data.terraform_remote_state.this.outputs.aws_kms_key_arn
+  owner           = "contact@caseysparkz.com"
   common_tags = {
     Application = local.application
     Domain      = "www.${data.terraform_remote_state.this.outputs.root_domain}"
@@ -15,6 +16,7 @@ locals {
     Project     = local.project
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/com/caseysparkz/www"
+    Owner       = local.owner
   }
 }
 

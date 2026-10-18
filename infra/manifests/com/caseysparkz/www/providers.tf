@@ -6,14 +6,6 @@ locals { aws_account_id = data.aws_caller_identity.this.account_id }
 terraform {
   required_version = ">= 1.10.5, < 2.0.0"
 
-  backend "s3" {
-    bucket       = "com.caseysparkz.tfstate"
-    key          = "com/caseysparkz/www.tfstate"
-    region       = "us-west-2"
-    use_lockfile = true
-    encrypt      = true
-  }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -23,6 +15,13 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 5.26.0"
     }
+  }
+
+  backend "s3" {
+    bucket       = "com.caseysparkz.tfstate"
+    key          = "com/caseysparkz/www.tfstate"
+    region       = "us-west-2"
+    use_lockfile = true
   }
 }
 

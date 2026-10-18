@@ -13,7 +13,6 @@ terraform {
     bucket       = "com.caseysparkz.tfstate"
     key          = "com/amazonaws/iam/ssoadmin.tfstate"
     region       = "us-west-2"
-    encrypt      = true
     use_lockfile = true
   }
 }

@@ -17,7 +17,6 @@ locals {
     Repo        = "github.com/caseysparkz/monorepo"
     RepoPath    = "infra/manifests/tfstate"
   }
-  state_principal_arns = distinct(concat(var.reader_principal_arns, var.writer_principal_arns))
 }
 
 // Data ========================================================================
